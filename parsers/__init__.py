@@ -7,13 +7,7 @@
 
 # List of parsers to import and use based on parser.domains
 
-parsers = """
-nyt.NYTParser
-cnn.CNNParser
-politico.PoliticoParser
-bbc.BBCParser
-washpo.WashPoParser
-""".split()
+parsers = ["nyt.NYTParser"]
 
 parser_dict = {}
 

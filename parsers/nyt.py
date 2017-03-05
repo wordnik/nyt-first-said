@@ -45,6 +45,7 @@ class NYTParser(BaseParser):
     def _parse(self, html):
         soup = BeautifulSoup(html, convertEntities=BeautifulSoup.HTML_ENTITIES)
         self.meta = soup.findAll('meta')
+
         try:
             seo_title = soup.find('meta', attrs={'name':'hdl'}).get('content')
         except AttributeError:
