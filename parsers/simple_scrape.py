@@ -36,8 +36,8 @@ def tweet_word(word):
         r.incr("recently")
         r.expire("recently", 60 * 30)
         print word
-        # status = api.PostUpdate(word)
-        # print "%s just posted: %s" % (status.user.name, status.text)
+        status = api.PostUpdate(word)
+        print "%s just posted: %s" % (status.user.name, status.text)
 
 def ok_word(s):
     return (not any(i.isdigit() for i in s)) and s.islower()
@@ -49,7 +49,6 @@ def process_article(content):
     text = unicode(content)
     words = text.split()
     for raw_word in words:
-        print raw_word
         if ok_word(raw_word):
             word = remove_punctuation(raw_word)
             if len(word) + 1 < len(raw_word):
@@ -60,7 +59,7 @@ def process_article(content):
                 r.set(wkey, '1')
 
 links = parser.feed_urls()
-for link in links[-1:]:
+for link in links:
     akey = "article:"+link
     if not r.get(akey):
         parsed_article = parser(link)
