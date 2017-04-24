@@ -6,6 +6,7 @@ import sys
 import redis
 import string
 import regex as re
+#import re
 import raven
 import twitter
 
@@ -35,28 +36,33 @@ def tweet_word(word):
     if int( r.get("recently") or 0 ) < 3:
         r.incr("recently")
         r.expire("recently", 60 * 30)
-        print word
-        status = api.PostUpdate(word)
-        print "%s just posted: %s" % (status.user.name, status.text)
+        try:
+#            print(word)
+            status = api.PostUpdate(word)
+        except UnicodeDecodeError:
+	    client.captureMessage(word)
+        print("%s just posted: %s" % (status.user.name, status.text))
 
 def ok_word(s):
     return (not any(i.isdigit() for i in s)) and s.islower()
 
 def remove_punctuation(text):
-    return re.sub(ur"\p{P}+", "", text)
+    #np = re.sub(u'-',' ', string.punctuation)
+    return re.sub(ur"\p{P}+$", "", re.sub(ur"^\p{P}+", "", text))
+    #return text.strip(np)
+    # return re.sub(ur"\p{P}+", "", text)
 
 def process_article(content):
     text = unicode(content)
     words = text.split()
-    for raw_word in words:
-        if ok_word(raw_word):
-            word = remove_punctuation(raw_word)
-            if len(word) + 1 < len(raw_word):
-                continue
-            wkey = "word:" + word
-            if not r.get(wkey):
-                tweet_word(word)
-                r.set(wkey, '1')
+    for raw_word_h in words:
+        for raw_word in raw_word_h.split('-'):
+            if ok_word(raw_word):
+                word = remove_punctuation(raw_word)
+                wkey = "word:" + word
+                if not r.get(wkey):
+                    tweet_word(word)
+                    r.set(wkey, '1')
 
 links = parser.feed_urls()
 for link in links:

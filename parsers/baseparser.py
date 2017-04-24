@@ -134,8 +134,11 @@ class BaseParser(object):
         raise NotImplementedError()
 
     def __unicode__(self):
-        return canonicalize(u'\n'.join((self.date, self.title, self.byline,
+	try:
+            return canonicalize(u'\n'.join((self.date, self.title, self.byline,
                                         self.body,)))
+        except TypeError as e:
+            return u''
 
     @classmethod
     def feed_urls(cls):
