@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/python
 """
 """
@@ -44,11 +45,12 @@ def tweet_word(word):
         print("%s just posted: %s" % (status.user.name, status.text))
 
 def ok_word(s):
-    return (not any(i.isdigit() for i in s)) and s.islower()
+    return (not any(i.isdigit() or i=='.' for i in s)) and s.islower()
 
 def remove_punctuation(text):
     #np = re.sub(u'-',' ', string.punctuation)
-    return re.sub(ur"\p{P}+$", "", re.sub(ur"^\p{P}+", "", text))
+    return re.sub(ur"’s","", re.sub(ur"\p{P}+$", "", re.sub(ur"^\p{P}+", "", text)))
+    #return re.sub(ur"\p{P}+$", "", re.sub(ur"^\p{P}+", "", text))
     #return text.strip(np)
     # return re.sub(ur"\p{P}+", "", text)
 
@@ -65,9 +67,11 @@ def process_article(content):
                     r.set(wkey, '1')
 
 links = parser.feed_urls()
+print(links)
 for link in links:
     akey = "article:"+link
     if not r.get(akey):
+        print(akey)
         parsed_article = parser(link)
         process_article(parsed_article)
         r.set(akey, '1')
