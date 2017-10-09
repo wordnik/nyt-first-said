@@ -52,11 +52,14 @@ def remove_punctuation(text):
     #return text.strip(np)
     # return re.sub(ur"\p{P}+", "", text)
 
+def normalize_punc(raw_word):
+    return raw_word.replace(',', '-').replace('—', '-').replace('/', '-').split('-')
+
 def process_article(content):
     text = unicode(content)
     words = text.split()
     for raw_word_h in words:
-        for raw_word in raw_word_h.split('-'):
+        for raw_word in normalize_punc(raw_word_h):
             if ok_word(raw_word):
                 word = remove_punctuation(raw_word)
                 wkey = "word:" + word
