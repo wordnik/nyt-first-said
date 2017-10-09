@@ -70,11 +70,11 @@ def process_article(content):
                     r.set(wkey, '1')
 
 links = parser.feed_urls()
-print(links)
+# print(links)
 for link in links:
     akey = "article:"+link
     if not r.get(akey):
-        print(akey)
+        # print(akey)
         parsed_article = parser(link)
         process_article(parsed_article)
         r.set(akey, '1')
