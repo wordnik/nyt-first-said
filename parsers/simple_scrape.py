@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/python
 """
 """
@@ -48,7 +49,8 @@ def ok_word(s):
 
 def remove_punctuation(text):
     #np = re.sub(u'-',' ', string.punctuation)
-    return re.sub(ur"\p{P}+$", "", re.sub(ur"^\p{P}+", "", text))
+    return re.sub(ur"’s","", re.sub(ur"\p{P}+$", "", re.sub(ur"^\p{P}+", "", text)))
+    #return re.sub(ur"\p{P}+$", "", re.sub(ur"^\p{P}+", "", text))
     #return text.strip(np)
     # return re.sub(ur"\p{P}+", "", text)
 
@@ -68,9 +70,11 @@ def process_article(content):
                     r.set(wkey, '1')
 
 links = parser.feed_urls()
+print(links)
 for link in links:
     akey = "article:"+link
     if not r.get(akey):
+        print(akey)
         parsed_article = parser(link)
         process_article(parsed_article)
         r.set(akey, '1')
