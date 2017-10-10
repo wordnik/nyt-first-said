@@ -48,7 +48,7 @@ def tweet_word(word):
         print("%s just posted: %s" % (status.user.name, status.text))
 
 def ok_word(s):
-    return (not any(i.isdigit() or i=='.' for i in s)) and s.islower()
+    return (not any(i.isdigit() or i=='.' for i in s)) and s.islower() and s[0] is not '@'
 
 def remove_punctuation(text):
     #np = re.sub(u'-',' ', string.punctuation)
