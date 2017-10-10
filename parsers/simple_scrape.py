@@ -11,6 +11,9 @@ import regex as re
 import raven
 import twitter
 
+reload(sys)  
+sys.setdefaultencoding('utf8')
+
 from raven import Client
 
 client = Client('https://ad7b9867c209488da9baa4fbae04d8f0:b63c0acd29eb40269b52d3e6f82191d9@sentry.io/144998')
