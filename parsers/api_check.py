@@ -10,4 +10,4 @@ def check_api(word):
     req = requests.get('https://api.nytimes.com/svc/search/v2/articlesearch.json', params=query_string)
     result = req.json()
     numResults = len(result['response']['docs'])
-    return numResults < 3
+    return numResults < 2
