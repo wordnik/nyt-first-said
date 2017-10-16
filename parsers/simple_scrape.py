@@ -34,7 +34,7 @@ module, classname = parsername.rsplit('.', 1)
 parser = getattr(__import__(module, globals(), fromlist=[classname]), classname)
 
 def tweet_word(word):
-    client.captureMessage(word)
+    client.captureMessage("posted: "+word)
     if int( r.get("recently") or 0 ) < 3:
         r.incr("recently")
         r.expire("recently", 60 * 30)
@@ -42,7 +42,7 @@ def tweet_word(word):
 #            print(word)
             status = api.PostUpdate(word)
         except UnicodeDecodeError:
-	    # client.captureMessage(word)
+	    client.captureMessage(word)
         print("%s just posted: %s" % (status.user.name, status.text))
 
 def ok_word(s):
