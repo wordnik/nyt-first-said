@@ -11,6 +11,7 @@ import regex as re
 import raven
 import twitter
 from twitter_creds import TwitterApi
+from api_check import check_api
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -35,6 +36,8 @@ parser = getattr(__import__(module, globals(), fromlist=[classname]), classname)
 
 def tweet_word(word):
     client.captureMessage("posted: "+word)
+    if not check_api(word):
+        return
     if int( r.get("recently") or 0 ) < 3:
         r.incr("recently")
         r.expire("recently", 60 * 30)
