@@ -7,7 +7,7 @@ import sys
 import redis
 import string
 import regex as re
-#import re
+import time
 import raven
 import twitter
 from twitter_creds import TwitterApi
@@ -36,6 +36,7 @@ parser = getattr(__import__(module, globals(), fromlist=[classname]), classname)
 
 def tweet_word(word):
     client.captureMessage("posted: "+word)
+    time.sleep(1)    
     if not check_api(word):
         return
     if int( r.get("recently") or 0 ) < 3:
@@ -79,6 +80,7 @@ for link in links:
     akey = "article:"+link
     if not r.get(akey):
         # print(akey)
+	time.sleep(1)
         parsed_article = parser(link)
         process_article(parsed_article)
         r.set(akey, '1')
