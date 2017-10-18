@@ -60,7 +60,7 @@ def remove_punctuation(text):
     # return re.sub(ur"\p{P}+", "", text)
 
 def normalize_punc(raw_word):
-    return raw_word.replace(',', '-').replace('—', '-').replace('/', '-').replace(':', '-').replace('\'', '-').split('-')
+    return raw_word.replace(',', '-').replace('—', '-').replace('/', '-').replace(':', '-').replace('\'', '-').replace('’','-').split('-')
 
 def process_article(content):
     text = unicode(content)
