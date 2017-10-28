@@ -35,7 +35,7 @@ except IndexError:
 module, classname = parsername.rsplit('.', 1)
 parser = getattr(__import__(module, globals(), fromlist=[classname]), classname)
 
-def tweet_word(word):
+def tweet_word(word, article):
     client.captureMessage("posted: "+word)
     time.sleep(1)    
     if not check_api(word):
@@ -45,12 +45,12 @@ def tweet_word(word):
         r.expire("recently", 60 * 30)
         try:
             status = api.PostUpdate(word)
-	    client.captureMessage(status,extra=status)
+            contextApi = api.PostUpdate(article, in_reply_to_status_id=status.id)
+	        client.captureMessage(status, extra=status)
         except UnicodeDecodeError:
-	    client.captureMessage(word)
-	except twitter.TwitterError:
-	    client.captureException()	
-#        print("%s just posted: %s" % (status.user.name, status.text))
+	        client.captureException()
+	    except twitter.TwitterError:
+	        client.captureException()	
 
 def ok_word(s):
     return (not any(i.isdigit() or i=='.' or i=='@' or i=='#' for i in s)) and s.islower() and s[0] is not '@'
@@ -61,7 +61,7 @@ def remove_punctuation(text):
 def normalize_punc(raw_word):
     return raw_word.replace(',', '-').replace('—', '-').replace('/', '-').replace(':', '-').replace('\'', '-').replace('’','-').split('-')
 
-def process_article(content):
+def process_article(content, article):
     text = unicode(content)
     words = text.split()
     for raw_word_h in words:
@@ -70,7 +70,7 @@ def process_article(content):
                 word = remove_punctuation(raw_word)
                 wkey = "word:" + word
                 if not r.get(wkey):
-                    tweet_word(word)
+                    tweet_word(word, article)
                     r.set(wkey, '1')
 
 links = parser.feed_urls()
@@ -79,5 +79,5 @@ for link in links:
     if not r.get(akey):
 	time.sleep(1)
         parsed_article = parser(link)
-        process_article(parsed_article)
+        process_article(parsed_article, link)
         r.set(akey, '1')
