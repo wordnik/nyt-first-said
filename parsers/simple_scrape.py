@@ -13,12 +13,13 @@ import twitter
 from twitter_creds import TwitterApi, TwitterApiContext
 from api_check import check_api
 
-reload(sys)  
+reload(sys)
 sys.setdefaultencoding('utf8')
 
 from raven import Client
 
-client = Client('https://ad7b9867c209488da9baa4fbae04d8f0:b63c0acd29eb40269b52d3e6f82191d9@sentry.io/144998')
+client = Client(
+    'https://ad7b9867c209488da9baa4fbae04d8f0:b63c0acd29eb40269b52d3e6f82191d9@sentry.io/144998')
 
 api = TwitterApi()
 contextApi = TwitterApiContext()
@@ -33,33 +34,40 @@ except IndexError:
     url = None
 
 module, classname = parsername.rsplit('.', 1)
-parser = getattr(__import__(module, globals(), fromlist=[classname]), classname)
+parser = getattr(__import__(module, globals(),
+                            fromlist=[classname]), classname)
+
 
 def tweet_word(word, article):
-    client.captureMessage("posted: "+word)
-    time.sleep(1)    
+    client.captureMessage("posted: " + word)
+    time.sleep(1)
     if not check_api(word):
         return
-    if int( r.get("recently") or 0 ) < 3:
+    if int(r.get("recently") or 0) < 3:
         r.incr("recently")
         r.expire("recently", 60 * 30)
         try:
             status = api.PostUpdate(word)
-            contextApi = api.PostUpdate(article, in_reply_to_status_id=status.id)
+            contextApi.PostUpdate(
+                article, in_reply_to_status_id=status.id)
             client.captureMessage(status, extra=status)
         except UnicodeDecodeError:
-	        client.captureException()
-	    except twitter.TwitterError:
-	        client.captureException()	
+            client.captureException()
+            except twitter.TwitterError:
+            client.captureException()
+
 
 def ok_word(s):
-    return (not any(i.isdigit() or i=='.' or i=='@' or i=='#' for i in s)) and s.islower() and s[0] is not '@'
+    return (not any(i.isdigit() or i == '.' or i == '@' or i == '#' for i in s)) and s.islower() and s[0] is not '@'
+
 
 def remove_punctuation(text):
-    return re.sub(ur"’s","", re.sub(ur"\p{P}+$", "", re.sub(ur"^\p{P}+", "", text)))
+    return re.sub(ur"’s", "", re.sub(ur"\p{P}+$", "", re.sub(ur"^\p{P}+", "", text)))
+
 
 def normalize_punc(raw_word):
-    return raw_word.replace(',', '-').replace('—', '-').replace('/', '-').replace(':', '-').replace('\'', '-').replace('’','-').split('-')
+    return raw_word.replace(',', '-').replace('—', '-').replace('/', '-').replace(':', '-').replace('\'', '-').replace('’', '-').split('-')
+
 
 def process_article(content, article):
     text = unicode(content)
@@ -73,11 +81,12 @@ def process_article(content, article):
                     tweet_word(word, article)
                     r.set(wkey, '1')
 
+
 links = parser.feed_urls()
 for link in links:
-    akey = "article:"+link
+    akey = "article:" + link
     if not r.get(akey):
-	time.sleep(1)
+        time.sleep(1)
         parsed_article = parser(link)
         process_article(parsed_article, link)
         r.set(akey, '1')
