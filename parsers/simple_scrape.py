@@ -46,7 +46,7 @@ def tweet_word(word, article):
         try:
             status = api.PostUpdate(word)
             contextApi = api.PostUpdate(article, in_reply_to_status_id=status.id)
-	        client.captureMessage(status, extra=status)
+            client.captureMessage(status, extra=status)
         except UnicodeDecodeError:
 	        client.captureException()
 	    except twitter.TwitterError:
