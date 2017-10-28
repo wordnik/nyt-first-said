@@ -53,7 +53,7 @@ def tweet_word(word, article):
             client.captureMessage(status, extra=status)
         except UnicodeDecodeError:
             client.captureException()
-            except twitter.TwitterError:
+        except twitter.TwitterError:
             client.captureException()
 
 
