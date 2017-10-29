@@ -49,8 +49,7 @@ def tweet_word(word, article):
         try:
             status = api.PostUpdate(word)
             contextApi.PostUpdate(
-                article, in_reply_to_status_id=status.id)
-            client.captureMessage(status, extra=status)
+                "@{} {}".format(status.user.screen_name, article), in_reply_to_status_id=status.id)
         except UnicodeDecodeError:
             client.captureException()
         except twitter.TwitterError:
