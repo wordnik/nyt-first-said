@@ -72,7 +72,7 @@ def remove_punctuation(text):
 
 
 def normalize_punc(raw_word):
-    return raw_word.replace(',', '-').replace('—', '-').replace('/', '-').replace(':', '-').replace('\'', '-').replace('’', '-').split('-')
+    return raw_word.replace(',', '-').replace('—', '-').replace(':', '-').replace('\'', '-').replace('’', '-').split('-')
 
 
 def process_article(content, article):
