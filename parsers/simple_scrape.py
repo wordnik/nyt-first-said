@@ -37,6 +37,8 @@ module, classname = parsername.rsplit('.', 1)
 parser = getattr(__import__(module, globals(),
                             fromlist=[classname]), classname)
 
+def humanize_url(article):
+    return article.split('/')[-1].split('.html')[0].replace('-', ' ')
 
 def tweet_word(word, article):
     client.captureMessage("posted: " + word)
@@ -49,7 +51,12 @@ def tweet_word(word, article):
         try:
             status = api.PostUpdate(word)
             contextApi.PostUpdate(
-                "@{} {}".format(status.user.screen_name, article), in_reply_to_status_id=status.id)
+                "@{} \"{}\" occurred in \"{}\": {}".format(
+	        status.user.screen_name,
+	        word,
+	        humanize_url(article),
+	        article),
+                in_reply_to_status_id=status.id)
         except UnicodeDecodeError:
             client.captureException()
         except twitter.TwitterError:
