@@ -3,11 +3,15 @@
 """
 """
 import requests
+import time
 
 key = ""
 def check_api(word):
     query_string = { 'api-key': key, 'q': word}
     req = requests.get('https://api.nytimes.com/svc/search/v2/articlesearch.json', params=query_string)
+    if req.status_code in set([529,504]):
+        time.sleep(15)
+        return check_api(word)
     result = req.json()
     numResults = len(result['response']['docs'])
     return numResults < 2

@@ -37,6 +37,8 @@ module, classname = parsername.rsplit('.', 1)
 parser = getattr(__import__(module, globals(),
                             fromlist=[classname]), classname)
 
+def humanize_url(article):
+    return article.split('/')[-1].split('.html')[0].replace('-', ' ')
 
 def tweet_word(word, article):
     client.captureMessage("posted: " + word)
@@ -49,8 +51,12 @@ def tweet_word(word, article):
         try:
             status = api.PostUpdate(word)
             contextApi.PostUpdate(
-                article, in_reply_to_status_id=status.id)
-            client.captureMessage(status, extra=status)
+                "@{} \"{}\" occurred in \"{}\": {}".format(
+	        status.user.screen_name,
+	        word,
+	        humanize_url(article),
+	        article),
+                in_reply_to_status_id=status.id)
         except UnicodeDecodeError:
             client.captureException()
         except twitter.TwitterError:
@@ -60,7 +66,7 @@ def tweet_word(word, article):
 def ok_word(s):
     if s[-1] == '.': #trim trailing .
         s = s[:-1]
-    return (not any(i.isdigit() or i == '.' or i == '@' or i == '#' for i in s)) and s.islower() and s[0] is not '@'
+    return (not any(i.isdigit() or i == '.' or i == '@' or i =='/' or i == '#' for i in s)) and s.islower() and s[0] is not '@'
 
 
 def remove_punctuation(text):
@@ -68,7 +74,7 @@ def remove_punctuation(text):
 
 
 def normalize_punc(raw_word):
-    return raw_word.replace(',', '-').replace('—', '-').replace('/', '-').replace(':', '-').replace('\'', '-').replace('’', '-').split('-')
+    return raw_word.replace(',', '-').replace('—', '-').replace('”','-').replace(':', '-').replace('\'', '-').replace('’', '-').split('-')
 
 
 def process_article(content, article):
