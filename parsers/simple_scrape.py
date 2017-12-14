@@ -64,7 +64,7 @@ def tweet_word(word, article):
 
 
 def ok_word(s):
-    if s[-1] == '.': #trim trailing .
+    if s.endswith('.'): #trim trailing .
         s = s[:-1]
     return (not any(i.isdigit() or i == '.' or i == '@' or i =='/' or i == '#' for i in s)) and s.islower() and s[0] is not '@'
 
