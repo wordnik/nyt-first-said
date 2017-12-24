@@ -40,7 +40,7 @@ parser = getattr(__import__(module, globals(),
 def humanize_url(article):
     return article.split('/')[-1].split('.html')[0].replace('-', ' ')
 
-def tweet_word(word, article):
+def tweet_word(word, article_url, article_content):
     client.captureMessage("posted: " + word)
     time.sleep(1)
     if not check_api(word):
@@ -53,9 +53,9 @@ def tweet_word(word, article):
             contextApi.PostUpdate(
                 "@{} \"{}\" occurred in \"{}\": {}".format(
 	        status.user.screen_name,
-	        word,
-	        humanize_url(article),
-	        article),
+	        context(article_content, word),
+	        humanize_url(article_url),
+	        article_url),
                 in_reply_to_status_id=status.id)
         except UnicodeDecodeError:
             client.captureException()
@@ -77,6 +77,23 @@ def normalize_punc(raw_word):
     return raw_word.replace(',', '-').replace('—', '-').replace('”','-').replace(':', '-').replace('\'', '-').replace('’', '-').split('-')
 
 
+def context(content, word):
+    loc = content.find(word)
+    to_period = content[loc:].find('.')
+    if to_period  < 40:
+        end = content[loc:loc+to_period+1]
+    else:
+        end = u'{}…'.format(content[loc:40])
+    
+    prev_period = content[:loc].rfind('.')
+    if loc - prev_period  < 40:
+        start = content[prev_period+2 : loc]
+    else:
+        start = u'…{}'.format(content[loc-40:loc])
+    
+    return u'{}{}'.format(start, end)
+
+
 def process_article(content, article):
     text = unicode(content)
     words = text.split()
@@ -86,7 +103,7 @@ def process_article(content, article):
                 word = remove_punctuation(raw_word)
                 wkey = "word:" + word
                 if not r.get(wkey):
-                    tweet_word(word, article)
+                    tweet_word(word, article, content)
                     r.set(wkey, '1')
 
 
