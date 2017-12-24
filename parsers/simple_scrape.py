@@ -103,7 +103,7 @@ def process_article(content, article):
                 word = remove_punctuation(raw_word)
                 wkey = "word:" + word
                 if not r.get(wkey):
-                    tweet_word(word, article, content)
+                    tweet_word(word, article, text)
                     r.set(wkey, '1')
 
 
