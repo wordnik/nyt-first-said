@@ -83,7 +83,7 @@ def context(content, word):
     if to_period  < 40:
         end = content[loc:loc+to_period+1]
     else:
-        end = u'{}…'.format(content[loc:40])
+        end = u'{}…'.format(content[loc:loc+40])
     
     prev_period = content[:loc].rfind('.')
     if loc - prev_period  < 40:
