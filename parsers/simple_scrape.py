@@ -80,16 +80,17 @@ def normalize_punc(raw_word):
 def context(content, word):
     loc = content.find(word)
     to_period = content[loc:].find('.')
-    if to_period  < 40:
+    prev_period = content[:loc].rfind('.')
+    allowance = 30;    
+    if to_period  < allowance:
         end = content[loc:loc+to_period+1]
     else:
-        end = u'{}…'.format(content[loc:loc+40])
+        end = u'{}…'.format(content[loc:loc+allowance])
     
-    prev_period = content[:loc].rfind('.')
-    if loc - prev_period  < 40:
+    if loc - prev_period  < allowance:
         start = content[prev_period+2 : loc]
     else:
-        start = u'…{}'.format(content[loc-40:loc])
+        start = u'…{}'.format(content[loc-allowance:loc])
     
     return u'{}{}'.format(start, end)
 
