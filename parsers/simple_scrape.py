@@ -51,10 +51,10 @@ def tweet_word(word, article_url, article_content):
         try:
             status = api.PostUpdate(word)
             contextApi.PostUpdate(
-                "@{} \"{}\" occurred in \"{}\": {}".format(
+                "@{} \"{}\" occurred in: {}".format(
 	        status.user.screen_name,
 	        context(article_content, word),
-	        humanize_url(article_url),
+	        # humanize_url(article_url),
 	        article_url),
                 in_reply_to_status_id=status.id)
         except UnicodeDecodeError:
