@@ -81,14 +81,14 @@ def context(content, word):
     loc = content.find(word)
     to_period = content[loc:].find('.')
     prev_period = content[:loc].rfind('.')
-    allowance = 30;    
+    allowance = 39;    
     if to_period  < allowance:
         end = content[loc:loc+to_period+1]
     else:
         end = u'{}…'.format(content[loc:loc+allowance])
     
     if loc - prev_period  < allowance:
-        start = content[prev_period+2 : loc]
+        start = content[prev_period+2 : loc].strip()
     else:
         start = u'…{}'.format(content[loc-allowance:loc])
     
