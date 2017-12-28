@@ -37,8 +37,10 @@ module, classname = parsername.rsplit('.', 1)
 parser = getattr(__import__(module, globals(),
                             fromlist=[classname]), classname)
 
+
 def humanize_url(article):
     return article.split('/')[-1].split('.html')[0].replace('-', ' ')
+
 
 def tweet_word(word, article_url, article_content):
     client.captureMessage("posted: " + word)
@@ -52,10 +54,10 @@ def tweet_word(word, article_url, article_content):
             status = api.PostUpdate(word)
             contextApi.PostUpdate(
                 "@{} \"{}\" occurred in: {}".format(
-	        status.user.screen_name,
-	        context(article_content, word),
-	        # humanize_url(article_url),
-	        article_url),
+                    status.user.screen_name,
+                    context(article_content, word),
+                    # humanize_url(article_url),
+                    article_url),
                 in_reply_to_status_id=status.id)
         except UnicodeDecodeError:
             client.captureException()
@@ -64,9 +66,9 @@ def tweet_word(word, article_url, article_content):
 
 
 def ok_word(s):
-    if s.endswith('.'): #trim trailing .
+    if s.endswith('.'):  # trim trailing .
         s = s[:-1]
-    return (not any(i.isdigit() or i == '.' or i == '@' or i =='/' or i == '#' for i in s)) and s.islower() and s[0] is not '@'
+    return (not any(i.isdigit() or i == '.' or i == '@' or i == '/' or i == '#' for i in s)) and s.islower() and s[0] is not '@'
 
 
 def remove_punctuation(text):
@@ -74,24 +76,24 @@ def remove_punctuation(text):
 
 
 def normalize_punc(raw_word):
-    return raw_word.replace(',', '-').replace('—', '-').replace('”','-').replace(':', '-').replace('\'', '-').replace('’', '-').split('-')
+    return raw_word.replace(',', '-').replace('—', '-').replace('”', '-').replace(':', '-').replace('\'', '-').replace('’', '-').split('-')
 
 
 def context(content, word):
     loc = content.find(word)
     to_period = content[loc:].find('.')
     prev_period = content[:loc].rfind('.')
-    allowance = 39;    
-    if to_period  < allowance:
-        end = content[loc:loc+to_period+1]
+    allowance = 39
+    if to_period < allowance:
+        end = content[loc:loc + to_period + 1]
     else:
-        end = u'{}…'.format(content[loc:loc+allowance])
-    
-    if loc - prev_period  < allowance:
-        start = content[prev_period+2 : loc].strip()
+        end = u'{}…'.format(content[loc:loc + allowance])
+
+    if loc - prev_period < allowance:
+        start = content[prev_period + 2: loc].strip()
     else:
-        start = u'…{}'.format(content[loc-allowance:loc])
-    
+        start = u'…{}'.format(content[loc - allowance:loc])
+
     return u'{}{}'.format(start, end)
 
 
