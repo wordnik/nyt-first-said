@@ -58,7 +58,8 @@ def tweet_word(word, article_url, article_content):
                     context(article_content, word),
                     # humanize_url(article_url),
                     article_url),
-                in_reply_to_status_id=status.id)
+                in_reply_to_status_id=status.id,
+                verify_status_length=False)
         except UnicodeDecodeError:
             client.captureException()
         except twitter.TwitterError:
