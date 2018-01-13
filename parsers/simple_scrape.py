@@ -12,6 +12,7 @@ import raven
 import twitter
 from twitter_creds import TwitterApi, TwitterApiContext
 from api_check import check_api
+from nyt import NYTParser
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -26,44 +27,37 @@ contextApi = TwitterApiContext()
 
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
-parsername = "nyt.NYTParser"
 
-try:
-    url = sys.argv[1]
-except IndexError:
-    url = None
-
-module, classname = parsername.rsplit('.', 1)
-parser = getattr(__import__(module, globals(),
-                            fromlist=[classname]), classname)
-
+parser = NYTParser
 
 def humanize_url(article):
     return article.split('/')[-1].split('.html')[0].replace('-', ' ')
 
 
-def tweet_word(word, article_url, article_content):
-    client.captureMessage("posted: " + word)
+def check_word(word, article_url, article_content):
     time.sleep(1)
     if not check_api(word):
         return
-    if int(r.get("recently") or 0) < 3:
+    if int(r.get("recently") or 0) < 4:
         r.incr("recently")
         r.expire("recently", 60 * 30)
-        try:
-            status = api.PostUpdate(word)
-            contextApi.PostUpdate(
-                "@{} \"{}\" occurred in: {}".format(
-                    status.user.screen_name,
-                    context(article_content, word),
-                    # humanize_url(article_url),
-                    article_url),
-                in_reply_to_status_id=status.id,
-                verify_status_length=False)
-        except UnicodeDecodeError:
-            client.captureException()
-        except twitter.TwitterError:
-            client.captureException()
+        tweet_word(word, article_url, article_content)
+
+
+def tweet_word(word, article_url, article_content):
+    try:
+        status = api.PostUpdate(word)
+        contextApi.PostUpdate(
+            "@{} \"{}\" occurred in: {}".format(
+                status.user.screen_name,
+                context(article_content, word),
+                article_url),
+            in_reply_to_status_id=status.id,
+            verify_status_length=False)
+    except UnicodeDecodeError:
+        client.captureException()
+    except twitter.TwitterError:
+        client.captureException()
 
 
 def ok_word(s):
@@ -77,21 +71,25 @@ def remove_punctuation(text):
 
 
 def normalize_punc(raw_word):
-    return raw_word.replace(',', '-').replace('—', '-').replace('”', '-').replace(':', '-').replace('\'', '-').replace('’', '-').split('-')
+    replaced_chars = [',', '—', '”', ':', '\'', '’']
+    for char in replaced_chars:
+        raw_word = raw_word.replace(char,'-')
+
+    return raw_word.split('-')
 
 
 def context(content, word):
     loc = content.find(word)
     to_period = content[loc:].find('.')
     prev_period = content[:loc].rfind('.')
-    allowance = 37
+    allowance = 45
     if to_period < allowance:
         end = content[loc:loc + to_period + 1]
     else:
         end = u'{}…'.format(content[loc:loc + allowance])
 
     if loc - prev_period < allowance:
-        start = content[prev_period + 2: loc].strip()
+        start = u'{} '.format(content[prev_period + 2: loc].strip())
     else:
         start = u'…{}'.format(content[loc - allowance:loc])
 
@@ -107,15 +105,19 @@ def process_article(content, article):
                 word = remove_punctuation(raw_word)
                 wkey = "word:" + word
                 if not r.get(wkey):
-                    tweet_word(word, article, text)
+                    check_word(word, article, text)
                     r.set(wkey, '1')
 
 
-links = parser.feed_urls()
-for link in links:
-    akey = "article:" + link
-    if not r.get(akey):
-        time.sleep(1)
-        parsed_article = parser(link)
-        process_article(parsed_article, link)
-        r.set(akey, '1')
+def process_links(links):
+    for link in links:
+        akey = "article:" + link
+        
+        # unseen article
+        if not r.get(akey): 
+            time.sleep(1)
+            parsed_article = parser(link)
+            process_article(parsed_article, link)
+            r.set(akey, '1')
+
+process_links(parser.feed_urls())

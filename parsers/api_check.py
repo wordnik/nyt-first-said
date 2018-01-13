@@ -15,5 +15,5 @@ def check_api(word):
     result = req.json()
     if req.status_code == 500:
         return False 
-    numResults = len(result['response']['docs'])
-    return numResults < 2
+    num_results = len(result['response']['docs'])
+    return num_results < 2
