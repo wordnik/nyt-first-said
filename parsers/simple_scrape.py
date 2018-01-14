@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/python
-"""
-"""
 
 import sys
 import redis
@@ -71,7 +69,7 @@ def remove_punctuation(text):
 
 
 def normalize_punc(raw_word):
-    replaced_chars = [',', '—', '”', ':', '\'', '’']
+    replaced_chars = [',', '—', '”', ':', '\'', '’', '"']
     for char in replaced_chars:
         raw_word = raw_word.replace(char,'-')
 
