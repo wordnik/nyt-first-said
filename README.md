@@ -7,6 +7,8 @@ It also powers a sibling bot [@NYT_said_where](https://twitter.com/NYT_said_wher
 
 The code takes some steps to throw away un-interesting words like proper nouns and urls, but still picks up a lot of typos and nonsense, so the sanitization is an ongoing process.
 
+Some points of inspiration are Allison Parrish's @everyword bot, and the [NewsDiffs](http://newsdiffs.org/about/) editorial change archiving software.
+
 ## Basic architecture
 
 NYT-first-said is essentially a single script. It's running once an hour as a cron job on a small VPS.
