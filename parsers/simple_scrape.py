@@ -59,9 +59,13 @@ def tweet_word(word, article_url, article_content):
 
 
 def ok_word(s):
-    if s.endswith('.'):  # trim trailing .
+    if s.endswith('.') or s.endswith('’'):  # trim trailing .
         s = s[:-1]
-    return (not any(i.isdigit() or i == '.' or i == '@' or i == '/' or i == '#' for i in s)) and s.islower() and s[0] is not '@'
+    
+    if s[0] is '@' or not s.islower():
+        return False
+
+    return (not any(i.isdigit() or i == '.' or i == '@' or i == '/' or i == '#' for i in s))
 
 
 def remove_punctuation(text):
@@ -69,7 +73,7 @@ def remove_punctuation(text):
 
 
 def normalize_punc(raw_word):
-    replaced_chars = [',', '—', '”', ':', '\'', '’', '"']
+    replaced_chars = [',', '—', '”', ':', '\'', '’s', '"']
     for char in replaced_chars:
         raw_word = raw_word.replace(char,'-')
 
