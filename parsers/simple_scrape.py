@@ -62,7 +62,7 @@ def ok_word(s):
     if s.endswith('.') or s.endswith('’'):  # trim trailing .
         s = s[:-1]
     
-    if s[0] is '@' or not s.islower():
+    if not s.islower() or s[0] is '@':
         return False
 
     return (not any(i.isdigit() or i == '.' or i == '@' or i == '/' or i == '#' for i in s))
