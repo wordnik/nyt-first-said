@@ -65,7 +65,7 @@ def ok_word(s):
     if not s.islower() or s[0] is '@':
         return False
 
-    return (not any(i.isdigit() or i == '.' or i == '@' or i == '/' or i == '#' for i in s))
+    return (not any(i.isdigit() or i == '.' or i == '@' or i == '/' or i == '#' or i == "-" for i in s))
 
 
 def remove_punctuation(text):
@@ -75,9 +75,9 @@ def remove_punctuation(text):
 def normalize_punc(raw_word):
     replaced_chars = [',', '—', '”', ':', '\'', '’s', '"']
     for char in replaced_chars:
-        raw_word = raw_word.replace(char,'-')
+        raw_word = raw_word.replace(char,' ')
 
-    return raw_word.split('-')
+    return raw_word.split(' ')
 
 
 def context(content, word):
