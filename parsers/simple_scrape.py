@@ -8,6 +8,7 @@ import regex as re
 import time
 import raven
 import twitter
+import langid
 from twitter_creds import TwitterApi, TwitterApiContext
 from api_check import check_api
 from nyt import NYTParser
@@ -28,27 +29,35 @@ r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 parser = NYTParser
 
+
 def humanize_url(article):
     return article.split('/')[-1].split('.html')[0].replace('-', ' ')
 
 
-def check_word(word, article_url, article_content):
+def check_word(word, article_url, word_context):
     time.sleep(1)
     if not check_api(word):
         return
-    if int(r.get("recently") or 0) < 4:
+
+    language, confidence = langid.classify(word_context)
+
+    if language != 'en':
+        client.captureMessage("language unknown")
+        return
+
+    if int(r.get("recently") or 0) < 5:
         r.incr("recently")
         r.expire("recently", 60 * 30)
-        tweet_word(word, article_url, article_content)
+        tweet_word(word, article_url, word_context)
 
 
-def tweet_word(word, article_url, article_content):
+def tweet_word(word, article_url, word_context):
     try:
         status = api.PostUpdate(word)
         contextApi.PostUpdate(
             "@{} \"{}\" occurred in: {}".format(
                 status.user.screen_name,
-                context(article_content, word),
+                word_context,
                 article_url),
             in_reply_to_status_id=status.id,
             verify_status_length=False)
@@ -61,7 +70,7 @@ def tweet_word(word, article_url, article_content):
 def ok_word(s):
     if s.endswith('.') or s.endswith('’'):  # trim trailing .
         s = s[:-1]
-    
+
     if not s.islower() or s[0] is '@':
         return False
 
@@ -75,7 +84,7 @@ def remove_punctuation(text):
 def normalize_punc(raw_word):
     replaced_chars = [',', '—', '”', ':', '\'', '’s', '"']
     for char in replaced_chars:
-        raw_word = raw_word.replace(char,' ')
+        raw_word = raw_word.replace(char, ' ')
 
     return raw_word.split(' ')
 
@@ -107,19 +116,20 @@ def process_article(content, article):
                 word = remove_punctuation(raw_word)
                 wkey = "word:" + word
                 if not r.get(wkey):
-                    check_word(word, article, text)
+                    check_word(word, article, context(text, word))
                     r.set(wkey, '1')
 
 
 def process_links(links):
     for link in links:
         akey = "article:" + link
-        
+
         # unseen article
-        if not r.get(akey): 
+        if not r.get(akey):
             time.sleep(1)
             parsed_article = parser(link)
             process_article(parsed_article, link)
             r.set(akey, '1')
+
 
 process_links(parser.feed_urls())
