@@ -42,7 +42,11 @@ def check_word(word, article_url, word_context):
     language, confidence = langid.classify(word_context)
 
     if language != 'en':
-        client.captureMessage("language unknown")
+        client.captureMessage("Language Rejection", extra={
+            'word': word,
+            'word_context': word_context,
+            'confidence': confidence
+        })
         return
 
     if int(r.get("recently") or 0) < 5:
