@@ -80,11 +80,14 @@ class NYTParser(BaseParser):
         
         p_contents = reduce(operator.concat, [p.contents for p in p_tags], [])
         
-        body_strings = [ngs for ngs in p_contents if type(ngs) is NavigableString]
-        other_body_elements = [el for el in p_contents if type(el) is not NavigableString]
+        body_strings  = []
+        for node in p_contents:
+            if type(node) is NavigableString:
+                body_strings.append(node)
+            else:
+                body_strings.append(node.getText())
 
-        main_body  = ' '.join(body_strings)
-        body_elements = '\n\n'.join([p.getText() for p in other_body_elements])
+        main_body = '\n\n'.join(body_strings)
 
         authorids = soup.find('div', attrs={'class':'authorIdentification'})
         authorid = authorids.getText() if authorids else ''
@@ -93,8 +96,8 @@ class NYTParser(BaseParser):
                                    soup.findAll('nyt_correction_top')) or '\n'
         bottom_correction = '\n'.join(x.getText() for x in
                                    soup.findAll('nyt_correction_bottom')) or '\n'
+
         self.body = '\n'.join([top_correction,
                                main_body,
-                               body_elements,
                                authorid,
                                bottom_correction,])
