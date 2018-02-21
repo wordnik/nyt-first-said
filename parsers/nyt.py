@@ -1,5 +1,6 @@
 from baseparser import BaseParser
-from BeautifulSoup import BeautifulSoup
+from BeautifulSoup import BeautifulSoup, NavigableString
+import operator
 
 class NYTParser(BaseParser):
     SUFFIX = '?pagewanted=all'
@@ -62,20 +63,29 @@ class NYTParser(BaseParser):
         except AttributeError:
             self.real_article = False
             return
+       
         p_tags = sum([list(soup.findAll('p', attrs=restriction))
                       for restriction in [{'itemprop': 'articleBody'},
                                           {'itemprop': 'reviewBody'},
                                           {'class':'story-body-text story-content'}
                                       ]],
                      [])
+
         div = soup.find('div', attrs={'class': 'story-addendum story-content theme-correction'})
         if div:
             p_tags += [div]
         footer = soup.find('footer', attrs={'class':'story-footer story-content'})
         if footer:
             p_tags += list(footer.findAll(lambda x: x.get('class') != 'story-print-citation' and x.name == 'p'))
+        
+        p_contents = reduce(operator.concat, [p.contents for p in p_tags], [])
+        
+        body_strings = [ngs for ngs in p_contents if type(ngs) is NavigableString]
+        other_body_elements = [el for el in p_contents if type(el) is not NavigableString]
 
-        main_body = '\n\n'.join([p.getText() for p in p_tags])
+        main_body  = ' '.join(body_strings)
+        body_elements = '\n\n'.join([p.getText() for p in other_body_elements])
+
         authorids = soup.find('div', attrs={'class':'authorIdentification'})
         authorid = authorids.getText() if authorids else ''
 
@@ -85,5 +95,6 @@ class NYTParser(BaseParser):
                                    soup.findAll('nyt_correction_bottom')) or '\n'
         self.body = '\n'.join([top_correction,
                                main_body,
+                               body_elements,
                                authorid,
                                bottom_correction,])
