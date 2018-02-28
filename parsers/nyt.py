@@ -78,16 +78,19 @@ class NYTParser(BaseParser):
         if footer:
             p_tags += list(footer.findAll(lambda x: x.get('class') != 'story-print-citation' and x.name == 'p'))
         
-        p_contents = reduce(operator.concat, [p.contents for p in p_tags], [])
+        p_contents = reduce(operator.concat, [p.contents + [NavigableString("\n")] for p in p_tags], [])
         
         body_strings  = []
         for node in p_contents:
             if type(node) is NavigableString:
                 body_strings.append(node)
             else:
-                body_strings.append(node.getText())
+                if node.name is 'br':
+                    body_strings.append("\n")
+                else:
+                    body_strings.append(node.getText())
 
-        main_body = '\n\n'.join(body_strings)
+        main_body = ''.join(body_strings)
 
         authorids = soup.find('div', attrs={'class':'authorIdentification'})
         authorid = authorids.getText() if authorids else ''
