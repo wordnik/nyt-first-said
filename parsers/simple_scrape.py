@@ -75,10 +75,10 @@ def ok_word(s):
     if s.endswith('.') or s.endswith('’'):  # trim trailing .
         s = s[:-1]
 
-    if not s.islower() or s[0] is '@':
+    if not s.islower():
         return False
 
-    return (not any(i.isdigit() or i == '.' or i == '@' or i == '/' or i == '#' or i == "-" for i in s))
+    return (not any(i.isdigit() or i in '.@/#-_' for i in s))
 
 
 def remove_punctuation(text):
