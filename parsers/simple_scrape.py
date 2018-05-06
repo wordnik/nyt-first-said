@@ -131,7 +131,7 @@ def process_links(links):
         # unseen article
         if not r.get(akey):
             time.sleep(1)
-            parsed_article = parser(link)
+            parsed_article = parser(link).body
             process_article(parsed_article, link)
             r.set(akey, '1')
 
