@@ -1,5 +1,6 @@
 from baseparser import BaseParser
-from BeautifulSoup import BeautifulSoup, NavigableString
+from bs4 import BeautifulSoup, NavigableString
+
 import operator
 
 class NYTParser(BaseParser):
@@ -44,41 +45,36 @@ class NYTParser(BaseParser):
 
 
     def _parse(self, html):
-        soup = BeautifulSoup(html, convertEntities=BeautifulSoup.HTML_ENTITIES)
-        self.meta = soup.findAll('meta')
+        soup = BeautifulSoup(html.decode('utf-8'), "html5lib")
+        self.meta = soup.find_all('meta')
+        
+        try:
+            soup.find('meta', attrs={'name':'hdl'}).get('content')
+            soup.find('meta', attrs={'name':'dat'}).get('content')
+            soup.find('meta', attrs={'name':'byl'}).get('content')
+        except AttributeError:
+            self.real_article = False
+            # return
 
-        try:
-            seo_title = soup.find('meta', attrs={'name':'hdl'}).get('content')
-        except AttributeError:
-            self.real_article = False
-            return
-        tmp = soup.find('meta', attrs={'name':'hdl_p'})
-        if tmp and tmp.get('content'):
-            self.title = tmp.get('content')
-        else:
-            self.title = seo_title
-        try:
-            self.date = soup.find('meta', attrs={'name':'dat'}).get('content')
-            self.byline = soup.find('meta', attrs={'name':'byl'}).get('content')
-        except AttributeError:
-            self.real_article = False
-            return
-       
-        p_tags = sum([list(soup.findAll('p', attrs=restriction))
+        p_tags = sum([list(soup.find_all('p', attrs=restriction))
                       for restriction in [{'itemprop': 'articleBody'},
                                           {'itemprop': 'reviewBody'},
                                           {'class':'story-body-text story-content'}
                                       ]],
                      [])
 
+        divs = soup.find_all('div', attrs={'class': 'StoryBodyCompanionColumn'})
+        for div in divs:
+            p_tags += div.find_all('p')        
+
         div = soup.find('div', attrs={'class': 'story-addendum story-content theme-correction'})
         if div:
             p_tags += [div]
         footer = soup.find('footer', attrs={'class':'story-footer story-content'})
         if footer:
-            p_tags += list(footer.findAll(lambda x: x.get('class') != 'story-print-citation' and x.name == 'p'))
+            p_tags += list(footer.find_all(lambda x: x.get('class') != 'story-print-citation' and x.name == 'p'))
         
-        p_contents = reduce(operator.concat, [p.contents + [NavigableString("\n")] for p in p_tags], [])
+        p_contents = reduce(operator.concat, [p.contents + [NavigableString('\n')] for p in p_tags], [])
         
         body_strings  = []
         for node in p_contents:
@@ -86,7 +82,7 @@ class NYTParser(BaseParser):
                 body_strings.append(node)
             else:
                 if node.name is 'br':
-                    body_strings.append("\n")
+                    body_strings.append('\n')
                 else:
                     body_strings.append(node.getText())
 
@@ -95,12 +91,13 @@ class NYTParser(BaseParser):
         authorids = soup.find('div', attrs={'class':'authorIdentification'})
         authorid = authorids.getText() if authorids else ''
 
-        top_correction = '\n'.join(x.getText() for x in
-                                   soup.findAll('nyt_correction_top')) or '\n'
-        bottom_correction = '\n'.join(x.getText() for x in
-                                   soup.findAll('nyt_correction_bottom')) or '\n'
+        top_correction = ' '.join(x.getText() for x in
+                                   soup.find_all('nyt_correction_top')) or ' '
+        bottom_correction = ' '.join(x.getText() for x in
+                                   soup.find_all('nyt_correction_bottom')) or ' '
 
         self.body = '\n'.join([top_correction,
                                main_body,
                                authorid,
                                bottom_correction,])
+                        

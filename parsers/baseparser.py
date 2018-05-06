@@ -48,23 +48,7 @@ def grab_url(url, max_depth=5, opener=None):
 
 
 
-# Begin hot patch for https://bugs.launchpad.net/bugs/788986
-# Ick.
-from BeautifulSoup import BeautifulSoup
-def bs_fixed_getText(self, separator=u""):
-    bsmod = sys.modules[BeautifulSoup.__module__]
-    if not len(self.contents):
-        return u""
-    stopNode = self._lastRecursiveChild().next
-    strings = []
-    current = self.contents[0]
-    while current is not stopNode:
-        if isinstance(current, bsmod.NavigableString):
-            strings.append(current)
-        current = current.next
-    return separator.join(strings)
-sys.modules[BeautifulSoup.__module__].Tag.getText = bs_fixed_getText
-# End fix
+from bs4 import BeautifulSoup
 
 def strip_whitespace(text):
     lines = text.split('\n')
@@ -145,10 +129,10 @@ class BaseParser(object):
         all_urls = []
         for feeder_url in cls.feeder_pages:
             html = grab_url(feeder_url)
-            soup = cls.feeder_bs(html)
+            soup = cls.feeder_bs(html, 'html5lib')
 
             # "or ''" to make None into str
-            urls = [a.get('href') or '' for a in soup.findAll('a')]
+            urls = [a.get('href') or '' for a in soup.find_all('a')]
 
             # If no http://, prepend domain name
             domain = '/'.join(feeder_url.split('/')[:3])
