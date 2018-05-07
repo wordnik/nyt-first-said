@@ -84,7 +84,10 @@ class NYTParser(BaseParser):
                 if node.name is 'br':
                     body_strings.append('\n')
                 else:
-                    body_strings.append(node.getText())
+                    try:
+                        body_strings.append(node.get_text())
+                    except:
+                        body_strings.append(node)
 
         main_body = ''.join(body_strings)
 
