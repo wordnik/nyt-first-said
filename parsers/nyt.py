@@ -81,8 +81,8 @@ class NYTParser(BaseParser):
             if type(node) is NavigableString:
                 body_strings.append(node)
             else:
-                if node.name is 'br':
-                    body_strings.append('\n')
+                if node.name == 'br':
+                    body_strings.append(' \n ')
                 else:
                     try:
                         body_strings.append(node.get_text())
