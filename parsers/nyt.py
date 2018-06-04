@@ -59,8 +59,10 @@ class NYTParser(BaseParser):
             self.real_article = False
             # return
 
-        p_tags = list(soup.find("article", {"id":"story"}).find_all('p'))
-
+        try:
+            p_tags = list(soup.find("article", {"id":"story"}).find_all('p'))
+        except:
+            return 
         div = soup.find('div', attrs={'class': 'story-addendum story-content theme-correction'})
         if div:
             p_tags += [div]
