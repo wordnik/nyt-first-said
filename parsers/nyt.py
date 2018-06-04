@@ -1,5 +1,5 @@
 from baseparser import BaseParser
-from bs4 import BeautifulSoup, NavigableString
+from bs4 import BeautifulSoup, NavigableString, Comment
 
 import operator
 
@@ -46,6 +46,10 @@ class NYTParser(BaseParser):
 
     def _parse(self, html):
         soup = BeautifulSoup(html.decode('utf-8'), "html5lib")
+        
+        for comment in soup.find_all(text=lambda text: isinstance(text, Comment)):
+            comment.extract()
+
         self.meta = soup.find_all('meta')
         try:
             soup.find('meta', attrs={'name':'hdl'}).get('content')
@@ -56,15 +60,6 @@ class NYTParser(BaseParser):
             # return
 
         p_tags = list(soup.find("article", {"id":"story"}).find_all('p'))
-                    #   for restriction in [{'itemprop': 'articleBody'},
-                    #                       {'itemprop': 'reviewBody'},
-                    #                       {'class':'story-body-text story-content'}
-                    #                   ]],
-                    #  [])
-
-        divs = soup.find_all('div', attrs={'class': 'StoryBodyCompanionColumn'})
-        for div in divs:
-            p_tags += div.find_all('p')        
 
         div = soup.find('div', attrs={'class': 'story-addendum story-content theme-correction'})
         if div:
@@ -72,7 +67,7 @@ class NYTParser(BaseParser):
         footer = soup.find('footer', attrs={'class':'story-footer story-content'})
         if footer:
             p_tags += list(footer.find_all(lambda x: x.get('class') != 'story-print-citation' and x.name == 'p'))
-        
+
         p_contents = reduce(operator.concat, [p.contents + [NavigableString('\n')] for p in p_tags], [])
 
         body_strings  = []
