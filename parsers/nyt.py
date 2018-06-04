@@ -47,7 +47,6 @@ class NYTParser(BaseParser):
     def _parse(self, html):
         soup = BeautifulSoup(html.decode('utf-8'), "html5lib")
         self.meta = soup.find_all('meta')
-        
         try:
             soup.find('meta', attrs={'name':'hdl'}).get('content')
             soup.find('meta', attrs={'name':'dat'}).get('content')
@@ -56,12 +55,12 @@ class NYTParser(BaseParser):
             self.real_article = False
             # return
 
-        p_tags = sum([list(soup.find_all('p', attrs=restriction))
-                      for restriction in [{'itemprop': 'articleBody'},
-                                          {'itemprop': 'reviewBody'},
-                                          {'class':'story-body-text story-content'}
-                                      ]],
-                     [])
+        p_tags = list(soup.find("article", {"id":"story"}).find_all('p'))
+                    #   for restriction in [{'itemprop': 'articleBody'},
+                    #                       {'itemprop': 'reviewBody'},
+                    #                       {'class':'story-body-text story-content'}
+                    #                   ]],
+                    #  [])
 
         divs = soup.find_all('div', attrs={'class': 'StoryBodyCompanionColumn'})
         for div in divs:
@@ -75,7 +74,7 @@ class NYTParser(BaseParser):
             p_tags += list(footer.find_all(lambda x: x.get('class') != 'story-print-citation' and x.name == 'p'))
         
         p_contents = reduce(operator.concat, [p.contents + [NavigableString('\n')] for p in p_tags], [])
-        
+
         body_strings  = []
         for node in p_contents:
             if type(node) is NavigableString:
