@@ -19,8 +19,7 @@ sys.setdefaultencoding('utf8')
 from raven import Client
 
 client = Client(
-    'https://ad7b9867c209488da9baa4fbae04d8f0:b63c0acd29eb40269b52d3e6f82191d9@sentry.io/144998')
-
+'https://aee9ceb609b549fe8a85339e69c74150:8604fd36d8b04fbd9a70a81bdada5cdf@sentry.io/1223891')
 api = TwitterApi()
 contextApi = TwitterApiContext()
 
@@ -36,6 +35,7 @@ def humanize_url(article):
 
 def check_word(word, article_url, word_context):
     time.sleep(1)
+    print(word)
     if not check_api(word):
         return
 
@@ -127,7 +127,7 @@ def process_article(content, article):
 def process_links(links):
     for link in links:
         akey = "article:" + link
-
+	print(akey)
         # unseen article
         if not r.get(akey):
             time.sleep(1)
