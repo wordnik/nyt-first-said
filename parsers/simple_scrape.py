@@ -90,6 +90,8 @@ def normalize_punc(raw_word):
     for char in replaced_chars:
         raw_word = raw_word.replace(char, ' ')
 
+    raw_word = raw_word.replace(u"\u00AD", '-')
+
     return raw_word.split(' ')
 
 
