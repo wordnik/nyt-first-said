@@ -15,14 +15,15 @@
     />
     <style>
       body {
-        margin: 40px auto;
+        margin: 20px auto;
         max-width: 650px;
         line-height: 1.6;
         font-size: 18px;
-        color: #444;
+        color: #222;
         padding: 0 10px;
         font-family: "Libre Baskerville", serif;
-        background-color: #efefef;
+        /* background-color: #f9f9f9; */
+        background-color: lavender;
       }
       h1,
       h2,
@@ -30,7 +31,7 @@
         line-height: 1.2;
       }
       .title {
-        font-size: 24px;
+        font-size: 28px;
       }
       a {
         text-decoration-line: none;
@@ -47,11 +48,14 @@
         .col {
           max-width: 450px;
           flex-grow: 1;
-          margin: 100px;
+          margin: 50px;
         }
         body {
           display: flex;
           max-width: 1400px;
+        }
+        .spacer {
+          height: 100px;
         }
       }
     </style>
@@ -79,7 +83,7 @@
       </blockquote>
 
       <p>
-        Some points of inspiration are Allison Parrish's
+        Some points of inspiration for the project are Allison Parrish's
         <a href="https://twitter.com/everyword"> @everyword</a> bot, and
         <a href="https://twitter.com/nyt_diff"> @nyt_diff</a>, a twitter bot
         inspired by the
@@ -104,35 +108,43 @@
       </p>
       <p>
         For instance, the bot takes some steps to throw away less-interesting
-        first words like proper nouns and urls, but still picks up a lot of
-        typos and nonsense, hopefully that's part of the charm :)
+        first words – such as words containing capital letters (proper nouns) or
+        certain punctuation (URLs). Despite this, it still picks up a lot of
+        typos and nonsense... but I like to think of that as part of its charm.
       </p>
 
       <p>
+        There are a few sibling bots, including
+        <a href="https://twitter.com/nyt_said_where/with_replies"
+          >@nyt-said-where</a
+        >, which replies to each tweet with a paragraph of context from the
+        source-text and a link to the article.
+      </p>
+      <p>
         You can find a more detailed explanation about how this bot works on the
-        github repository - and that's also the best place to file bugs.
+        github repository -
         <a
           href="https://github.com/maxbittker/nyt-first-said"
           style="display: block; margin:auto;"
           ><img src="https://gh-card.dev/repos/maxbittker/nyt-first-said.svg"
         /></a>
+        and that's also the best place to file bugs if something is wrong.
       </p>
-
       <p>
-        There's a couple of sibling bots, including
-        <a href="https://twitter.com/nyt_said_where/with_replies"
-          >@nyt-said-where</a
-        >, which replies to each tweet with a paragraph of context from the
-        source-text, and a link to the article.
+        Thank you for reading and feel free to let me know
+        <a href="https://twitter.com/maxbittker">@maxbittker</a> if you think
+        there are other important questions I should answer on this page!
       </p>
-
       <p>
-        Thanks for reading and feel free to tweet me @maxbittker if you think
-        there are more important questions I should answer on this page!
+        If you're curious, I've done some other projects, and you can find some
+        of those
+        <a href="https://maxbittker.com/projects"> on my website</a>.
       </p>
     </div>
 
     <div class="col">
+      <div class="spacer"></div>
+
       <a
         class="twitter-timeline"
         href="https://twitter.com/nyt_first_said?ref_src=twsrc%5Etfw"
