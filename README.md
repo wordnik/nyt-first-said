@@ -1,5 +1,7 @@
 # [@NYT_first_said](https://twitter.com/NYT_first_said)
 
+#### [Info website](https://maxbittker.github.io/nyt-first-said/)
+
 A twitter bot to track when the New York Times publishes a word for the first time in history.
 running at: [@NYT_first_said](https://twitter.com/NYT_first_said)
 
