@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAC0tPoAAAAAANvb/wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREREREREREREQAREREREREQAiEREREREQAiIhEREREQAiIiIREREQAiIiIiEREQAiIiIiIhERAiIiIiIiERECIiIiIjIREQIiIRIjIhERECIRESIhERERERERERERERERERERERERERERERERERERERERERERERERERERERH+fwAA/D8AAPgfAADwDwAA4AcAAMADAACAAQAAgAEAAIABAACAAQAAwYMAAOPHAAD//wAA//8AAP//AAD//wAA"
+      rel="icon"
+      type="image/x-icon"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>nyt-first-said</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Libre+Baskerville&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 20px auto;
+        max-width: 650px;
+        line-height: 1.6;
+        font-size: 18px;
+        color: #222;
+        padding: 0 10px;
+        font-family: "Libre Baskerville", serif;
+        /* background-color: #f9f9f9; */
+        background-color: lavender;
+      }
+      h1,
+      h2,
+      h3 {
+        line-height: 1.2;
+      }
+      .title {
+        font-size: 28px;
+      }
+      a {
+        text-decoration-line: none;
+        overflow: hidden;
+      }
+      twitter-widget,
+      img {
+        display: block;
+        margin: auto;
+      }
+      img {
+        padding: 20px 20px 11.6px;
+        max-width: 100%;
+      }
+      @media only screen and (min-width: 1000px) {
+        .col {
+          max-width: 450px;
+          flex-grow: 1;
+          margin: 50px;
+        }
+        body {
+          display: flex;
+          max-width: 1400px;
+        }
+        .spacer {
+          height: 100px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="col">
+      <p>
+        <a href="https://twitter.com/nyt_first_said" class="title"
+          >@nyt-first-said</a
+        >
+        is a twitter bot which tracks when the New York Times publishes a word
+        for the first time in its history.
+      </p>
+      <p>
+        It looks like this:
+      </p>
+
+      <blockquote class="twitter-tweet" data-lang="en">
+        <p lang="en" dir="ltr">subtweeted</p>
+        &mdash; New New York Times (@nyt_first_said)
+        <a
+          href="https://twitter.com/nyt_first_said/status/958399986051567622?ref_src=twsrc%5Etfw"
+          >January 30, 2018</a
+        >
+      </blockquote>
+
+      <p>
+        Some points of inspiration for the project are Allison Parrish's
+        <a href="https://twitter.com/everyword"> @everyword</a> bot, and
+        <a href="https://twitter.com/nyt_diff"> @nyt_diff</a>, a twitter bot
+        inspired by the
+        <a href="http://newsdiffs.org/about/">NewsDiffs</a> project.
+      </p>
+
+      <blockquote class="twitter-tweet" data-lang="en">
+        <p lang="en" dir="ltr">
+          bot idea: whenever the nyt publishes a lowercase word for the first
+          time in it&#39;s history, tweet it.
+        </p>
+        &mdash; Max (@maxbittker)
+        <a
+          href="https://twitter.com/maxbittker/status/836730024094908417?ref_src=twsrc%5Etfw"
+          >March 1, 2017</a
+        >
+      </blockquote>
+      <p>
+        An important thing to understand about @nyt-first-said is that the
+        process to extract these words is a <b>best effort</b> undertaking, and
+        not <i>neccesarily </i> 100.00% accurate or exaustive.
+      </p>
+      <p>
+        For instance, the bot takes some steps to throw away less-interesting
+        first words – such as words containing capital letters (proper nouns) or
+        certain punctuation (URLs). Despite this, it still picks up a lot of
+        typos and nonsense... but I like to think of that as part of its charm.
+      </p>
+
+      <p>
+        There are a few sibling bots, including
+        <a href="https://twitter.com/nyt_said_where/with_replies"
+          >@nyt-said-where</a
+        >, which replies to each tweet with a paragraph of context from the
+        source-text and a link to the article.
+      </p>
+      <p>
+        You can find a more detailed explanation about how this bot works on the
+        github repository -
+        <a
+          href="https://github.com/maxbittker/nyt-first-said"
+          style="display: block; margin:auto;"
+          ><img src="https://gh-card.dev/repos/maxbittker/nyt-first-said.svg"
+        /></a>
+        and that's also the best place to file bugs if something is wrong.
+      </p>
+      <p>
+        Thank you for reading and feel free to let me know
+        <a href="https://twitter.com/maxbittker">@maxbittker</a> if you think
+        there are other important questions I should answer on this page!
+      </p>
+      <p>
+        If you're curious, I've done some other projects, and you can find some
+        of those
+        <a href="https://maxbittker.com/projects"> on my website</a>.
+      </p>
+    </div>
+
+    <div class="col">
+      <div class="spacer"></div>
+
+      <a
+        class="twitter-timeline"
+        href="https://twitter.com/nyt_first_said?ref_src=twsrc%5Etfw"
+        >Tweets by nyt_first_said</a
+      >
+      <script
+        async
+        src="https://platform.twitter.com/widgets.js"
+        charset="utf-8"
+      ></script>
+    </div>
+  </body>
+</html>
