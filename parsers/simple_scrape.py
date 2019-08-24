@@ -138,4 +138,12 @@ def process_links(links):
             r.set(akey, '1')
 
 
+start_time = time.time()
+
 process_links(parser.feed_urls())
+
+elapsed_time = time.time() - start_time
+print('Time Elapsed (seconds):')
+print(elapsed_time)
+
+
