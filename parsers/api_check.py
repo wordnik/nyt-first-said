@@ -8,7 +8,7 @@ import time
 key = ""
 def check_api(word):
     query_string = { 'api-key': key, 'q': word}
-    req = requests.get('https://api.nytimes.com/svc/search/v2/articlesearch.json', params=query_string)
+    req = requests.get('https://api.nytimes.com/svc/search/v2/articlesearch.json', params=query_string, verify=False)
     
     if req.status_code in set([429, 529, 504]):
         time.sleep(25)

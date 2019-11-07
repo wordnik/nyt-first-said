@@ -6,6 +6,12 @@ import sys
 import time
 import urllib2
 
+
+from raven import Client
+
+client = Client(
+'https://aee9ceb609b549fe8a85339e69c74150:8604fd36d8b04fbd9a70a81bdada5cdf@sentry.io/1223891')
+
 # Define a logger
 
 # This formatter is like the default but uses a period rather than a comma
@@ -38,6 +44,11 @@ def grab_url(url, max_depth=5, opener=None):
             retry = True
     except socket.timeout:
         retry = True
+    except urllib2.HTTPError:
+        retry = True
+	if max_depth == 0:
+            client.captureMessage("bad url", extra={'url':url}); 
+            return ''
     if retry:
         if max_depth == 0:
             raise Exception('Too many attempts to download %s' % url)
