@@ -39,20 +39,25 @@ def grab_url(url, max_depth=5, opener=None):
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
     retry = False
     try:
-        text = opener.open(url, timeout=5).read()
+        text = opener.open(url, timeout=10).read()
         if '<title>NY Times Advertisement</title>' in text:
+            print('advert retry')
             retry = True
     except socket.timeout:
+        print('socket retry')
         retry = True
     except urllib2.HTTPError:
+        print('http error retry')
         retry = True
+
 	if max_depth == 0:
             client.captureMessage("bad url", extra={'url':url}); 
             return ''
+
     if retry:
-        if max_depth == 0:
-            raise Exception('Too many attempts to download %s' % url)
-        time.sleep(0.5)
+#        if max_depth == 0:
+#            raise Exception('Too many attempts to download %s' % url)
+        time.sleep(5.0)
         return grab_url(url, max_depth-1, opener)
     return text
 

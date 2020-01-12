@@ -11,6 +11,7 @@ class NYTParser(BaseParser):
     feeder_pages = ['http://www.nytimes.com/',
                     'http://www.nytimes.com/pages/world/',
                     'http://www.nytimes.com/pages/national/',
+                    'http://www.nytimes.com/pages/todayspaper/',
                     'http://www.nytimes.com/pages/politics/',
                     'http://www.nytimes.com/pages/nyregion/',
                     'http://www.nytimes.com/pages/business/',
@@ -34,17 +35,17 @@ class NYTParser(BaseParser):
                     'http://www.nytimes.com/pages/movies/',
                     'http://www.nytimes.com/pages/arts/music/',
                     'http://www.nytimes.com/pages/obituaries/',
-                    'http://www.nytimes.com/pages/realestate/',
+#                    'http://www.nytimes.com/pages/realestate/',
                     'http://www.nytimes.com/pages/t-magazine/',
                     'http://www.nytimes.com/pages/arts/television/',
                     'http://www.nytimes.com/pages/theater/',
                     'http://www.nytimes.com/pages/travel/',
-                    'http://www.nytimes.com/pages/fashion/weddings/',
-                    'http://www.nytimes.com/pages/todayspaper/',
+#                    'http://www.nytimes.com/pages/fashion/weddings/',
                     'http://topics.nytimes.com/top/opinion/thepubliceditor/']
 
 
     def _parse(self, html):
+#        print(html)
         soup = BeautifulSoup(html.decode('utf-8'), "html5lib")
         
         for comment in soup.find_all(text=lambda text: isinstance(text, Comment)):
@@ -62,6 +63,7 @@ class NYTParser(BaseParser):
         try:
             p_tags = list(soup.find("article", {"id":"story"}).find_all('p'))
         except:
+            print(html)
             return 
         div = soup.find('div', attrs={'class': 'story-addendum story-content theme-correction'})
         if div:
@@ -87,8 +89,8 @@ class NYTParser(BaseParser):
 
         main_body = ''.join(body_strings)
 
-        authorids = soup.find('div', attrs={'class':'authorIdentification'})
-        authorid = authorids.getText() if authorids else ''
+#        authorids = soup.find('div', attrs={'class':'authorIdentification'})
+#        authorid = authorids.getText() if authorids else ''
 
         top_correction = ' '.join(x.getText() for x in
                                    soup.find_all('nyt_correction_top')) or ' '
@@ -97,6 +99,7 @@ class NYTParser(BaseParser):
 
         self.body = '\n'.join([top_correction,
                                main_body,
-                               authorid,
+#                               authorid,
                                bottom_correction,])
+#        print(self.body)
                         

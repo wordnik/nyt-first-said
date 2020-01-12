@@ -37,6 +37,10 @@ def check_word(word, article_url, word_context):
     time.sleep(1)
     print(word)
     if not check_api(word):
+        client.captureMessage("API Rejection", extra={
+            'word': word,
+            'word_context': word_context,
+        })
         return
 
     language, confidence = langid.classify(word_context)
@@ -49,7 +53,7 @@ def check_word(word, article_url, word_context):
         })
         return
 
-    if int(r.get("recently") or 0) < 5:
+    if int(r.get("recently") or 0) < 8:
         r.incr("recently")
         r.expire("recently", 60 * 30)
         tweet_word(word, article_url, word_context)
