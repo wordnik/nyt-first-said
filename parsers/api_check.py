@@ -6,7 +6,15 @@ import requests
 import time
 from raven import Client
 
-key = ""
+client = Client(
+'https://aee9ceb609b549fe8a85339e69c74150:8604fd36d8b04fbd9a70a81bdada5cdf@sentry.io/1223891')
+
+
+
+key = "f02981de7e824038967f4194b7815c8d"
+
+
+
 def check_api(word):
     query_string = { 'api-key': key, 'q': '"%s"' % word}
     req = requests.get('https://api.nytimes.com/svc/search/v2/articlesearch.json', params=query_string, verify=False)

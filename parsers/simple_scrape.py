@@ -133,9 +133,11 @@ def process_article(content, article):
 def process_links(links):
     for link in links:
         akey = "article:" + link
-	print(akey)
+        seen = r.get(akey)
+    	print(akey+" seen: " + str(seen))
+#    	seen = False
         # unseen article
-        if not r.get(akey):
+        if not seen:
             time.sleep(1)
             parsed_article = parser(link).body
             process_article(parsed_article, link)
@@ -145,6 +147,9 @@ def process_links(links):
 start_time = time.time()
 
 process_links(parser.feed_urls())
+#process_links(['https://www.nytimes.com/2019/11/06/magazine/turtleneck-man-bbc-question-time-brexit.html'])
+
+
 
 elapsed_time = time.time() - start_time
 print('Time Elapsed (seconds):')
