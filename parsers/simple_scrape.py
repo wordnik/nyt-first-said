@@ -128,7 +128,7 @@ def process_article(content, article):
     words = text.split()
     client.captureMessage("Processing Article",extra={
         'article': article,
-        'length': len(word),
+        'length': len(words),
     })
     for raw_word_h in words:
         for raw_word in normalize_punc(raw_word_h):
