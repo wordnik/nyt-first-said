@@ -36,6 +36,10 @@ def humanize_url(article):
 def check_word(word, article_url, word_context):
     time.sleep(1)
     print(word)
+    client.captureMessage("API Checking Word",extra={
+        'word': word,
+    })
+
     if not check_api(word):
         client.captureMessage("API Rejection", extra={
             'word': word,
@@ -57,6 +61,8 @@ def check_word(word, article_url, word_context):
         r.incr("recently")
         r.expire("recently", 60 * 30)
         tweet_word(word, article_url, word_context)
+    else:
+        client.captureMessage("Recency Rejection")
 
 
 def tweet_word(word, article_url, word_context):
@@ -120,6 +126,10 @@ def context(content, word):
 def process_article(content, article):
     text = unicode(content)
     words = text.split()
+    client.captureMessage("Processing Article",extra={
+        'article': article,
+        'length': len(word),
+    })
     for raw_word_h in words:
         for raw_word in normalize_punc(raw_word_h):
             if ok_word(raw_word):
@@ -139,6 +149,9 @@ def process_links(links):
         # unseen article
         if not seen:
             time.sleep(1)
+            client.captureMessage("Getting Article",extra={
+                'link': link,
+            })
             parsed_article = parser(link).body
             process_article(parsed_article, link)
             r.set(akey, '1')
