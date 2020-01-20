@@ -135,6 +135,7 @@ def process_article(content, article):
             if ok_word(raw_word):
                 word = remove_punctuation(raw_word)
                 wkey = "word:" + word
+                print(word)
                 if not r.get(wkey):
                     check_word(word, article, context(text, word))
                     r.set(wkey, '1')
