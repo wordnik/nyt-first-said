@@ -7,7 +7,7 @@ class NYTParser(BaseParser):
     SUFFIX = '?pagewanted=all'
     domains = ['www.nytimes.com']
 
-    feeder_pat   = '^https?://www.nytimes.com/201'
+    feeder_pat   = '^https?://www.nytimes.com/202'
     feeder_pages = ['http://www.nytimes.com/',
                     'http://www.nytimes.com/pages/world/',
                     'http://www.nytimes.com/pages/national/',
