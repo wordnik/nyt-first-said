@@ -90,7 +90,7 @@ def ok_word(s):
     if not s.islower():
         return False
 
-    return (not any(i.isdigit() or i in '.@/#-_' for i in s))
+    return (not any(i.isdigit() or i in '(.@/#-_' for i in s))
 
 
 def remove_punctuation(text):
