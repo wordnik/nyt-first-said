@@ -12,15 +12,10 @@ import sys
 from nyt import NYTParser
 
 try:
-    parsername = sys.argv[1]
+    url = sys.argv[1]
 except IndexError:
-    print 'Usage: test_parser.py <modulename>.<classname> [<url_to_check>]'
+    print 'Usage: test_parser.py  [<url_to_check>]'
     sys.exit()
-
-try:
-    url = sys.argv[2]
-except IndexError:
-    url = None
 
 parser = NYTParser
 
