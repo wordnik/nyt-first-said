@@ -12,6 +12,8 @@ import langid
 from twitter_creds import TwitterApi, TwitterApiContext
 from api_check import check_api
 from nyt import NYTParser
+from datetime import date
+today = date.today()
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -28,6 +30,9 @@ r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 parser = NYTParser
 
+date = today.strftime("%B-%d-%Y")
+
+record = open("/home/max/newsdiffs/records/"+date+".txt", "a+") 
 
 def humanize_url(article):
     return article.split('/')[-1].split('.html')[0].replace('-', ' ')
@@ -39,13 +44,14 @@ def check_word(word, article_url, word_context):
     client.captureMessage("API Checking Word",extra={
         'word': word,
     })
-
-    if not check_api(word):
+    count = check_api(word)
+    if count > 1:
         client.captureMessage("API Rejection", extra={
             'word': word,
             'word_context': word_context,
         })
-        return
+        record.write("~" + "API") 
+        return count
 
     language, confidence = langid.classify(word_context)
 
@@ -55,17 +61,21 @@ def check_word(word, article_url, word_context):
             'word_context': word_context,
             'confidence': confidence
         })
-        return
-
+        record.write("~" + "LANG") 
+        return count
+        
+    record.write("~" + "GOOD") 
+    record.write("~" + word) 
     if int(r.get("recently") or 0) < 8:
         r.incr("recently")
         r.expire("recently", 60 * 30)
+ 
         tweet_word(word, article_url, word_context)
     else:
         client.captureMessage("Recency Rejection", extra={
             'word': word
         })
-
+    return count 
 
 def tweet_word(word, article_url, word_context):
     try:
@@ -90,7 +100,7 @@ def ok_word(s):
     if not s.islower():
         return False
 
-    return (not any(i.isdigit() or i in '(.@/#-_' for i in s))
+    return (not any(i.isdigit() or i in '(.@/#-_[' for i in s))
 
 
 def remove_punctuation(text):
@@ -126,20 +136,33 @@ def context(content, word):
 
 
 def process_article(content, article):
+    # record = open("records/"+article.replace("/", "_")+".txt", "w+") 
+    record.write("\nARTICLE:" + article) 
     text = unicode(content)
     words = text.split()
+#    print(words)
     client.captureMessage("Processing Article",extra={
         'article': article,
         'length': len(words),
     })
     for raw_word_h in words:
         for raw_word in normalize_punc(raw_word_h):
+            if len(raw_word) < 2:
+                continue
+            record.write("\n" +raw_word) 
+            record.write("~" + remove_punctuation(raw_word)) 
             if ok_word(raw_word):
                 word = remove_punctuation(raw_word)
+                record.write("~" + word) 
                 wkey = "word:" + word
-                if not r.get(wkey):
-                    check_word(word, article, context(text, word))
-                    r.set(wkey, '1')
+                cache_count = r.get(wkey)
+                if not cache_count:
+                    # not in cache
+                    c = check_word(word, article, context(text, word))
+                    r.set(wkey, c)
+                else: 
+                    # seen in cache
+                    record.write("~" + "C") 
 
 
 def process_links(links):
@@ -147,7 +170,7 @@ def process_links(links):
         akey = "article:" + link
         seen = r.get(akey)
     	print(akey+" seen: " + str(seen))
-#    	seen = False
+        #seen = False
         # unseen article
         if not seen:
             time.sleep(1)
@@ -161,8 +184,10 @@ def process_links(links):
 
 start_time = time.time()
 
+#process_links(['https://www.nytimes.com/2022/04/01/learning/word-of-the-day-oblivionaire.html'])
 process_links(parser.feed_urls())
 #process_links(['https://www.nytimes.com/2019/11/06/magazine/turtleneck-man-bbc-question-time-brexit.html'])
+record.close() 
 
 
 

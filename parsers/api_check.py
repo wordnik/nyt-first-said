@@ -33,4 +33,4 @@ def check_api(word):
 
     result = req.json()
     num_results = len(result['response']['docs'])
-    return num_results < 2
+    return num_results
