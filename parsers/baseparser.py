@@ -5,6 +5,7 @@ import socket
 import sys
 import time
 import urllib2
+from archive_bounce import download_via_archive
 
 
 from raven import Client
@@ -46,8 +47,9 @@ def grab_url(url, max_depth=5, opener=None):
     except socket.timeout:
         print('socket retry')
         retry = True
-    except urllib2.HTTPError:
+    except urllib2.HTTPError as e:
         print('http error retry')
+        print(e.reason)
         retry = True
 
 	if max_depth == 0:
@@ -111,7 +113,8 @@ class BaseParser(object):
 
     feeder_bs = BeautifulSoup #use this version of beautifulsoup for feed
 
-    def __init__(self, url):
+    def __init__(self, base_url):
+        url = download_via_archive(base_url + '?pagewanted=all')
         self.url = url
         try:
             self.html = grab_url(self._printableurl())
@@ -124,7 +127,7 @@ class BaseParser(object):
         self._parse(self.html)
 
     def _printableurl(self):
-        return self.url + self.SUFFIX
+        return self.url 
 
     def _parse(self, html):
         """Should take html and populate self.(date, title, byline, body)
