@@ -39,6 +39,7 @@ def grab_url(url, max_depth=5, opener=None):
         cj = cookielib.CookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
     retry = False
+    print(url)
     try:
         text = opener.open(url, timeout=10).read()
         if '<title>NY Times Advertisement</title>' in text:
@@ -48,6 +49,7 @@ def grab_url(url, max_depth=5, opener=None):
         print('socket retry')
         retry = True
     except urllib2.HTTPError as e:
+        print(url)
         print('http error retry')
         print(e.reason)
         retry = True
@@ -114,7 +116,7 @@ class BaseParser(object):
     feeder_bs = BeautifulSoup #use this version of beautifulsoup for feed
 
     def __init__(self, base_url):
-        url = download_via_archive(base_url + '?pagewanted=all')
+        url = download_via_archive(base_url)
         self.url = url
         try:
             self.html = grab_url(self._printableurl())

@@ -25,41 +25,51 @@ def download_via_archive(url):
 
     req = requests.post('https://web.archive.org/save', headers=headers, data=data, verify=False)
 
-
     result = req.json()
-    job_id = result['job_id'];
+    job_id = result.get('job_id');
 
     original_url = url
-    done = False
+    done = job_id == None
+    if done:
+        print(result)
     while done == False:
         time.sleep(2)
         statusReq = requests.get('https://web.archive.org/save/status/%s' % job_id, headers=headers, verify=False)
         statusData = statusReq.json()
         status = statusData["status"]
-        original_url = statusData["original_url"]
-
+  
         if status == "success" :
+            original_url = statusData["original_url"]
+
             done = True
 
         if status == "error":
             print("job failed " + statusData["message"]);
-            return false
+            print(statusData)
+            time.sleep(30)
+            return download_via_archive(url)
         
         time.sleep(2)
         
     
   
-    done = False
-    while done == False:
+    i= 0;
+    while i < 5:
+        i+=1
         time.sleep(2)
         urlCheck = requests.get('https://archive.org/wayback/available?url=%s' % original_url, headers=headers, verify=False)
         availableData = urlCheck.json()
+        print(availableData)
+
         if availableData["archived_snapshots"]:
             snapshot = availableData["archived_snapshots"]["closest"]
             newUrl = snapshot["url"]
             return newUrl
         else: 
-            time.sleep(2)
+            time.sleep(6)
+
+    time.sleep(20)            
+    return download_via_archive(url)
 
 
  
