@@ -117,6 +117,9 @@ class BaseParser(object):
 
     def __init__(self, base_url):
         url = download_via_archive(base_url)
+        if url == False:
+            self.real_article = False
+            return 
         self.url = url
         try:
             self.html = grab_url(self._printableurl())

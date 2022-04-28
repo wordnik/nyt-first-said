@@ -177,9 +177,11 @@ def process_links(links):
             client.captureMessage("Getting Article",extra={
                 'link': link,
             })
-            parsed_article = parser(link).body
-            process_article(parsed_article, link)
-            r.set(akey, '1')
+            
+            parsed_article = parser(link)
+            if parsed_article.real_article:
+                process_article(parsed_article.body, link)
+                r.set(akey, '1')
 
 
 start_time = time.time()
