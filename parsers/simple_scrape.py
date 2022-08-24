@@ -108,7 +108,7 @@ def remove_punctuation(text):
 
 
 def normalize_punc(raw_word):
-    replaced_chars = [',', '—', '”', '“', ':', '\'', '’s', '"', u'\u200B', u'\u200E']
+    replaced_chars = [',', '—', '”', '“', ':', '\'', '’s', '"', u'\u200B', u'\u200E', u'\u200C']
     for char in replaced_chars:
         raw_word = raw_word.replace(char, ' ')
 
