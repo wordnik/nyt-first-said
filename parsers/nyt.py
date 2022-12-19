@@ -45,19 +45,20 @@ class NYTParser(BaseParser):
 
 
     def _parse(self, html):
-#        print(html)
+#        print("html: " + html)
         soup = BeautifulSoup(html.decode('utf-8'), "html5lib")
         
         for comment in soup.find_all(text=lambda text: isinstance(text, Comment)):
             comment.extract()
 
         self.meta = soup.find_all('meta')
-        try:
-            soup.find('meta', attrs={'name':'hdl'}).get('content')
-            soup.find('meta', attrs={'name':'dat'}).get('content')
-            soup.find('meta', attrs={'name':'byl'}).get('content')
-        except AttributeError:
-            self.real_article = False
+#        try:
+#            soup.find('meta', attrs={'name':'hdl'}).get('content')
+#            soup.find('meta', attrs={'name':'dat'}).get('content')
+#            soup.find('meta', attrs={'name':'byl'}).get('content')
+#        except AttributeError:
+#            print(AttributeError)
+#            self.real_article = False
             # return
 
         try:

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/python
-
 import sys
 import redis
 import string
@@ -61,8 +60,8 @@ def check_word(word, article_url, word_context):
             'word_context': word_context,
             'confidence': confidence
         })
-        record.write("~" + "LANG") 
-        return count
+ #       record.write("~" + "LANG") 
+#        return count
         
     record.write("~" + "GOOD") 
     record.write("~" + word) 
