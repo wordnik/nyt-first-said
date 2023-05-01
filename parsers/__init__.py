@@ -13,16 +13,18 @@ parser_dict = {}
 
 # Import the parsers and fill in parser_dict: domain -> parser
 for parsername in parsers:
-    module, classname = parsername.rsplit('.', 1)
+    module, classname = parsername.rsplit(".", 1)
     parser = getattr(__import__(module, globals(), fromlist=[classname]), classname)
     for domain in parser.domains:
         parser_dict[domain] = parser
 
+
 def get_parser(url):
-    return parser_dict[url.split('/')[2]]
+    return parser_dict[url.split("/")[2]]
+
 
 # Each feeder places URLs into the database to be checked periodically.
 
 parsers = [parser for parser in parser_dict.values()]
 
-__all__ = ['parsers', 'get_parser']
+__all__ = ["parsers", "get_parser"]
