@@ -79,7 +79,6 @@ def tweet_word(word, article_url, word_context):
             '"{}" occurred in: {}'.format(word_context, article_url),
             {"root": firstPost, "parent": firstPost},
         )
-        return
         data = {"status": word}
         url = "%s/api/v1/statuses" % "https://botsin.space"
         r = requests.post(
