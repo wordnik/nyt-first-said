@@ -14,7 +14,7 @@ from twitter_creds import TwitterApi, TwitterApiContext
 from api_check import check_api
 from nyt import NYTParser
 from datetime import date
-from atproto import bloot
+from atproto import bloot, bloot2
 from sentry_sdk import capture_exception, capture_message
 
 today = date.today()
@@ -74,8 +74,12 @@ def check_word(word, article_url, word_context):
 
 def tweet_word(word, article_url, word_context):
     try:
-        bloot(word)
-
+        firstPost = bloot(word).json()
+        bloot2(
+            '"{}" occurred in: {}'.format(word_context, article_url),
+            {"root": firstPost, "parent": firstPost},
+        )
+        return
         data = {"status": word}
         url = "%s/api/v1/statuses" % "https://botsin.space"
         r = requests.post(
@@ -190,6 +194,8 @@ def process_links(links):
     for link in links:
         akey = "article:" + link
         seen = r.get(akey)
+        link = link.replace("http://", "https://")
+
         #    	print(akey+" seen: " + str(seen))
         # seen = False
         # unseen article
@@ -207,7 +213,6 @@ def process_links(links):
 
 start_time = time.time()
 # tweet_word("testing", "context", "a")
-
 # process_links(['https://www.nytimes.com/2022/04/01/learning/word-of-the-day-oblivionaire.html'])
 process_links(parser.feed_urls())
 # process_links(['https://www.nytimes.com/2019/11/06/magazine/turtleneck-man-bbc-question-time-brexit.html'])
