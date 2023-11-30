@@ -14,7 +14,7 @@ from twitter_creds import TwitterApi, TwitterApiContext
 from api_check import check_api
 from nyt import NYTParser
 from datetime import date
-from atproto import bloot, bloot2
+from bsky import bloot, bloot2
 from sentry_sdk import capture_exception, capture_message
 
 today = date.today()
@@ -74,10 +74,11 @@ def check_word(word, article_url, word_context):
 
 def tweet_word(word, article_url, word_context):
     try:
-        firstPost = bloot(word).json()
+        firstPost = bloot(word)
         bloot2(
             '"{}" occurred in: {}'.format(word_context, article_url),
-            {"root": firstPost, "parent": firstPost},
+            article_url,
+            firstPost,
         )
         data = {"status": word}
         url = "%s/api/v1/statuses" % "https://botsin.space"
@@ -93,6 +94,7 @@ def tweet_word(word, article_url, word_context):
         )
 
         status = api.PostUpdate(word)
+        return
         contextApi.PostUpdate(
             '@{} "{}" occurred in: {}'.format(
                 status.user.screen_name, word_context, article_url
@@ -147,7 +149,7 @@ def context(content, word):
     loc = content.find(word)
     to_period = content[loc:].find(".")
     prev_period = content[:loc].rfind(".")
-    allowance = 82
+    allowance = 70
     if to_period < allowance:
         end = content[loc : loc + to_period + 1]
     else:
@@ -199,7 +201,7 @@ def process_links(links):
         # seen = False
         # unseen article
         if not seen:
-            time.sleep(1)
+            time.sleep(30)
             sentry_sdk.set_context("link", {"link": link})
             capture_message("Getting Article")
 
@@ -211,7 +213,7 @@ def process_links(links):
 
 
 start_time = time.time()
-# tweet_word("testing", "context", "a")
+#tweet_word("testing", "http://example.com", "a")
 # process_links(['https://www.nytimes.com/2022/04/01/learning/word-of-the-day-oblivionaire.html'])
 process_links(parser.feed_urls())
 # process_links(['https://www.nytimes.com/2019/11/06/magazine/turtleneck-man-bbc-question-time-brexit.html'])

@@ -49,7 +49,11 @@ class NYTParser(BaseParser):
 
     def _parse(self, html):
         #        print("html: " + html)
-        soup = BeautifulSoup(html.decode("utf-8"), "html5lib")
+        # if it's not a str, decode it:
+        if not isinstance(html, str):
+            html = html.decode("utf-8")
+            
+        soup = BeautifulSoup(html, "html5lib")
 
         for comment in soup.find_all(text=lambda text: isinstance(text, Comment)):
             comment.extract()
