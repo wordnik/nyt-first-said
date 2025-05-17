@@ -15,7 +15,7 @@ Some points of inspiration are Allison Parrish's @everyword bot, and the [NewsDi
 
 NYT-first-said is essentially a single script. It's running once an hour as a cron job on a small VPS.
 
-`nyt.py` is a beautifulsoup parser adapted from the [newsdiffs sourcecode](https://github.com/ecprice/newsdiffs). 
+`nyt.py` is a beautifulsoup parser adapted from the [newsdiffs sourcecode](https://github.com/ecprice/newsdiffs).
 
 `redis` holds a list of scraped URLs and seen words (to reduce load on NYT API). It also holds a count of words tweeted recently to avoid blasting out too many tweets in a short period of time.
 
@@ -26,3 +26,11 @@ NYT-first-said is essentially a single script. It's running once an hour as a cr
 
 Also check out [@nyt-finally-said](https://github.com/uniphil/nyt-finally-said), a cool sibling bot that cross-references these words with the google n-gram dataset!
 
+# Running locally
+
+- Set up a virtual Python environment:
+    - `python3 -m venv venv`
+    - `source venv/bin/activate`
+- Install Python packages with `pip install -r requirements.txt`.
+- Run `docker compose up` to get a Redis service running on port 6379.
+- Run the main program with `python parsers/simple_scrape.py"

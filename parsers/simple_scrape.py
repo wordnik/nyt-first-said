@@ -5,37 +5,23 @@ import redis
 import string
 import regex as re
 import time
-import sentry_sdk
-import twitter
 import langid
 import requests
 import os
-from twitter_creds import TwitterApi, TwitterApiContext
 from api_check import check_api
 from nyt import NYTParser
 from datetime import date
-from bsky import bloot, bloot2
-from sentry_sdk import capture_exception, capture_message
 
 today = date.today()
 
-mast_key = os.environ.get("MAST_KEY")
-mast_key2 = os.environ.get("MAST_KEY2")
-
-sentry_sdk.init(
-    dsn="https://aee9ceb609b549fe8a85339e69c74150:8604fd36d8b04fbd9a70a81bdada5cdf@sentry.io/1223891"
-)
-api = TwitterApi()
-contextApi = TwitterApiContext()
-
 r = redis.StrictRedis(host="localhost", port=6379, db=0)
-
 
 parser = NYTParser
 
 date = today.strftime("%B-%d-%Y")
 
-record = open("/root/nyt-first-said/records/" + date + ".txt", "a+")
+# Assuming we're running from the project root.
+record = open("records/" + date + ".txt", "a+")
 
 
 def humanize_url(article):
@@ -45,18 +31,17 @@ def humanize_url(article):
 def check_word(word, article_url, word_context):
     time.sleep(1)
     print(word)
-    sentry_sdk.set_context("word", {"word": word})
-    capture_message("API Checking Word")
+    print("API Checking Word")
     count = check_api(word)
     if count > 1:
-        capture_message("API Rejection")
+        print("API Rejection")
         record.write("~" + "API")
         return count
 
     language, confidence = langid.classify(word_context)
 
     if language != "en":
-        capture_message("Language Rejection")
+        print("Language Rejection")
     #       record.write("~" + "LANG")
     #        return count
 
@@ -66,48 +51,17 @@ def check_word(word, article_url, word_context):
         r.incr("recently")
         r.expire("recently", 60 * 30)
 
-        tweet_word(word, article_url, word_context)
+        post(word, article_url, word_context)
     else:
-        capture_message("Recency Rejection")
+        print("Recency Rejection")
     return count
 
 
-def tweet_word(word, article_url, word_context):
+def post(word, article_url, word_context):
     try:
-        firstPost = bloot(word)
-        bloot2(
-            '"{}" occurred in: {}'.format(word_context, article_url),
-            article_url,
-            firstPost,
-        )
-        data = {"status": word}
-        url = "%s/api/v1/statuses" % "https://botsin.space"
-        r = requests.post(
-            url, data=data, headers={"Authorization": "Bearer %s" % (mast_key2)}
-        )
-        data = {
-            "status": '"{}" occurred in: {}'.format(word_context, article_url),
-            "in_reply_to_id": r.json()["id"],
-        }
-        r2 = requests.post(
-            url, data=data, headers={"Authorization": "Bearer %s" % (mast_key)}
-        )
-
-        status = api.PostUpdate(word)
-        return
-        contextApi.PostUpdate(
-            '@{} "{}" occurred in: {}'.format(
-                status.user.screen_name, word_context, article_url
-            ),
-            in_reply_to_status_id=status.id,
-            verify_status_length=False,
-        )
-
+        print('"{}" occurred in: {} at {}'.format(word, word_context, article_url))
     except UnicodeDecodeError as e:
-        capture_exception(e)
-    except twitter.TwitterError as e:
-        capture_exception(e)
-
+        print(e)
 
 def ok_word(s):
     if s.endswith(".") or s.endswith("’"):  # trim trailing .
@@ -169,8 +123,7 @@ def process_article(content, article):
     text = str(content)
     words = text.split()
     #    print(words)
-    sentry_sdk.set_context("article", {"article": article})
-    capture_message("Processing Article")
+    print("Processing Article")
     for raw_word_h in words:
         for raw_word in normalize_punc(raw_word_h):
             if len(raw_word) < 2:
@@ -202,8 +155,7 @@ def process_links(links):
         # unseen article
         if not seen:
             time.sleep(30)
-            sentry_sdk.set_context("link", {"link": link})
-            capture_message("Getting Article")
+            print("Getting Article")
 
             parsed_article = parser(link)
             print(parsed_article.real_article)
@@ -213,11 +165,7 @@ def process_links(links):
 
 
 start_time = time.time()
-#tweet_word("testing", "http://example.com", "a")
-# process_links(['https://www.nytimes.com/2022/04/01/learning/word-of-the-day-oblivionaire.html'])
 process_links(parser.feed_urls())
-# process_links(['https://www.nytimes.com/2019/11/06/magazine/turtleneck-man-bbc-question-time-brexit.html'])
-# process_links(['https://www.nytimes.com/2022/08/20/world/americas/jair-bolsonaro-video.html'])
 record.close()
 
 
