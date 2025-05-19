@@ -5,11 +5,10 @@
 import requests
 import time
 import os
-from sentry_sdk import capture_message
+from dotenv import load_dotenv
 
-
-key = os.environ.get("NYT_API_KEY")
-
+load_dotenv()
+key = os.getenv("NYT_API_KEY")
 
 def check_api(word):
     query_string = {"api-key": key, "q": '"%s"' % word}

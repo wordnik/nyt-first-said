@@ -4,6 +4,10 @@ import random
 import logging
 from requests.exceptions import RequestException
 from urllib3.exceptions import MaxRetryError
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -20,7 +24,7 @@ def download_via_archive(url, max_attempts=5):
             headers = {
                 "Accept": "application/json",
                 "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": "LOW %s" % s3A,
+                "Authorization": "LOW %s" % os.getenv("S3A")
             }
 
             data = "url=%s/&if_not_archived_within=1d&capture_outlinks=0" % url

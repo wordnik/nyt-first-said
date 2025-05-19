@@ -8,12 +8,6 @@ import urllib.request as urllib2
 from archive_bounce import download_via_archive
 
 
-from sentry_sdk import capture_message
-
-
-# Define a logger
-
-
 # This formatter is like the default but uses a period rather than a comma
 # to separate the milliseconds
 class MyFormatter(logging.Formatter):
@@ -54,7 +48,7 @@ def grab_url(url, max_depth=5, opener=None):
         retry = True
 
     if max_depth == 0:
-        capture_message("bad url")
+        print("bad url")
         return ""
 
     if retry:
