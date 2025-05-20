@@ -71,7 +71,7 @@ class NYTParser(BaseParser):
         try:
             p_tags = list(soup.find("article", {"id": "story"}).find_all("p"))
         except:
-            print(html)
+            print("Error while parsing html:" + html)
             return
         div = soup.find(
             "div", attrs={"class": "story-addendum story-content theme-correction"}
