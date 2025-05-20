@@ -105,23 +105,15 @@ def normalize_punc(raw_word):
     return raw_word.split(" ")
 
 
-def context(content, word):
+def get_containing_sentence(content, word):
     loc = content.find(word)
+    # TODO: Use sentence parser from s3-epub.
     to_period = content[loc:].find(".")
     prev_period = content[:loc].rfind(".")
-    allowance = 70
-    if to_period < allowance:
-        end = content[loc : loc + to_period + 1]
-    else:
-        end = "{}…".format(content[loc : loc + allowance])
+    before = content[prev_period + 2 : loc].strip() + " "
+    after = content[loc : loc + to_period + 1]
 
-    if loc - prev_period < allowance:
-        start = "{} ".format(content[prev_period + 2 : loc].strip())
-    else:
-        start = "…{}".format(content[loc - allowance : loc])
-
-    return "{}{}".format(start, end)
-
+    return before + after
 
 def process_article(content, article):
     # record = open("records/"+article.replace("/", "_")+".txt", "w+")
@@ -147,7 +139,7 @@ def process_article(content, article):
                 cache_count = r.get(wkey)
                 if not cache_count:
                     # not in cache
-                    c = check_word(word, article, context(text, word))
+                    c = check_word(word, article, get_containing_sentence(text, word))
                     r.set(wkey, c)
                 else:
                     # seen in cache
