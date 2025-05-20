@@ -11,6 +11,7 @@ import os
 from api_check import check_api
 from nyt import NYTParser
 from datetime import date
+import json
 
 today = date.today()
 
@@ -23,8 +24,10 @@ date = today.strftime("%B-%d-%Y")
 # Assuming we're running from the project root.
 record = open("records/" + date + ".txt", "a+")
 
-common_words_text = open("data/wordlist-20210729.txt", "r").read();
-common_words = [word.lstrip('"').rstrip('"') for word in common_words_text.split("\n")]
+# common_words_text = open("data/wordlist-20210729.txt", "r").read();
+# common_words = [word.lstrip('"').rstrip('"') for word in common_words_text.split("\n")]
+common_words_text = open("data/nltk-stop-words.json", "r").read()
+common_words = json.loads(common_words_text)
 
 def humanize_url(article):
     return article.split("/")[-1].split(".html")[0].replace("-", " ")
