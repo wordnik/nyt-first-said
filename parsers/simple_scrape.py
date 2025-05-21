@@ -12,6 +12,7 @@ from api_check import check_api
 from nyt import NYTParser
 from datetime import date
 import json
+from textblob import TextBlob 
 
 today = date.today()
 
@@ -33,7 +34,7 @@ def humanize_url(article):
     return article.split("/")[-1].split(".html")[0].replace("-", " ")
 
 
-def check_word(word, article_url, word_context):
+def check_word(word, article_url, sentence):
     time.sleep(1)
     print("API Checking Word: {}".format(word))
     count = check_api(word)
@@ -42,7 +43,7 @@ def check_word(word, article_url, word_context):
         record.write("~" + "API")
         return count
 
-    language, confidence = langid.classify(word_context)
+    language, confidence = langid.classify(sentence)
 
     if language != "en":
         print("Language Rejection: {}".format(word))
@@ -55,15 +56,15 @@ def check_word(word, article_url, word_context):
         r.incr("recently")
         r.expire("recently", 60 * 30)
 
-        post(word, article_url, word_context)
+        post(word, article_url, sentence)
     else:
         print("Recency Rejection: {}".format(word))
     return count
 
 
-def post(word, article_url, word_context):
+def post(word, article_url, sentence):
     try:
-        print('New word! "{}" occurred in: {} at {}'.format(word, word_context, article_url))
+        print('New word! "{}" occurred in: {} at {}'.format(word, sentence, article_url))
     except UnicodeDecodeError as e:
         print(e)
 
@@ -79,72 +80,34 @@ def ok_word(s):
 def word_is_common(word):
     return word in common_words
 
-def remove_punctuation(text):
-    return re.sub(r"’s", "", re.sub(r"\p{P}+$", "", re.sub(r"^\p{P}+", "", text)))
-
-
-def normalize_punc(raw_word):
-    replaced_chars = [
-        ",",
-        "—",
-        "”",
-        "“",
-        ":",
-        "'",
-        "’s",
-        '"',
-        "\u200B",
-        "\u200E",
-        "\u200C",
-    ]
-    for char in replaced_chars:
-        raw_word = raw_word.replace(char, " ")
-
-    raw_word = raw_word.replace("\u00AD", "-")
-
-    return raw_word.split(" ")
-
-
-def get_containing_sentence(content, word):
-    loc = content.find(word)
-    # TODO: Use sentence parser from s3-epub.
-    to_period = content[loc:].find(".")
-    prev_period = content[:loc].rfind(".")
-    before = content[prev_period + 2 : loc].strip() + " "
-    after = content[loc : loc + to_period + 1]
-
-    return before + after
-
 def process_article(content, article):
     # record = open("records/"+article.replace("/", "_")+".txt", "w+")
     record.write("\nARTICLE:" + article)
-    text = str(content)
-    words = text.split()
-    #    print(words)
     print("Processing Article")
-    for raw_word_h in words:
-        for raw_word in normalize_punc(raw_word_h):
-            if len(raw_word) < 2:
+    text = str(content)
+    sentence_blob = TextBlob(text)
+    for sentence in sentence_blob.sentences:
+        for token in sentence.tokens:
+            word = token.string
+            if len(word) < 2:
                 continue
-            record.write("\n" + raw_word)
-            record.write("~" + remove_punctuation(raw_word))
-            if word_is_common(raw_word):
-                print("Word commonness rejection: {}.".format(raw_word))
+            record.write("\n" + word)
+            record.write("~" + word)
+            if word_is_common(word):
+                print("Word commonness rejection: {}.".format(word))
                 continue
 
-            if ok_word(raw_word):
-                word = remove_punctuation(raw_word)
+            if ok_word(word):
                 record.write("~" + word)
                 wkey = "word:" + word
                 cache_count = r.get(wkey)
                 if not cache_count:
                     # not in cache
-                    c = check_word(word, article, get_containing_sentence(text, word))
+                    c = check_word(word, article, sentence.string)
                     r.set(wkey, c)
                 else:
                     # seen in cache
                     record.write("~" + "C")
-
 
 def process_links(links):
     for link in links:
