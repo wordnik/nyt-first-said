@@ -6,7 +6,6 @@ import string
 import regex as re
 import time
 import langid
-import requests
 import os
 from api_check import check_api
 from nyt import NYTParser
@@ -123,16 +122,17 @@ def process_links(links):
         # unseen article
         if not seen:
             time.sleep(30)
-            print("Getting Article")
+            print("Getting Article {}".format(link))
 
             parsed_article = parser(link)
-            print(parsed_article.real_article)
+            print("Is {} real_article: {}".format(link, parsed_article.real_article))
             if parsed_article.real_article:
                 process_article(parsed_article.body, link)
                 r.set(akey, "1")
 
 
 start_time = time.time()
+print("Started simple_scrape.")
 process_links(parser.feed_urls())
 record.close()
 
