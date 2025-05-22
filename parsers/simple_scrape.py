@@ -11,6 +11,7 @@ import os
 from api_check import check_api
 from nyt import NYTParser
 from datetime import date
+import json
 
 today = date.today()
 
@@ -23,6 +24,10 @@ date = today.strftime("%B-%d-%Y")
 # Assuming we're running from the project root.
 record = open("records/" + date + ".txt", "a+")
 
+# common_words_text = open("data/wordlist-20210729.txt", "r").read();
+# common_words = [word.lstrip('"').rstrip('"') for word in common_words_text.split("\n")]
+common_words_text = open("data/nltk-stop-words.json", "r").read()
+common_words = json.loads(common_words_text)
 
 def humanize_url(article):
     return article.split("/")[-1].split(".html")[0].replace("-", " ")
@@ -30,18 +35,17 @@ def humanize_url(article):
 
 def check_word(word, article_url, word_context):
     time.sleep(1)
-    print(word)
-    print("API Checking Word")
+    print("API Checking Word: {}".format(word))
     count = check_api(word)
     if count > 1:
-        print("API Rejection")
+        print("API Rejection: {}".format(word))
         record.write("~" + "API")
         return count
 
     language, confidence = langid.classify(word_context)
 
     if language != "en":
-        print("Language Rejection")
+        print("Language Rejection: {}".format(word))
     #       record.write("~" + "LANG")
     #        return count
 
@@ -53,13 +57,13 @@ def check_word(word, article_url, word_context):
 
         post(word, article_url, word_context)
     else:
-        print("Recency Rejection")
+        print("Recency Rejection: {}".format(word))
     return count
 
 
 def post(word, article_url, word_context):
     try:
-        print('"{}" occurred in: {} at {}'.format(word, word_context, article_url))
+        print('New word! "{}" occurred in: {} at {}'.format(word, word_context, article_url))
     except UnicodeDecodeError as e:
         print(e)
 
@@ -72,6 +76,8 @@ def ok_word(s):
 
     return not any(i.isdigit() or i in "(.@/#-_[" for i in s)
 
+def word_is_common(word):
+    return word in common_words
 
 def remove_punctuation(text):
     return re.sub(r"’s", "", re.sub(r"\p{P}+$", "", re.sub(r"^\p{P}+", "", text)))
@@ -99,23 +105,15 @@ def normalize_punc(raw_word):
     return raw_word.split(" ")
 
 
-def context(content, word):
+def get_containing_sentence(content, word):
     loc = content.find(word)
+    # TODO: Use sentence parser from s3-epub.
     to_period = content[loc:].find(".")
     prev_period = content[:loc].rfind(".")
-    allowance = 70
-    if to_period < allowance:
-        end = content[loc : loc + to_period + 1]
-    else:
-        end = "{}…".format(content[loc : loc + allowance])
+    before = content[prev_period + 2 : loc].strip() + " "
+    after = content[loc : loc + to_period + 1]
 
-    if loc - prev_period < allowance:
-        start = "{} ".format(content[prev_period + 2 : loc].strip())
-    else:
-        start = "…{}".format(content[loc - allowance : loc])
-
-    return "{}{}".format(start, end)
-
+    return before + after
 
 def process_article(content, article):
     # record = open("records/"+article.replace("/", "_")+".txt", "w+")
@@ -130,6 +128,10 @@ def process_article(content, article):
                 continue
             record.write("\n" + raw_word)
             record.write("~" + remove_punctuation(raw_word))
+            if word_is_common(raw_word):
+                print("Word commonness rejection: {}.".format(raw_word))
+                continue
+
             if ok_word(raw_word):
                 word = remove_punctuation(raw_word)
                 record.write("~" + word)
@@ -137,7 +139,7 @@ def process_article(content, article):
                 cache_count = r.get(wkey)
                 if not cache_count:
                     # not in cache
-                    c = check_word(word, article, context(text, word))
+                    c = check_word(word, article, get_containing_sentence(text, word))
                     r.set(wkey, c)
                 else:
                     # seen in cache

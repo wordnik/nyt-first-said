@@ -5,11 +5,10 @@
 import requests
 import time
 import os
-from sentry_sdk import capture_message
+from dotenv import load_dotenv
 
-
-key = os.environ.get("NYT_API_KEY")
-
+load_dotenv()
+key = os.getenv("NYT_API_KEY")
 
 def check_api(word):
     query_string = {"api-key": key, "q": '"%s"' % word}
@@ -21,13 +20,22 @@ def check_api(word):
 
     if req.status_code in set([429, 529, 504]):
         time.sleep(50)
-        capture_message("NYT API RATELIMIT")
+        print("NYT API RATELIMIT")
         return check_api(word)
 
     if req.status_code == 500:
-        capture_message("NYT API 500")
+        print("NYT API 500")
         return False
 
     result = req.json()
-    num_results = len(result["response"]["docs"])
+    num_results = 0
+
+    docs = result.get("response", {}).get("docs", [])
+    # Sometimes `docs` is null.
+    if docs:
+        num_results = len(docs)
+
+    if num_results < 1:
+        print("No docs in NYT API search response: {}".format(req.text))
+
     return num_results

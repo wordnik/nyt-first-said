@@ -28,6 +28,11 @@ Also check out [@nyt-finally-said](https://github.com/uniphil/nyt-finally-said),
 
 # Running locally
 
+- Create a `.env` file in the project root that looks like this:
+
+        S3A=<Your S3-like archive.org key from https://archive.org/account/s3.php>
+        NYT_API_KEY=<Your API key from https://developer.nytimes.com/get-started>
+
 - Set up a virtual Python environment:
     - `python3 -m venv venv`
     - `source venv/bin/activate`
