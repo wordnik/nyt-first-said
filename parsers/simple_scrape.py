@@ -80,6 +80,9 @@ def ok_word(s):
 def word_is_common(word):
     return word in common_words
 
+def remove_punctuation(text):
+    return re.sub(r"’s", "", re.sub(r"\p{P}+$", "", re.sub(r"^\p{P}+", "", text)))
+
 def process_article(content, article):
     # record = open("records/"+article.replace("/", "_")+".txt", "w+")
     record.write("\nARTICLE:" + article)
@@ -88,7 +91,7 @@ def process_article(content, article):
     sentence_blob = TextBlob(text)
     for sentence in sentence_blob.sentences:
         for token in sentence.tokens:
-            word = token.string
+            word = remove_punctuation(token.string)
             if len(word) < 2:
                 continue
             record.write("\n" + word)
