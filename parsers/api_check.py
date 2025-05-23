@@ -20,7 +20,7 @@ def check_api(word):
 
     if res.status_code in set([429, 529, 504]):
         print("NYT API RATELIMIT. Response: {}".format(res.text))
-        time.sleep(60)
+        time.sleep(70)
         return check_api(word)
 
     if res.status_code == 500:
