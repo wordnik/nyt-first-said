@@ -72,10 +72,10 @@ def download_via_archive(url, max_attempts=5):
     return False
 
 def check_availability(url, headers):
-    for attempt in range(5):
+    for attempt in range(10):
         try:
             logging.info(f"Checking availability of archived URL: {url} (Attempt {attempt + 1}/5)")
-            url_check = requests.get(f"https://archive.org/wayback/available?url={url}", headers=headers, timeout=30)
+            url_check = requests.get(f"https://archive.org/wayback/available?url={url}", headers=headers, timeout=60)
             available_data = url_check.json()
             
             if available_data["archived_snapshots"]:

@@ -37,5 +37,7 @@ Also check out [@nyt-finally-said](https://github.com/uniphil/nyt-finally-said),
     - `python3 -m venv venv`
     - `source venv/bin/activate`
 - Install Python packages with `pip install -r requirements.txt`.
+- Download data needed by `textblob` with `make install-textblob`.
 - Run `docker compose up` to get a Redis service running on port 6379.
+    - If you want to inspect the persistent storage, it's on the host machine at `/var/lib/docker/volumes/nyt-first-said_redis_data/`.
 - Run the main program with `python parsers/simple_scrape.py"
