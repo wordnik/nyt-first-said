@@ -32,8 +32,8 @@ common_words = json.loads(common_words_text)
 def humanize_url(article):
     return article.split("/")[-1].split(".html")[0].replace("-", " ")
 
-# Returns whether or not this example exists. Even if the method ends up
-# posting the word, it may not make it all the way through the example
+# Returns whether or not this example exists (as a 0 or 1). Even if the method
+# ends up posting the word, it may not make it all the way through the example
 # pipeline, so we return False in that case.
 def check_word(word, article_url, sentence):
     time.sleep(1)
@@ -109,7 +109,8 @@ def process_article(content, article):
                     record.write("~" + "C")
                 else:
                     # not in cache
-                    r.set(wkey, check_word(word, article, sentence.string))
+                    # Multiply by 1 to cast the boolean into a number.
+                    r.set(wkey, 1 * check_word(word, article, sentence.string))
 
 def process_links(links):
     for link in links:

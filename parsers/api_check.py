@@ -28,8 +28,9 @@ def does_example_exist(word):
         return False
 
     result = res.json()
+    print("Wordnik response: {}".format(res.text))
 
-    if result.statusCode and result.statusCode == 404:
+    if result.get("statusCode") == 404:
         print("No examples in Wordnik API search response: {}".format(res.text))
         return False
 
