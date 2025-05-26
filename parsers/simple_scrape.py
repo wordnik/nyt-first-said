@@ -7,7 +7,7 @@ import regex as re
 import time
 import langid
 import os
-from api_check import check_api
+from api_check import does_example_exist
 from nyt import NYTParser
 from datetime import date
 import json
@@ -32,22 +32,23 @@ common_words = json.loads(common_words_text)
 def humanize_url(article):
     return article.split("/")[-1].split(".html")[0].replace("-", " ")
 
-
+# Returns whether or not this example exists. Even if the method ends up
+# posting the word, it may not make it all the way through the example
+# pipeline, so we return False in that case.
 def check_word(word, article_url, sentence):
     time.sleep(1)
     print("API Checking Word: {}".format(word))
-    count = check_api(word)
-    if count > 1:
-        print("API Rejection: {}".format(word))
+    
+    example_exists = does_example_exist(word)
+    if example_exists:
+        print("We already have an example for {}".format(word))
         record.write("~" + "API")
-        return count
+        return example_exists 
 
     language, confidence = langid.classify(sentence)
 
     if language != "en":
         print("Language Rejection: {}".format(word))
-    #       record.write("~" + "LANG")
-    #        return count
 
     record.write("~" + "GOOD")
     record.write("~" + word)
@@ -58,8 +59,8 @@ def check_word(word, article_url, sentence):
         post(word, article_url, sentence)
     else:
         print("Recency Rejection: {}".format(word))
-    return count
 
+    return example_exists 
 
 def post(word, article_url, sentence):
     try:
@@ -102,14 +103,13 @@ def process_article(content, article):
             if ok_word(word):
                 record.write("~" + word)
                 wkey = "word:" + word
-                cache_count = r.get(wkey)
-                if not cache_count:
-                    # not in cache
-                    c = check_word(word, article, sentence.string)
-                    r.set(wkey, c)
-                else:
+                cache_flag = r.get(wkey)
+                if cache_flag:
                     # seen in cache
                     record.write("~" + "C")
+                else:
+                    # not in cache
+                    r.set(wkey, check_word(word, article, sentence.string))
 
 def process_links(links):
     for link in links:
