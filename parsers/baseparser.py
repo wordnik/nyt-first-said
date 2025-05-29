@@ -5,7 +5,7 @@ import sys
 import time
 import http.cookiejar as cookielib
 import urllib.request as urllib2
-from archive_bounce import download_via_archive
+from parsers.archive_bounce import download_via_archive
 
 
 # This formatter is like the default but uses a period rather than a comma
@@ -105,7 +105,7 @@ class BaseParser(object):
     real_article = True  # If set to False, ignore this article
     SUFFIX = ""  # append suffix, like '?fullpage=yes', to urls
 
-    meta = []  # Currently unused.
+    meta = []
 
     # Used when finding articles to parse
     feeder_pat = None  # Look for links matching this regular expression

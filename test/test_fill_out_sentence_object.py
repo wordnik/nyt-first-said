@@ -1,5 +1,5 @@
 import unittest
-from utils import fill_out_sentence_object
+from parsers.utils import fill_out_sentence_object
 from bs4 import BeautifulSoup
 
 example_nyt_html = open("test/fixtures/example-nyt-page.html", "r").read()

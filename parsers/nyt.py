@@ -1,4 +1,4 @@
-from baseparser import BaseParser
+from parsers.baseparser import BaseParser
 from bs4 import BeautifulSoup, NavigableString, Comment
 from functools import reduce
 
@@ -53,7 +53,7 @@ class NYTParser(BaseParser):
         if not isinstance(html, str):
             html = html.decode("utf-8")
             
-        soup = BeautifulSoup(html, "html5lib")
+        soup = BeautifulSoup(html, "lxml")
 
         for comment in soup.find_all(text=lambda text: isinstance(text, Comment)):
             comment.extract()

@@ -7,11 +7,12 @@ import regex as re
 import time
 import langid
 import os
-from api_check import does_example_exist
-from nyt import NYTParser
+from parsers.api_check import does_example_exist
+from parsers.nyt import NYTParser
 from datetime import date
 import json
 from textblob import TextBlob 
+from parsers.utils import fill_out_sentence_object
 
 today = date.today()
 
@@ -35,7 +36,7 @@ def humanize_url(article):
 # Returns whether or not this example exists (as a 0 or 1). Even if the method
 # ends up posting the word, it may not make it all the way through the example
 # pipeline, so we return False in that case.
-def check_word(word, article_url, sentence):
+def check_word(word, article_url, sentence, meta):
     time.sleep(1)
     print("API Checking Word: {}".format(word))
     
@@ -56,15 +57,22 @@ def check_word(word, article_url, sentence):
         r.incr("recently")
         r.expire("recently", 60 * 30)
 
-        post(word, article_url, sentence)
+        post(word, article_url, sentence, meta)
     else:
         print("Recency Rejection: {}".format(word))
 
     return example_exists 
 
-def post(word, article_url, sentence):
+def post(word, article_url, sentence, meta):
     try:
-        print('New word! "{}" occurred in: {} at {}'.format(word, sentence, article_url))
+        sentence_obj = fill_out_sentence_object(
+            word=word,
+            sentence=sentence,
+            article_url=article_url,
+            date=date,
+            meta=meta
+        )
+        print('New word! {}'.format(json.dumps(sentence_obj, indent=2)))
     except UnicodeDecodeError as e:
         print(e)
 
@@ -83,7 +91,7 @@ def word_is_common(word):
 def remove_punctuation(text):
     return re.sub(r"’s", "", re.sub(r"\p{P}+$", "", re.sub(r"^\p{P}+", "", text)))
 
-def process_article(content, article):
+def process_article(content, article, meta):
     # record = open("records/"+article.replace("/", "_")+".txt", "w+")
     record.write("\nARTICLE:" + article)
     print("Processing Article")
@@ -110,7 +118,9 @@ def process_article(content, article):
                 else:
                     # not in cache
                     # Multiply by 1 to cast the boolean into a number.
-                    r.set(wkey, 1 * check_word(word, article, sentence.string))
+                    r.set(
+                        wkey,
+                        1 * check_word(word, article, sentence.string, meta))
 
 def process_links(links):
     for link in links:
@@ -128,10 +138,8 @@ def process_links(links):
             parsed_article = parser(link)
             print("Is {} real_article: {}".format(link, parsed_article.real_article))
             if parsed_article.real_article:
-                process_article(parsed_article.body, link)
+                process_article(parsed_article.body, link, parsed_article.meta)
                 r.set(akey, "1")
-
-
 start_time = time.time()
 print("Started simple_scrape.")
 process_links(parser.feed_urls())
@@ -141,3 +149,4 @@ record.close()
 elapsed_time = time.time() - start_time
 print("Time Elapsed (seconds):")
 print(elapsed_time)
+
