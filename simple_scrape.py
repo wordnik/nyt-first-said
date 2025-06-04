@@ -7,11 +7,12 @@ import regex as re
 import time
 import langid
 import os
+import json
+from datetime import date
+from textblob import TextBlob 
+
 from parsers.api_check import does_example_exist
 from parsers.nyt import NYTParser
-from datetime import date
-import json
-from textblob import TextBlob 
 from parsers.utils import fill_out_sentence_object
 
 today = date.today()

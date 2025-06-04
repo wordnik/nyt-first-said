@@ -1,3 +1,5 @@
+import uuid
+
 def get_meta_content_by_attr(bs_meta_list, attr, val):
     # print("name: {}".format(bs_meta_list.name))
     for element in bs_meta_list:
@@ -25,7 +27,7 @@ def fill_out_sentence_object(word, sentence, article_url, date, meta):
         "url": article_url,
         "text": sentence,
         "frd_rating": 1,
-        "exampleId": "",
+        "exampleId": str(uuid.uuid4()),
         "word": word,
         "labels": [],
         "fileId": ""
