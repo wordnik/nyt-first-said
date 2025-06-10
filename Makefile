@@ -6,3 +6,4 @@ install-textblob:
 
 run-test:
 	venv/bin/python -m unittest -v test.test_fill_out_sentence_object
+	venv/bin/python -m unittest -v test.test_job_id

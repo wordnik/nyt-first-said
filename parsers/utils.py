@@ -1,4 +1,6 @@
 import uuid
+import hashlib
+import base64
 
 def get_meta_content_by_attr(bs_meta_list, attr, val):
     # print("name: {}".format(bs_meta_list.name))
@@ -31,4 +33,13 @@ def fill_out_sentence_object(word, sentence, article_url, date, meta):
         "word": word,
         "labels": [],
         "fileId": ""
-    };
+    }
+
+def get_job_id(contents_str):
+    job_hash = hashlib.sha1(contents_str.encode('utf-8'))
+    digest_bytes = base64.b64encode(job_hash.digest(), b'+-')
+    return digest_bytes.decode('utf-8')
+
+def get_job_filename(contents_str, date, basename):
+    return "{}_{}_{}.json".format(get_job_id(contents_str), date.isoformat(), basename)
+
