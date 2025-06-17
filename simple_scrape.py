@@ -10,12 +10,14 @@ import os
 import json
 from datetime import date
 from textblob import TextBlob 
+import boto3
 
 from parsers.api_check import does_example_exist
 from parsers.nyt import NYTParser
-from parsers.utils import fill_out_sentence_object
+from parsers.utils import fill_out_sentence_object, get_job_filename
 
 today = date.today()
+s3 = boto3.client("s3")
 
 r = redis.StrictRedis(host="localhost", port=6379, db=0)
 
@@ -73,7 +75,12 @@ def post(word, article_url, sentence, meta):
             date=date,
             meta=meta
         )
-        print('New word! {}'.format(json.dumps(sentence_obj, indent=2)))
+        sentence_json = json.dumps(sentence_obj, indent=2)
+        print('New word! {}'.format(sentence_json))
+        filename = get_job_filename(sentence_json, today, word)
+        obj_path = "nyt/" + filename
+        s3.put_object(Bucket="nyt-said-examples", Key=obj_path,
+                      Body=sentence_json.encode())
     except UnicodeDecodeError as e:
         print(e)
 
