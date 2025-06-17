@@ -14,7 +14,7 @@ import boto3
 
 from parsers.api_check import does_example_exist
 from parsers.nyt import NYTParser
-from parsers.utils import fill_out_sentence_object, get_job_filename
+from parsers.utils import fill_out_sentence_object, get_job_filename, clean_text
 
 today = date.today()
 s3 = boto3.client("s3")
@@ -103,7 +103,7 @@ def process_article(content, article, meta):
     # record = open("records/"+article.replace("/", "_")+".txt", "w+")
     record.write("\nARTICLE:" + article)
     print("Processing Article")
-    text = str(content)
+    text = clean_text(str(content))
     sentence_blob = TextBlob(text)
     for sentence in sentence_blob.sentences:
         for token in sentence.tokens:

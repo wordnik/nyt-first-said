@@ -43,3 +43,8 @@ def get_job_id(contents_str):
 def get_job_filename(contents_str, date, basename):
     return "{}_{}_{}.json".format(get_job_id(contents_str), date.isoformat(), basename)
 
+def clean_text(text):
+    # u200b is a zero-width space (https://en.wikipedia.org/wiki/Zero-width_space)
+    # that trips up TextBlob.
+    return text.replace(u'\u200b', ' ')
+
