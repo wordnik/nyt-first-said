@@ -9,7 +9,7 @@ def get_meta_content_by_attr(bs_meta_list, attr, val):
         if attr_val != None and attr_val == val:
             return element.get("content")
 
-def fill_out_sentence_object(word, sentence, article_url, date, meta):
+def fill_out_sentence_object(word, sentence, article_url, date, meta, pos):
     return {
         "metadata": {
             "searchAPI": "nyt",
@@ -32,7 +32,8 @@ def fill_out_sentence_object(word, sentence, article_url, date, meta):
         "exampleId": str(uuid.uuid4()),
         "word": word,
         "labels": [],
-        "fileId": ""
+        "fileId": "",
+        "pos": pos
     }
 
 def get_job_id(contents_str):

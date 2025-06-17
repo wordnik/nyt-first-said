@@ -39,7 +39,7 @@ def humanize_url(article):
 # Returns whether or not this example exists (as a 0 or 1). Even if the method
 # ends up posting the word, it may not make it all the way through the example
 # pipeline, so we return False in that case.
-def check_word(word, article_url, sentence, meta):
+def check_word(word, article_url, sentence, meta, pos):
     time.sleep(1)
     print("API Checking Word: {}".format(word))
     
@@ -73,7 +73,8 @@ def post(word, article_url, sentence, meta):
             sentence=sentence,
             article_url=article_url,
             date=date,
-            meta=meta
+            meta=meta,
+            pos=pos
         )
         sentence_json = json.dumps(sentence_obj, indent=2)
         print('New word! {}'.format(sentence_json))
@@ -125,10 +126,12 @@ def process_article(content, article, meta):
                     record.write("~" + "C")
                 else:
                     # not in cache
+                    # NLTK part of speech tag list: https://stackoverflow.com/a/38264311/87798
+                    pos = next(x for x in sentence_blob.pos_tags if x[0] == word)
                     # Multiply by 1 to cast the boolean into a number.
                     r.set(
                         wkey,
-                        1 * check_word(word, article, sentence.string, meta))
+                        1 * check_word(word, article, sentence.string, meta, pos))
 
 def process_links(links):
     for link in links:
