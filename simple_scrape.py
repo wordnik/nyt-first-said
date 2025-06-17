@@ -14,7 +14,7 @@ import boto3
 
 from parsers.api_check import does_example_exist
 from parsers.nyt import NYTParser
-from parsers.utils import fill_out_sentence_object, get_job_filename, clean_text
+from parsers.utils import fill_out_sentence_object, clean_text
 
 today = date.today()
 s3 = boto3.client("s3")
