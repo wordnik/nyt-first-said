@@ -78,7 +78,7 @@ def post(word, article_url, sentence, meta, pos):
         )
         sentence_json = json.dumps(sentence_obj, indent=2)
         print('New word! {}'.format(sentence_json))
-        filename = get_job_filename(sentence_json, today, word)
+        filename = word + ".json"
         obj_path = "nyt/" + filename
         s3.put_object(Bucket="nyt-said-examples", Key=obj_path,
                       Body=sentence_json.encode())
@@ -127,7 +127,11 @@ def process_article(content, article, meta):
                 else:
                     # not in cache
                     # NLTK part of speech tag list: https://stackoverflow.com/a/38264311/87798
-                    pos = next(x for x in sentence_blob.pos_tags if x[0] == word)
+                    try:
+                        pos = next(x for x in sentence_blob.pos_tags if x[0] == word)
+                    except StopIteration as e:
+                        print("Could not find {} in {}".format(word, sentence_blob.pos_tags))
+
                     # Multiply by 1 to cast the boolean into a number.
                     r.set(
                         wkey,
