@@ -60,13 +60,13 @@ def check_word(word, article_url, sentence, meta, pos):
         r.incr("recently")
         r.expire("recently", 60 * 30)
 
-        post(word, article_url, sentence, meta)
+        post(word, article_url, sentence, meta, pos)
     else:
         print("Recency Rejection: {}".format(word))
 
     return example_exists 
 
-def post(word, article_url, sentence, meta):
+def post(word, article_url, sentence, meta, pos):
     try:
         sentence_obj = fill_out_sentence_object(
             word=word,
