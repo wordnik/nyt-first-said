@@ -14,7 +14,7 @@ import boto3
 
 from parsers.api_check import does_example_exist
 from parsers.nyt import NYTParser
-from parsers.utils import fill_out_sentence_object, clean_text
+from parsers.utils import fill_out_sentence_object, clean_text, find_pos_for_word
 
 today = date.today()
 s3 = boto3.client("s3")
@@ -127,10 +127,7 @@ def process_article(content, article, meta):
                 else:
                     # not in cache
                     # NLTK part of speech tag list: https://stackoverflow.com/a/38264311/87798
-                    try:
-                        pos = next(x for x in sentence_blob.pos_tags if x[0] == word)
-                    except StopIteration as e:
-                        print("Could not find {} in {}".format(word, sentence_blob.pos_tags))
+                    pos = find_pos_for_word(sentence_blob.pos_tags, word)
 
                     # Multiply by 1 to cast the boolean into a number.
                     r.set(
