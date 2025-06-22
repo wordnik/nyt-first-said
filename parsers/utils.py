@@ -32,7 +32,7 @@ def fill_out_sentence_object(word, sentence, article_url, date, meta, pos):
         "word": word,
         "labels": [],
         "fileId": "",
-        "pos": pos
+        # "pos": pos,
     }
 
 def remove_ending_punc(s):
