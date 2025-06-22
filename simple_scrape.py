@@ -8,7 +8,7 @@ import time
 import langid
 import os
 import json
-from datetime import date
+from datetime import datetime, timezone
 from textblob import TextBlob 
 import boto3
 
@@ -16,17 +16,16 @@ from parsers.api_check import does_example_exist
 from parsers.nyt import NYTParser
 from parsers.utils import fill_out_sentence_object, clean_text, find_pos_for_word
 
-today = date.today()
+now = datetime.now(timezone.utc)
 s3 = boto3.client("s3")
 
 r = redis.StrictRedis(host="localhost", port=6379, db=0)
 
 parser = NYTParser
-
-date = today.strftime("%B-%d-%Y")
+date_string = now.strftime("%B-%d-%Y")
 
 # Assuming we're running from the project root.
-record = open("records/" + date + ".txt", "a+")
+record = open("records/" + date_string + ".txt", "a+")
 
 # common_words_text = open("data/wordlist-20210729.txt", "r").read();
 # common_words = [word.lstrip('"').rstrip('"') for word in common_words_text.split("\n")]
@@ -72,7 +71,7 @@ def post(word, article_url, sentence, meta, pos):
             word=word,
             sentence=sentence,
             article_url=article_url,
-            date=date,
+            crawl_date_time=now,
             meta=meta,
             pos=pos
         )

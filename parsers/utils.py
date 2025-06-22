@@ -8,12 +8,15 @@ def get_meta_content_by_attr(bs_meta_list, attr, val):
         if attr_val != None and attr_val == val:
             return element.get("content")
 
-def fill_out_sentence_object(word, sentence, article_url, date, meta, pos):
+def fill_out_sentence_object(word, sentence, article_url, crawl_date_time, meta, pos):
+    # Elastic, like JS, expects the "Z" to represent the UTC timezone.
+    date_string = crawl_date_time.isoformat(timespec='milliseconds').replace("+00:00", "Z")
+
     return {
         "metadata": {
             "searchAPI": "nyt",
             "documentTitle": get_meta_content_by_attr(meta, "property", "og:title"),
-            "crawlDate": date,
+            "crawlDate": date_string,
             "documentId": get_meta_content_by_attr(meta, "name", "articleId"),
             "description": get_meta_content_by_attr(meta, "property", "og:description"),
             "source": article_url,

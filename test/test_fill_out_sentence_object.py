@@ -1,6 +1,7 @@
 import unittest
 from parsers.utils import fill_out_sentence_object
 from bs4 import BeautifulSoup
+from datetime import datetime, timezone
 
 example_nyt_html = open("test/fixtures/example-nyt-page.html", "r").read()
 
@@ -14,7 +15,7 @@ class SentenceObjectSuite(unittest.TestCase):
         word = "naïve",
         sentence = "In a show that recently opened at the LaMaMa Experimental Theater Club in the East Village, a group of actors led by a young, ambitious, charmingly naïve director are almost finished rehearsing Chekhov’s “The Seagull” at the famed Moscow Art Theater when Russia invades Ukraine.", 
         article_url = "https://www.nytimes.com/2025/05/28/opinion/trump-danger-normalization-shock.html",
-        date = "2025-05-28",
+        crawl_date_time = datetime(2025, 5, 28, tzinfo=timezone.utc),
         meta = meta,
         pos = "JJ"
     )
@@ -24,7 +25,7 @@ class SentenceObjectSuite(unittest.TestCase):
                      'Sentence object has a uuid-length exampleId.');
 
     del sentence_obj['exampleId']
-    expected_sentence_obj = {'metadata': {'searchAPI': 'nyt', 'documentTitle': None, 'crawlDate': '2025-05-28', 'documentId': None, 'description': None, 'source': 'https://www.nytimes.com/2025/05/28/opinion/trump-danger-normalization-shock.html', 'DOI': None, 'subjects': None}, 'pubDate': None, 'author': None, 'hypothesisAccount': '', 'exampleType': '', 'rating': 1, 'url': 'https://www.nytimes.com/2025/05/28/opinion/trump-danger-normalization-shock.html', 'text': 'In a show that recently opened at the LaMaMa Experimental Theater Club in the East Village, a group of actors led by a young, ambitious, charmingly naïve director are almost finished rehearsing Chekhov’s “The Seagull” at the famed Moscow Art Theater when Russia invades Ukraine.', 'frd_rating': 1, 'word': 'naïve', 'labels': [], 'fileId': ''} # 'pos' 'JJ'
+    expected_sentence_obj = {'metadata': {'searchAPI': 'nyt', 'documentTitle': None, 'crawlDate': '2025-05-28T00:00:00.000Z', 'documentId': None, 'description': None, 'source': 'https://www.nytimes.com/2025/05/28/opinion/trump-danger-normalization-shock.html', 'DOI': None, 'subjects': None}, 'pubDate': None, 'author': None, 'hypothesisAccount': '', 'exampleType': '', 'rating': 1, 'url': 'https://www.nytimes.com/2025/05/28/opinion/trump-danger-normalization-shock.html', 'text': 'In a show that recently opened at the LaMaMa Experimental Theater Club in the East Village, a group of actors led by a young, ambitious, charmingly naïve director are almost finished rehearsing Chekhov’s “The Seagull” at the famed Moscow Art Theater when Russia invades Ukraine.', 'frd_rating': 1, 'word': 'naïve', 'labels': [], 'fileId': ''} # 'pos' 'JJ'
 
     self.assertEqual(sentence_obj, expected_sentence_obj,
                      'Sentence object properties are correct.')
