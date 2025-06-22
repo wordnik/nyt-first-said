@@ -10,12 +10,14 @@ import os
 import json
 from datetime import date
 from textblob import TextBlob 
+import boto3
 
 from parsers.api_check import does_example_exist
 from parsers.nyt import NYTParser
-from parsers.utils import fill_out_sentence_object
+from parsers.utils import fill_out_sentence_object, clean_text, find_pos_for_word
 
 today = date.today()
+s3 = boto3.client("s3")
 
 r = redis.StrictRedis(host="localhost", port=6379, db=0)
 
@@ -37,7 +39,7 @@ def humanize_url(article):
 # Returns whether or not this example exists (as a 0 or 1). Even if the method
 # ends up posting the word, it may not make it all the way through the example
 # pipeline, so we return False in that case.
-def check_word(word, article_url, sentence, meta):
+def check_word(word, article_url, sentence, meta, pos):
     time.sleep(1)
     print("API Checking Word: {}".format(word))
     
@@ -58,22 +60,28 @@ def check_word(word, article_url, sentence, meta):
         r.incr("recently")
         r.expire("recently", 60 * 30)
 
-        post(word, article_url, sentence, meta)
+        post(word, article_url, sentence, meta, pos)
     else:
         print("Recency Rejection: {}".format(word))
 
     return example_exists 
 
-def post(word, article_url, sentence, meta):
+def post(word, article_url, sentence, meta, pos):
     try:
         sentence_obj = fill_out_sentence_object(
             word=word,
             sentence=sentence,
             article_url=article_url,
             date=date,
-            meta=meta
+            meta=meta,
+            pos=pos
         )
-        print('New word! {}'.format(json.dumps(sentence_obj, indent=2)))
+        sentence_json = json.dumps(sentence_obj, indent=2)
+        print('New word! {}'.format(sentence_json))
+        filename = word + ".json"
+        obj_path = "nyt/" + filename
+        s3.put_object(Bucket="nyt-said-examples", Key=obj_path,
+                      Body=sentence_json.encode())
     except UnicodeDecodeError as e:
         print(e)
 
@@ -96,7 +104,7 @@ def process_article(content, article, meta):
     # record = open("records/"+article.replace("/", "_")+".txt", "w+")
     record.write("\nARTICLE:" + article)
     print("Processing Article")
-    text = str(content)
+    text = clean_text(str(content))
     sentence_blob = TextBlob(text)
     for sentence in sentence_blob.sentences:
         for token in sentence.tokens:
@@ -118,10 +126,13 @@ def process_article(content, article, meta):
                     record.write("~" + "C")
                 else:
                     # not in cache
+                    # NLTK part of speech tag list: https://stackoverflow.com/a/38264311/87798
+                    pos = find_pos_for_word(sentence_blob.pos_tags, word)
+
                     # Multiply by 1 to cast the boolean into a number.
                     r.set(
                         wkey,
-                        1 * check_word(word, article, sentence.string, meta))
+                        1 * check_word(word, article, sentence.string, meta, pos))
 
 def process_links(links):
     for link in links:
