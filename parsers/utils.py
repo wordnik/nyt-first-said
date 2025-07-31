@@ -8,7 +8,7 @@ def get_meta_content_by_attr(bs_meta_list, attr, val):
         if attr_val != None and attr_val == val:
             return element.get("content")
 
-def fill_out_sentence_object(word, sentence, article_url, date, meta, pos):
+def fill_out_sentence_object(word, sentence, article_url, date, meta):
     return {
         "metadata": {
             "searchAPI": "nyt",
@@ -23,7 +23,7 @@ def fill_out_sentence_object(word, sentence, article_url, date, meta, pos):
         "pubDate": get_meta_content_by_attr(meta, "property", "article:published_time"),
         "author": get_meta_content_by_attr(meta, "name", "byl"),
         "hypothesisAccount": "",
-        "exampleType": "",
+        "exampleType": "sentence",
         "rating": 1,
         "url": article_url,
         "text": sentence,
@@ -32,7 +32,6 @@ def fill_out_sentence_object(word, sentence, article_url, date, meta, pos):
         "word": word,
         "labels": [],
         "fileId": "",
-        "pos": pos
     }
 
 def remove_ending_punc(s):

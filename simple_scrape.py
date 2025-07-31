@@ -14,7 +14,7 @@ import boto3
 
 from parsers.api_check import does_example_exist
 from parsers.nyt import NYTParser
-from parsers.utils import fill_out_sentence_object, clean_text, find_pos_for_word
+from parsers.utils import fill_out_sentence_object, clean_text
 
 today = date.today()
 s3 = boto3.client("s3")
@@ -39,7 +39,7 @@ def humanize_url(article):
 # Returns whether or not this example exists (as a 0 or 1). Even if the method
 # ends up posting the word, it may not make it all the way through the example
 # pipeline, so we return False in that case.
-def check_word(word, article_url, sentence, meta, pos):
+def check_word(word, article_url, sentence, meta):
     time.sleep(1)
     print("API Checking Word: {}".format(word))
     
@@ -60,13 +60,13 @@ def check_word(word, article_url, sentence, meta, pos):
         r.incr("recently")
         r.expire("recently", 60 * 30)
 
-        post(word, article_url, sentence, meta, pos)
+        post(word, article_url, sentence, meta)
     else:
         print("Recency Rejection: {}".format(word))
 
     return example_exists 
 
-def post(word, article_url, sentence, meta, pos):
+def post(word, article_url, sentence, meta):
     try:
         sentence_obj = fill_out_sentence_object(
             word=word,
@@ -74,13 +74,11 @@ def post(word, article_url, sentence, meta, pos):
             article_url=article_url,
             date=date,
             meta=meta,
-            pos=pos
         )
         sentence_json = json.dumps(sentence_obj, indent=2)
         print('New word! {}'.format(sentence_json))
-        filename = word + ".json"
-        obj_path = "nyt/" + filename
-        s3.put_object(Bucket="nyt-said-examples", Key=obj_path,
+        obj_path = word + ".json"
+        s3.put_object(Bucket="nyt-said-sentences", Key=obj_path,
                       Body=sentence_json.encode())
     except UnicodeDecodeError as e:
         print(e)
@@ -127,12 +125,10 @@ def process_article(content, article, meta):
                 else:
                     # not in cache
                     # NLTK part of speech tag list: https://stackoverflow.com/a/38264311/87798
-                    pos = find_pos_for_word(sentence_blob.pos_tags, word)
-
                     # Multiply by 1 to cast the boolean into a number.
                     r.set(
                         wkey,
-                        1 * check_word(word, article, sentence.string, meta, pos))
+                        1 * check_word(word, article, sentence.string, meta))
 
 def process_links(links):
     for link in links:
