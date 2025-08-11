@@ -23,7 +23,7 @@ r = redis.StrictRedis(host="localhost", port=6379, db=0)
 
 parser = NYTParser
 
-date = today.strftime("%B-%d-%Y")
+date = today.isoformat()
 
 # Assuming we're running from the project root.
 record = open("records/" + date + ".txt", "a+")
