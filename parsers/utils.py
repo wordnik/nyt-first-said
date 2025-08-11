@@ -1,12 +1,13 @@
 import uuid
 import re
 
-def get_meta_content_by_attr(bs_meta_list, attr, val):
+def get_meta_content_by_attr(bs_meta_list, attr, val, default=None):
     # print("name: {}".format(bs_meta_list.name))
     for element in bs_meta_list:
         attr_val = element.attrs.get(attr, None)
         if attr_val != None and attr_val == val:
             return element.get("content")
+    return default
 
 def fill_out_sentence_object(word, sentence, article_url, date, meta):
     return {
@@ -14,11 +15,11 @@ def fill_out_sentence_object(word, sentence, article_url, date, meta):
             "searchAPI": "nyt",
             "documentTitle": get_meta_content_by_attr(meta, "property", "og:title"),
             "crawlDate": date,
-            "documentId": get_meta_content_by_attr(meta, "name", "articleId"),
+            "documentId": get_meta_content_by_attr(meta, "name", "articleId", article_url),
             "description": get_meta_content_by_attr(meta, "property", "og:description"),
             "source": article_url,
             "DOI": None,
-            "subjects": get_meta_content_by_attr(meta, "name", "news_keywords")
+            "subjects": get_meta_content_by_attr(meta, "name", "news_keywords".split(","), [])
         },
         "pubDate": get_meta_content_by_attr(meta, "property", "article:published_time"),
         "author": get_meta_content_by_attr(meta, "name", "byl"),
