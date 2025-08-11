@@ -79,7 +79,7 @@ def post(word, article_url, sentence, meta):
         print('New word! {}'.format(sentence_json))
         obj_path = word + ".json"
         s3.put_object(Bucket="nyt-said-sentences", Key=obj_path,
-                      Body=sentence_json.encode())
+                      Body=sentence_json.encode(), ContentType="application/json")
     except UnicodeDecodeError as e:
         print(e)
 
