@@ -1,9 +1,6 @@
 /* global process */
 var { S3Client } = require('@aws-sdk/client-s3');
-var {
-  streamFromBucketToMemory,
-} = require('../utils/stream-from-bucket-to-memory.js');
-var parseEvent = require('../utils/parse-event.js');
+var { streamFromBucketToMemory, parseEvent } = require('sentence-utils');
 var { esExampleSentenceSchema } = require('validation-library');
 var VError = require('verror');
 
