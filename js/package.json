@@ -1,0 +1,37 @@
+{
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.848.0",
+    "dotenv": "^17.2.0",
+    "validation-library": "wordnik/validation-library",
+    "sentence-utils": "wordnik/sentence-utils",
+    "verror": "^1.10.1"
+  },
+  "devDependencies": {
+    "eslint": "7.5",
+    "prettier": "^2.8.3"
+  },
+  "name": "nyt-first-said",
+  "version": "1.0.0",
+  "description": "Lambdas for getting new sentences into Wordnik.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wordnik/nyt-first-said.git"
+  },
+  "keywords": [
+    "words"
+  ],
+  "author": "Wordnik",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wordnik/nyt-first-said/issues"
+  },
+  "homepage": "https://github.com/wordnik/nyt-first-said#readme",
+  "private": true
+}

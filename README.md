@@ -41,7 +41,29 @@ Also check out [@nyt-finally-said](https://github.com/uniphil/nyt-finally-said),
 - Run `docker compose up` to get a Redis service running on port 6379.
     - If you want to inspect the persistent storage, it's on the host machine at `/var/lib/docker/volumes/nyt-first-said_redis_data/`.
 - Run `. tools/init-aws.sh` (the space after the . is important) to set the AWS_PROFILE env. var. If you haven't already, use [`aws configure --wordnik](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-using-profiles) to create configuration and credential files for the `wordnik` profile.
-- Run the main program with `python simple_scrape.py"
+- Run the main program with `python simple_scrape.py`
+
+# AWS lambda
+
+There is also a lambda in this project that listens for the sentence objects to drop in the [nyt-said-sentences bucket](https://054978852993-rpuykha7.us-west-1.console.aws.amazon.com/s3/buckets/nyt-said-sentences?region=us-west-1&bucketType=general&tab=objects). The lambda uploads those objects to lambda.
+
+## Setting up
+
+To run the parts of the project that use AWS from your computer, you need to set up a file at `~/.aws/credentials` that has your access keys in it like so:
+
+    [default]
+    aws_access_key_id = <access key>
+    aws_secret_access_key = <secret>
+
+### aws tool
+
+To deploy the lambda from your computer, you'll need to [install the `aws` tool](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+
+## Deploying
+
+You can deploy changes to the lambda on AWS with the `push-sentences-to-elastic` Makefile target.
+
+That will create a zip file with the relevant files, then push it to AWS with the `aws` command line tool.
 
 # Tests
 
