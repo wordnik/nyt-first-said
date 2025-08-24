@@ -173,9 +173,11 @@ def process_links(links):
             parse = parse_fns.get(site["parser_name"], parse_fns["article_based"])
             parsed = parse(html)
 
-            if parsed and len(parsed.get("body", "")) > 0:
-                process_article(body, link, parsed["meta"])
-                r.set(akey, "1")
+            if parsed: 
+                body = parsed.get("body", "")
+                if len(body) > 0:
+                    process_article(body, link, parsed.get("meta", {}))
+                    r.set(akey, "1")
 
 start_time = time.time()
 print("Started simple_scrape.")
