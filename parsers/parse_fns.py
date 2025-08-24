@@ -19,8 +19,8 @@ def article_based(html, get_additional_p_tags = None):
 
     try:
         p_tags = list(soup.find("article").find_all("p"))
-    except:
-        print("Error while parsing html:" + html)
+    except Exception as e:
+        print(f"Error {e} while parsing html.")
         return
 
     if get_additional_p_tags:

@@ -12,6 +12,7 @@ import argparse
 from datetime import date
 from textblob import TextBlob 
 import boto3
+import urllib.request as urllib2
 
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls
@@ -159,6 +160,8 @@ def process_links(links):
             content_url = link
             if site["use_archive"]:
                 content_url = download_via_archive(link)
+                if content_url == False:
+                    return
 
             html = ""
             try:
