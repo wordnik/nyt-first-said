@@ -1,7 +1,10 @@
 from bs4 import BeautifulSoup, NavigableString, Comment
 from functools import reduce
+import logging
 
 import operator
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # parser_fns need to take an html string and return an object with body and meta keys and, optionally, the soup instance.
 
@@ -18,9 +21,14 @@ def article_based(html, get_additional_p_tags = None):
     meta = soup.find_all("meta")
 
     try:
-        p_tags = list(soup.find("article").find_all("p"))
+        article = soup.find("article")
+        if not article:
+            logging.info("No article in html.")
+            return
+
+        p_tags = list(article.find_all("p"))
     except Exception as e:
-        print(f"Error {e} while parsing html.")
+        logging.info(f"Error {e} while parsing html: {html}")
         return
 
     if get_additional_p_tags:
