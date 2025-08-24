@@ -8,22 +8,35 @@ import time
 import langid
 import os
 import json
+import argparse
 from datetime import date
 from textblob import TextBlob 
 import boto3
 
 from parsers.api_check import does_example_exist
-from parsers.nyt import NYTParser
-from parsers.utils import fill_out_sentence_object, clean_text
+from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls
+from parsers.parse_fns import parse_fns
+from parsers.archive_bounce import download_via_archive
 
 today = date.today()
 s3 = boto3.client("s3")
 
 r = redis.StrictRedis(host="localhost", port=6379, db=0)
 
-parser = NYTParser
-
 date = today.isoformat()
+
+argparser = argparse.ArgumentParser()
+argparser.add_argument('site_name')
+args = argparser.parse_args()
+
+# Open the site configs.
+target_sites_text = open("data/target_sites.json", "r").read()
+target_sites = json.loads(target_sites_text)
+site = target_sites.get(args.site_name)
+
+if not site:
+    print("Could not find site config for " + args.site_name)
+    quit()
 
 # Assuming we're running from the project root.
 record = open("records/" + date + ".txt", "a+")
@@ -143,14 +156,30 @@ def process_links(links):
             time.sleep(30)
             print("Getting Article {}".format(link))
 
-            parsed_article = parser(link)
-            print("Is {} real_article: {}".format(link, parsed_article.real_article))
-            if parsed_article.real_article:
-                process_article(parsed_article.body, link, parsed_article.meta)
+            content_url = link
+            if site["use_archive"]:
+                content_url = download_via_archive(link)
+
+            html = ""
+            try:
+                html = grab_url(content_url)
+            except urllib2.HTTPError as e:
+                if e.code == 404:
+                    self.real_article = False
+                    return
+                raise
+            print("got html")
+
+            parse = parse_fns.get(site["parser_name"], parse_fns["article_based"])
+            parsed = parse(html)
+
+            if parsed and len(parsed.get("body", "")) > 0:
+                process_article(body, link, parsed["meta"])
                 r.set(akey, "1")
+
 start_time = time.time()
 print("Started simple_scrape.")
-process_links(parser.feed_urls())
+process_links(get_feed_urls(site["feeder_pages"], site["feeder_pattern"]))
 record.close()
 
 

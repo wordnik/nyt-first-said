@@ -3,4 +3,3 @@
 #  - add import here.
 # Test with test_parser.py
 
-from parsers.nyt import NYTParser
