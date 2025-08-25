@@ -26,6 +26,7 @@ def article_based(html, get_additional_p_tags = None):
             logging.info("No article in html.")
             return
 
+        logging.info("Article found in html.")
         p_tags = list(article.find_all("p"))
     except Exception as e:
         logging.info(f"Error {e} while parsing html: {html}")

@@ -159,9 +159,13 @@ def process_links(links):
 
             content_url = link
             if site["use_archive"]:
+                print(f"Downloading via archive: {link}")
                 content_url = download_via_archive(link)
                 if content_url == False:
+                    print(f"Could not download via archive: {link}")
                     return
+
+                print(f"Successfully downloaded via archive: {link}, content_url: {content_url}")
 
             html = ""
             try:

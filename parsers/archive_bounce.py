@@ -53,15 +53,22 @@ def download_via_archive(url, max_attempts=5):
                 status_data = status_req.json()
                 status = status_data.get("status", "")
 
-                if status == "success":
+                if not status:
+                    logging.info(f"Could not find status in status_data: {json.dumps(status_data)}")
+
+                elif status == "success":
                     logging.info(f"Successfully archived URL: {url}")
                     return check_availability(status_data["original_url"], headers)
                 elif status == "error":
                     logging.error(f"Job failed: {status_data['message']}")
                     break
 
+                elif status == "pending":
+                    logging.info(f"Archive status pending for {url}")
+
                 else:
-                    logging.info(f"Could not find status in status_data: {json.dumps(status_data)}")
+                    logging.error(f"Unknown archive status: {status}")
+
 
         except (RequestException, MaxRetryError) as e:
             logging.error(f"Attempt {attempt + 1} failed due to {str(e)}")
