@@ -49,9 +49,38 @@
         "https://www.eurogamer.net/",
         "https://www.eurogamer.net/latest",
         "https://www.eurogamer.net/pc",
-        "https://www.eurogamer.net/nintendo"
+        "https://www.eurogamer.net/nintendo",
+        "https://www.eurogamer.net/playstation",
+        "https://www.eurogamer.net/xbox",
+        "https://www.eurogamer.net/digital-foundry",
+        "https://www.eurogamer.net/news",
+        "https://www.eurogamer.net/reviews",
+        "https://www.eurogamer.net/features",
+        "https://www.eurogamer.net/guides"
     ],
     "use_archive": false,
+    "parser_name": "article_based"
+  },
+  "sciam": {
+    "site": "sciam",
+    "domains": ["www.scientificamerican.com"],
+    "feeder_pattern": "^https?://www.scientificamerican.com/",
+    "feeder_pages": [
+      "https://www.scientificamerican.com/",
+      "https://www.scientificamerican.com/health/",
+      "https://www.scientificamerican.com/mind-and-brain/",
+      "https://www.scientificamerican.com/environment/",
+      "https://www.scientificamerican.com/technology/",
+      "https://www.scientificamerican.com/space-and-physics/",
+      "https://www.scientificamerican.com/biology/",
+      "https://www.scientificamerican.com/math/",
+      "https://www.scientificamerican.com/chemistry/",
+      "https://www.scientificamerican.com/social-sciences/",
+      "https://www.scientificamerican.com/section/opinion/",
+      "https://www.scientificamerican.com/games/",
+      "https://www.scientificamerican.com/reports/"
+    ],
+    "use_archive": true,
     "parser_name": "article_based"
   }
 }
