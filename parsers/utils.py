@@ -102,7 +102,6 @@ def get_feed_urls(feeder_pages, feeder_pattern):
         # If no http://, prepend domain name
         domain = "/".join(feeder_url.split("/")[:3])
         urls = [url if "://" in url else concat(domain, url) for url in urls]
-
         all_urls = all_urls + [
             url for url in urls if re.search(feeder_pattern, url)
         ]

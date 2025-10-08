@@ -171,7 +171,7 @@ def process_links(links):
                 dl_result = download_via_archive(link)
                 if dl_result == False:
                     print(f"Could not download via archive: {link}")
-                    return
+                    continue
 
                 content_url = dl_result
                 print(f"Successfully downloaded via archive: {link}, content_url: {content_url}")
@@ -182,7 +182,7 @@ def process_links(links):
             except urllib2.HTTPError as e:
                 if e.code == 404:
                     self.real_article = False
-                    return
+                    continue
                 raise
             print("got html")
 
