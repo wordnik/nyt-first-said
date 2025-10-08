@@ -19,6 +19,8 @@ from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_fe
 from parsers.parse_fns import parse_fns
 from parsers.archive_bounce import download_via_archive
 
+articles_processed = 0
+new_words_found = 0
 today = date.today()
 s3 = boto3.client("s3")
 
@@ -46,6 +48,7 @@ record = open("records/" + date + ".txt", "a+")
 # common_words = [word.lstrip('"').rstrip('"') for word in common_words_text.split("\n")]
 common_words_text = open("data/nltk-stop-words.json", "r").read()
 common_words = json.loads(common_words_text)
+
 
 def humanize_url(article):
     return article.split("/")[-1].split(".html")[0].replace("-", " ")
@@ -81,6 +84,7 @@ def check_word(word, article_url, sentence, meta):
     return example_exists 
 
 def post(word, article_url, sentence, meta):
+    global new_words_found
     try:
         sentence_obj = fill_out_sentence_object(
             word=word,
@@ -94,6 +98,7 @@ def post(word, article_url, sentence, meta):
         obj_path = word + ".json"
         s3.put_object(Bucket="nyt-said-sentences", Key=obj_path,
                       Body=sentence_json.encode(), ContentType="application/json")
+        new_words_found += 1
     except UnicodeDecodeError as e:
         print(e)
 
@@ -113,6 +118,8 @@ def remove_punctuation(text):
     return re.sub(r"’s", "", re.sub(r"\p{P}+$", "", re.sub(r"^\p{P}+", "", text)))
 
 def process_article(content, article, meta):
+    global articles_processed
+
     # record = open("records/"+article.replace("/", "_")+".txt", "w+")
     record.write("\nARTICLE:" + article)
     print("Processing Article")
@@ -126,7 +133,7 @@ def process_article(content, article, meta):
             record.write("\n" + word)
             record.write("~" + word)
             if word_is_common(word):
-                print("Word commonness rejection: {}.".format(word))
+                # print("Word commonness rejection: {}.".format(word))
                 continue
 
             if ok_word(word):
@@ -143,6 +150,7 @@ def process_article(content, article, meta):
                     r.set(
                         wkey,
                         1 * check_word(word, article, sentence.string, meta))
+    articles_processed += 1
 
 def process_links(links):
     for link in links:
@@ -160,11 +168,12 @@ def process_links(links):
             content_url = link
             if site["use_archive"]:
                 print(f"Downloading via archive: {link}")
-                content_url = download_via_archive(link)
-                if content_url == False:
+                dl_result = download_via_archive(link)
+                if dl_result == False:
                     print(f"Could not download via archive: {link}")
                     return
 
+                content_url = dl_result
                 print(f"Successfully downloaded via archive: {link}, content_url: {content_url}")
 
             html = ""
@@ -195,4 +204,6 @@ record.close()
 elapsed_time = time.time() - start_time
 print("Time Elapsed (seconds):")
 print(elapsed_time)
+print(f"Articles processed: {articles_processed}, new words found: {new_words_found}")
+
 
