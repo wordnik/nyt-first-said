@@ -1,5 +1,6 @@
 import uuid
 import re
+import socket
 from bs4 import BeautifulSoup
 import http.cookiejar as cookielib
 import urllib.request as urllib2
