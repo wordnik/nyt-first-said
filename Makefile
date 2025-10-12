@@ -1,4 +1,3 @@
-CURRENTDATE = $(shell /bin/date +%Y-%m-%d)
 
 # Install helpers
 
@@ -49,7 +48,3 @@ drop-sentence-to-trigger-lambda:
 	aws s3api delete-object --bucket nyt-said-sentences --key nyt-example-sentence.json
 	aws s3api put-object --bucket nyt-said-sentences --key nyt-example-sentence.json \
     --body meta/examples/nyt-example-sentence.json --content-type application/json
-
-# Execution
-nyt-scrape:
-	python simple_scrape.py nyt > meta/nyt-run-$(CURRENTDATE).txt 2> meta/nyt-error-$(CURRENTDATE).txt
