@@ -71,4 +71,4 @@ Run tests with `make run-test`.
 
 # Exploratory tools
 
-You can try out the NYT parser with `python try_parser.py <NYTurl>`;
+You can try out the NYT parser with `python try_parser.py <NYTurl>`.
