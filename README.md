@@ -56,6 +56,7 @@ To run the parts of the project that use AWS from your computer, you need to set
     aws_access_key_id = <access key>
     aws_secret_access_key = <secret>
 
+
 ### aws tool
 
 To deploy the lambda from your computer, you'll need to [install the `aws` tool](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
@@ -72,4 +73,4 @@ Run tests with `make run-test`.
 
 # Exploratory tools
 
-You can try out the NYT parser with `python try_parser.py <NYTurl>`;
+You can try out the NYT parser with `python try_parser.py <NYTurl>`.
