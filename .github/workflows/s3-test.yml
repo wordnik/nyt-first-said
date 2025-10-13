@@ -1,9 +1,12 @@
 name: Sync to S3
 on:
-  push:
-    branches:
-      - master
-      - actions
+  workflow_dispatch:
+    inputs:
+        site:
+          description: site
+          required: true
+          default: 'nyt'
+          type: string
 jobs:
   sync:
     runs-on: ubuntu-latest
