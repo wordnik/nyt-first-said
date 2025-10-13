@@ -42,10 +42,11 @@ Also check out [@nyt-finally-said](https://github.com/uniphil/nyt-finally-said),
     - If you want to inspect the persistent storage, it's on the host machine at `/var/lib/docker/volumes/nyt-first-said_redis_data/`.
 - Run `. tools/init-aws.sh` (the space after the . is important) to set the AWS_PROFILE env. var. If you haven't already, use [`aws configure --wordnik](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-using-profiles) to create configuration and credential files for the `wordnik` profile.
 - Run the main program with `python simple_scrape.py`
+    - To get stdout and error logs captured in text files, run `./tools/scrape-site.py <site name from data/target_sites.json>`
 
 # AWS lambda
 
-There is also a lambda in this project that listens for the sentence objects to drop in the [nyt-said-sentences bucket](https://054978852993-rpuykha7.us-west-1.console.aws.amazon.com/s3/buckets/nyt-said-sentences?region=us-west-1&bucketType=general&tab=objects). The lambda uploads those objects to lambda.
+There is also a lambda in this project that listens for the sentence objects to drop in the [nyt-said-sentences bucket](https://054978852993-rpuykha7.us-west-1.console.aws.amazon.com/s3/buckets/nyt-said-sentences?region=us-west-1&bucketType=general&tab=objects). The lambda uploads those objects to S3.
 
 ## Setting up
 
