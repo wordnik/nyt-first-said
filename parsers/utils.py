@@ -4,6 +4,7 @@ import socket
 from bs4 import BeautifulSoup
 import http.cookiejar as cookielib
 import urllib.request as urllib2
+import time
 
 def get_meta_content_by_attr(bs_meta_list, attr, val, default=None):
     # print("name: {}".format(bs_meta_list.name))
@@ -13,10 +14,10 @@ def get_meta_content_by_attr(bs_meta_list, attr, val, default=None):
             return element.get("content")
     return default
 
-def fill_out_sentence_object(word, sentence, article_url, date, meta):
+def fill_out_sentence_object(word, sentence, article_url, date, meta, source):
     return {
         "metadata": {
-            "searchAPI": "nyt",
+            "searchAPI": source,
             "documentTitle": get_meta_content_by_attr(meta, "property", "og:title"),
             "crawlDate": date,
             "documentId": get_meta_content_by_attr(meta, "name", "articleId", article_url),
