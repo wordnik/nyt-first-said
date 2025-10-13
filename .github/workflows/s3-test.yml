@@ -23,8 +23,9 @@ jobs:
 
     - name: Sync to S3
       run: aws s3 cp README.md s3://epub-test-fixtures
+
     - name: Install dependencies
-      - uses: actions/setup-python@v3
+      uses: actions/setup-python@v3
         with:
           python-version: 3.10
       run: |
