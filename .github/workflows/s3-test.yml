@@ -30,7 +30,7 @@ jobs:
       run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Run script
+    - name: Run env check
       run: python tools/test_env.py '${{ inputs.site }}'
       env:
         S3A: ${{ secrets.S3A }}

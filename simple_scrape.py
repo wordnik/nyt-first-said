@@ -13,6 +13,7 @@ from datetime import date
 from textblob import TextBlob 
 import boto3
 import urllib.request as urllib2
+from utils.word_count_cache import WordCountCache
 
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls
@@ -23,8 +24,12 @@ articles_processed = 0
 new_words_found = 0
 today = date.today()
 s3 = boto3.client("s3")
+enable_redis = False
 
-r = redis.StrictRedis(host="localhost", port=6379, db=0)
+if enable_redis:
+    r = redis.StrictRedis(host="localhost", port=6379, db=0)
+else:
+    r = WordCountCache()
 
 date = today.isoformat()
 

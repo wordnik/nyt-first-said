@@ -8,6 +8,7 @@ install-textblob:
 run-test:
 	# venv/bin/python -m unittest -v test.test_fill_out_sentence_object
 	venv/bin/python -m unittest -v test.test_pos
+	venv/bin/python -m unittest -v test.test_filter_words
 
 # Lambda deployment
 #
