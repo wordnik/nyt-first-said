@@ -6,6 +6,9 @@ import requests
 import time
 import os
 from dotenv import load_dotenv
+import urllib3
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 load_dotenv()
 key = os.getenv("WORDNIK_API_KEY")
