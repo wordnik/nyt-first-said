@@ -1,1 +1,43 @@
+name: Brush
+on:
+  workflow_dispatch:
+    inputs:
+        site:
+          description: site
+          required: true
+          default: 'nyt'
+          type: string
+jobs:
+  brush:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-1
+    - uses: actions/setup-python@v3
+      with:
+        python-version: 3.10.19
+    - name: Install dependencies
+      run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Install TextBlob corpora
+      run: mkdir -p nltk_data && NLTK_DATA=nltk_data python -m textblob.download_corpora lite
+    - name: Run env check
+      run: python tools/test_env.py '${{ inputs.site }}'
+      env:
+        S3A: ${{ secrets.S3A }}
+        WORDNIK_API_KEY: ${{ secrets.WORDNIK_API_KEY }}
+    - name: Run script
+      run: python simple_scrape.py '${{ inputs.site }}'
+      env:
+        S3A: ${{ secrets.S3A }}
+        WORDNIK_API_KEY: ${{ secrets.WORDNIK_API_KEY }}
+        NLTK_DATA: nltk_data
 
