@@ -31,9 +31,9 @@ jobs:
     - name: Restore nltk_data from cache
       id: restore-nltk-cache
       uses: actions/cache@v3
-        with:
-          path: nltk_data
-          key: nltk_data
+      with:
+        path: nltk_data
+        key: nltk_data
     - name: Install TextBlob corpora
       run: mkdir -p nltk_data && NLTK_DATA=nltk_data python -m textblob.download_corpora lite
       if: steps.restore-nltk-cache.outputs.cache-hit != 'true'
