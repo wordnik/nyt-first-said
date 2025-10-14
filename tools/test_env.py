@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/python
+
+# This is a script for testing the GitHub Actions environment.
 import os
 from dotenv import load_dotenv
 import boto3

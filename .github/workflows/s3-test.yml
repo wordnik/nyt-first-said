@@ -35,3 +35,8 @@ jobs:
       env:
         S3A: ${{ secrets.S3A }}
         WORDNIK_API_KEY: ${{ secrets.WORDNIK_API_KEY }}
+    - name: Run script
+      run: python simple_scrape.py '${{ inputs.site }}'
+      env:
+        S3A: ${{ secrets.S3A }}
+        WORDNIK_API_KEY: ${{ secrets.WORDNIK_API_KEY }}
