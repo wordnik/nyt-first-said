@@ -108,3 +108,9 @@ def get_feed_urls(feeder_pages, feeder_pattern):
             url for url in urls if re.search(feeder_pattern, url)
         ]
     return all_urls
+
+# This is to cover word delimiters not covered by TextBlob.
+def split_words_by_unicode_chars(s):
+    # Unicode symbol range https://en.wikipedia.org/wiki/List_of_Unicode_characters#Unicode_symbols
+    return [x for x in re.split('[\u2013-\u204a]', s) if x != '']
+
