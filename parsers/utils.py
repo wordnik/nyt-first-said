@@ -14,10 +14,10 @@ def get_meta_content_by_attr(bs_meta_list, attr, val, default=None):
             return element.get("content")
     return default
 
-def fill_out_sentence_object(word, sentence, article_url, date, meta, source):
+def fill_out_sentence_object(word, sentence, article_url, date, meta, api):
     return {
         "metadata": {
-            "searchAPI": source,
+            "searchAPI": api,
             "documentTitle": get_meta_content_by_attr(meta, "property", "og:title"),
             "crawlDate": date,
             "documentId": get_meta_content_by_attr(meta, "name", "articleId", article_url),

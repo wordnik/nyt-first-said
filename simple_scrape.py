@@ -97,7 +97,7 @@ def post(word, article_url, sentence, meta):
             article_url=article_url,
             date=date,
             meta=meta,
-            source=site["site"]
+            api=site["site"]
         )
         sentence_json = json.dumps(sentence_obj, indent=2)
         print('New word! {}'.format(sentence_json))
