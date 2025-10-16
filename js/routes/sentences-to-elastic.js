@@ -70,29 +70,29 @@ async function handler(event) {
     var body;
 
     try {
-      const uploadURL = elasticBaseURL + '/_bulk';
+      // const uploadURL = elasticBaseURL + '/_bulk';
       body = indexJSONLine + JSON.stringify(sentenceObj, null, 0) + '\n';
+      console.log('Would have posted to elastic:', body);
+      // let res = await fetch(uploadURL, {
+      //   headers: {
+      //     Authorization: authValues,
+      //     'Content-Type': 'application/x-ndjson',
+      //   },
+      //   method: 'POST',
+      //   body,
+      // });
+      // if (!res.ok) {
+      //   throw new Error(
+      //     `Failure response to elastic sentence upload: ${res.status}/${res.statusText}`
+      //   );
+      // }
 
-      let res = await fetch(uploadURL, {
-        headers: {
-          Authorization: authValues,
-          'Content-Type': 'application/x-ndjson',
-        },
-        method: 'POST',
-        body,
-      });
-      if (!res.ok) {
-        throw new Error(
-          `Failure response to elastic sentence upload: ${res.status}/${res.statusText}`
-        );
-      }
-
-      const resText = await res.text();
-      if (res.ok) {
-        console.log('Completed', body, res.status, resText);
-      } else {
-        throw new Error(`Bulk upload failed: ${res.status} | ${resText}`);
-      }
+      // const resText = await res.text();
+      // if (res.ok) {
+      //   console.log('Completed', body, res.status, resText);
+      // } else {
+      //   throw new Error(`Bulk upload failed: ${res.status} | ${resText}`);
+      // }
     } catch (error) {
       throw new VError(error, 'Bulk upload failed.');
     }
