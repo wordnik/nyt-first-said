@@ -1,30 +1,22 @@
 import unittest
-from parsers.utils import fill_out_sentence_object
-from bs4 import BeautifulSoup
+from utils.word_count_cache import WordCountCache
 
-example_nyt_html = open("test/fixtures/example-nyt-page.html", "r").read()
-
-class SentenceObjectSuite(unittest.TestCase):
+class WordCountCacheSuite(unittest.TestCase):
   def test_basic(self):
-    soup = BeautifulSoup(example_nyt_html, "lxml")
-    meta = soup.find_all("meta")
-    sentence_obj = fill_out_sentence_object(
-        word = "naïve",
-        sentence = "In a show that recently opened at the LaMaMa Experimental Theater Club in the East Village, a group of actors led by a young, ambitious, charmingly naïve director are almost finished rehearsing Chekhov’s “The Seagull” at the famed Moscow Art Theater when Russia invades Ukraine.", 
-        article_url = "https://www.nytimes.com/2025/05/28/opinion/trump-danger-normalization-shock.html",
-        date = "2025-05-28",
-        meta = meta,
-        pos = "JJ"
-    )
+      cache = WordCountCache()
+      cache.incr("word:hi")
+      cache.incr("word:hi")
+      self.assertEqual(cache.get("word:hi"), 2, "Incrementing a key twice sets the value to 2.")
+      cache.incr("word:hi")
+      self.assertEqual(cache.get("word:hi"), 3, "Incrementing a key thrice sets the value to 3.")
 
-    self.assertEqual(len(sentence_obj.get('exampleId', '')), 36,
-                     'Sentence object has a uuid-length exampleId.');
+      self.assertEqual(cache.get("word:hey"), None, "Getting a key not set returns None")
+    
+      cache.set("word:hey", 4)
+      self.assertEqual(cache.get("word:hey"), 4, "Getting a key set to 4 returns 4")
 
-    del sentence_obj['exampleId']
-    expected_sentence_obj = {'metadata': {'searchAPI': 'nyt', 'documentTitle': None, 'crawlDate': '2025-05-28', 'documentId': None, 'description': None, 'source': 'https://www.nytimes.com/2025/05/28/opinion/trump-danger-normalization-shock.html', 'DOI': None, 'subjects': None}, 'pubDate': None, 'author': None, 'hypothesisAccount': '', 'exampleType': '', 'rating': 1, 'url': 'https://www.nytimes.com/2025/05/28/opinion/trump-danger-normalization-shock.html', 'text': 'In a show that recently opened at the LaMaMa Experimental Theater Club in the East Village, a group of actors led by a young, ambitious, charmingly naïve director are almost finished rehearsing Chekhov’s “The Seagull” at the famed Moscow Art Theater when Russia invades Ukraine.', 'frd_rating': 1, 'word': 'naïve', 'labels': [], 'fileId': '', 'pos': 'JJ'}
-
-    self.assertEqual(sentence_obj, expected_sentence_obj,
-                     'Sentence object properties are correct.')
+      cache.incr("word:hey")
+      self.assertEqual(cache.get("word:hey"), 5, "Incrementing a set key works")
 
 if __name__ == '__main__':
     unittest.main()
