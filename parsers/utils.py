@@ -14,10 +14,10 @@ def get_meta_content_by_attr(bs_meta_list, attr, val, default=None):
             return element.get("content")
     return default
 
-def fill_out_sentence_object(word, sentence, article_url, date, meta, source):
+def fill_out_sentence_object(word, sentence, article_url, date, meta, api):
     return {
         "metadata": {
-            "searchAPI": source,
+            "searchAPI": api,
             "documentTitle": get_meta_content_by_attr(meta, "property", "og:title"),
             "crawlDate": date,
             "documentId": get_meta_content_by_attr(meta, "name", "articleId", article_url),
@@ -108,3 +108,9 @@ def get_feed_urls(feeder_pages, feeder_pattern):
             url for url in urls if re.search(feeder_pattern, url)
         ]
     return all_urls
+
+# This is to cover word delimiters not covered by TextBlob.
+def split_words_by_unicode_chars(s):
+    # Unicode symbol range https://en.wikipedia.org/wiki/List_of_Unicode_characters#Unicode_symbols
+    return [x for x in re.split('[\u2013-\u204a]', s) if x != '']
+

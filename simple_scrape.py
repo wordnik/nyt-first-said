@@ -13,9 +13,10 @@ from datetime import date
 from textblob import TextBlob 
 import boto3
 import urllib.request as urllib2
+from utils.word_count_cache import WordCountCache
 
 from parsers.api_check import does_example_exist
-from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls
+from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls, split_words_by_unicode_chars
 from parsers.parse_fns import parse_fns
 from parsers.archive_bounce import download_via_archive
 
@@ -23,8 +24,12 @@ articles_processed = 0
 new_words_found = 0
 today = date.today()
 s3 = boto3.client("s3")
+enable_redis = False
 
-r = redis.StrictRedis(host="localhost", port=6379, db=0)
+if enable_redis:
+    r = redis.StrictRedis(host="localhost", port=6379, db=0)
+else:
+    r = WordCountCache()
 
 date = today.isoformat()
 
@@ -92,7 +97,7 @@ def post(word, article_url, sentence, meta):
             article_url=article_url,
             date=date,
             meta=meta,
-            source=site["site"]
+            api=site["site"]
         )
         sentence_json = json.dumps(sentence_obj, indent=2)
         print('New word! {}'.format(sentence_json))
@@ -128,29 +133,31 @@ def process_article(content, article, meta):
     sentence_blob = TextBlob(text)
     for sentence in sentence_blob.sentences:
         for token in sentence.tokens:
-            word = remove_punctuation(token.string)
-            if len(word) < 2:
-                continue
-            record.write("\n" + word)
-            record.write("~" + word)
-            if word_is_common(word):
-                # print("Word commonness rejection: {}.".format(word))
-                continue
-
-            if ok_word(word):
+            # TODO: New inner loop with word split among tokens.
+            words = split_words_by_unicode_chars(remove_punctuation(token.string))
+            for word in words:
+                if len(word) < 2:
+                    continue
+                record.write("\n" + word)
                 record.write("~" + word)
-                wkey = "word:" + word
-                cache_flag = r.get(wkey)
-                if cache_flag:
-                    # seen in cache
-                    record.write("~" + "C")
-                else:
-                    # not in cache
-                    # NLTK part of speech tag list: https://stackoverflow.com/a/38264311/87798
-                    # Multiply by 1 to cast the boolean into a number.
-                    r.set(
-                        wkey,
-                        1 * check_word(word, article, sentence.string, meta))
+                if word_is_common(word):
+                    # print("Word commonness rejection: {}.".format(word))
+                    continue
+
+                if ok_word(word):
+                    record.write("~" + word)
+                    wkey = "word:" + word
+                    cache_flag = r.get(wkey)
+                    if cache_flag:
+                        # seen in cache
+                        record.write("~" + "C")
+                    else:
+                        # not in cache
+                        # NLTK part of speech tag list: https://stackoverflow.com/a/38264311/87798
+                        # Multiply by 1 to cast the boolean into a number.
+                        r.set(
+                            wkey,
+                            1 * check_word(word, article, sentence.string, meta))
     articles_processed += 1
 
 def process_links(links):
