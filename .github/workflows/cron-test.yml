@@ -1,6 +1,7 @@
+name: Cron test
 on:
   schedule:
-    - cron: '* * * * *'
+    - cron: '41 * * * *'
 
 jobs:
   test_schedule:
