@@ -7,6 +7,13 @@ on:
           required: true
           default: 'nyt'
           type: string
+  workflow_call:
+    inputs:
+        site:
+          description: site
+          required: true
+          default: 'nyt'
+          type: string
 jobs:
   brush:
     runs-on: ubuntu-latest
