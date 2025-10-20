@@ -1,0 +1,8 @@
+on:
+  schedule:
+    - cron: '20 * * * *'
+jobs:
+  nyt:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    with:
+      site: 'nyt'
