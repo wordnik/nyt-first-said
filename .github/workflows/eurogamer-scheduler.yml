@@ -1,0 +1,16 @@
+name: Eurogamer scheduler
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '50 2 * * *'
+jobs:
+  test_schedule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Every time
+        run: echo "This step will always run"
+  nyt:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: nyt
