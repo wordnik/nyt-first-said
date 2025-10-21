@@ -2,7 +2,7 @@ name: Eurogamer scheduler
 on:
   workflow_dispatch:
   schedule:
-    - cron: '50 2 * * *'
+    - cron: '50 1 * * *'
 jobs:
   test_schedule:
     runs-on: ubuntu-latest
