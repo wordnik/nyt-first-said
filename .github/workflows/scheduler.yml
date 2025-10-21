@@ -1,11 +1,9 @@
 name: Scheduler
 on:
   schedule:
-    - cron: '2 * * * *'
+    - cron: '55 * * * *'
 jobs:
   nyt:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     with:
       site: nyt
-    secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
