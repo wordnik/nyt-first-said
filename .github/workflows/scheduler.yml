@@ -1,8 +1,15 @@
 name: Scheduler
 on:
+
+  workflow_dispatch:
   schedule:
-    - cron: '24 * * * *'
+    - cron: '29 * * * *'
 jobs:
+  test_schedule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Every time
+        run: echo "This step will always run"
   nyt:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     with:
