@@ -2,7 +2,7 @@ name: Scheduler
 on:
   workflow_dispatch:
   schedule:
-    - cron: '35 * * * *'
+    - cron: '36 * * * *'
 jobs:
   test_schedule:
     runs-on: ubuntu-latest
