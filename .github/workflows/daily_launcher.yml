@@ -2,7 +2,7 @@ name: Daily launcher
 on:
   workflow_dispatch:
   schedule:
-    - cron: '28 16 * * *'
+    - cron: '0 17 * * *'
 jobs:
   nyt:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
