@@ -1,6 +1,5 @@
 name: Scheduler
 on:
-
   workflow_dispatch:
   schedule:
     - cron: '29 * * * *'
@@ -12,5 +11,6 @@ jobs:
         run: echo "This step will always run"
   nyt:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
     with:
       site: nyt
