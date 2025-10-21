@@ -14,3 +14,13 @@ jobs:
     secrets: inherit
     with:
       site: eurogamer
+  news-medical:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: news-medical
+  farmersjournal:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: farmersjournal
