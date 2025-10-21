@@ -1,7 +1,7 @@
 name: Scheduler
 on:
   schedule:
-    - cron: '55 * * * *'
+    - cron: '24 * * * *'
 jobs:
   nyt:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
