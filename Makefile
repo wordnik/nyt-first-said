@@ -49,3 +49,6 @@ drop-sentence-to-trigger-lambda:
 	aws s3api delete-object --bucket nyt-said-sentences --key nyt-example-sentence.json
 	aws s3api put-object --bucket nyt-said-sentences --key nyt-example-sentence.json \
     --body meta/examples/nyt-example-sentence.json --content-type application/json
+
+generate-launcher:
+	node js/tools/generate-launcher-action.js data/target_sites.json > .github/workflows/daily_launcher.yml

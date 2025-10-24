@@ -14,6 +14,11 @@ jobs:
     secrets: inherit
     with:
       site: eurogamer
+  sciam:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: sciam
   news-medical:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -24,3 +29,4 @@ jobs:
     secrets: inherit
     with:
       site: farmersjournal
+

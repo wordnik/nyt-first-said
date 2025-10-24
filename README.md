@@ -73,4 +73,12 @@ Run tests with `make run-test`.
 
 # Exploratory tools
 
-You can try out the NYT parser with `python try_parser.py <NYTurl>`.
+You can try out the NYT parser with `python try_parser.py <NYT url>`.
+
+# Scheduled runs
+
+The script runs on GitHub Actions.
+
+The definition for the runner action is in `brush.yml`. It takes an input named `site` that corresponds to a key in `data/target_sites.json`. That input tells the action what which site `simple_scrape.py` should run on.
+
+`daily_launcher.yml` defines when the Brush action runs. It is generated vi`make generate-launcher`.
