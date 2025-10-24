@@ -38,8 +38,6 @@ Also check out [@nyt-finally-said](https://github.com/uniphil/nyt-finally-said),
     - `source venv/bin/activate`
 - Install Python packages with `pip install -r requirements.txt`.
 - Download data needed by `textblob` with `make install-textblob`.
-- Run `docker compose up` to get a Redis service running on port 6379.
-    - If you want to inspect the persistent storage, it's on the host machine at `/var/lib/docker/volumes/nyt-first-said_redis_data/`.
 - Run `. tools/init-aws.sh` (the space after the . is important) to set the AWS_PROFILE env. var. If you haven't already, use [`aws configure --wordnik](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-using-profiles) to create configuration and credential files for the `wordnik` profile.
 - Run the main program with `python simple_scrape.py`
     - To get stdout and error logs captured in text files, run `./tools/scrape-site.py <site name from data/target_sites.json>`
@@ -74,6 +72,10 @@ Run tests with `make run-test`.
 # Exploratory tools
 
 You can try out the NYT parser with `python try_parser.py <NYT url>`.
+
+# Running in development
+
+Use `./tools/scrape-site.sh <site id from target_sites.json` to run locally.
 
 # Scheduled runs
 
