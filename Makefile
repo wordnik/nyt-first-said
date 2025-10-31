@@ -9,6 +9,7 @@ run-test:
 	venv/bin/python -m unittest -v test.test_fill_out_sentence_object
 	venv/bin/python -m unittest -v test.test_pos
 	venv/bin/python -m unittest -v test.test_word_count_cache
+	venv/bin/python -m unittest -v test.test_bloom_filter
 
 # Lambda deployment
 #
