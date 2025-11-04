@@ -135,7 +135,7 @@ def process_article(content, article, meta):
                 record.write("\n" + word)
                 record.write("~" + word)
                 if bloom_filter.contains(word):
-                    print("Word is in Bloom filter: {}.".format(word))
+                    # print("Word is in Bloom filter: {}.".format(word))
                     continue
 
                 if ok_word(word):
@@ -206,6 +206,7 @@ record.close()
 elapsed_time = time.time() - start_time
 print("Time Elapsed (seconds):")
 print(elapsed_time)
-print(f"Articles processed: {articles_processed}, new words found: {new_words_found}")
+summary = f"Articles processed: {articles_processed}, new words found: {new_words_found}"
+print(summary)
 
-
+os.environ["GITHUB_STEP_SUMMARY"] = summary
