@@ -1,14 +1,16 @@
-
 # Install helpers
 
 install-textblob:
 	mkdir -p venv/share/nltk_data
 	NLTK_DATA=venv/share/nltk_data ./venv/bin/python -m textblob.download_corpora lite
 
+# Tests
+
 run-test:
 	venv/bin/python -m unittest -v test.test_fill_out_sentence_object
 	venv/bin/python -m unittest -v test.test_pos
 	venv/bin/python -m unittest -v test.test_word_count_cache
+	venv/bin/python -m unittest -v test.test_bloom_filter
 
 # Lambda deployment
 #
@@ -52,3 +54,6 @@ drop-sentence-to-trigger-lambda:
 
 generate-launcher:
 	node js/tools/generate-launcher-action.js data/target_sites.json > .github/workflows/daily_launcher.yml
+
+build-bloom:
+	python -m tools.build-bloom-filter -f data/nospace-examplesWords20250910.json -o data/bloom_filter.bits

@@ -54,10 +54,17 @@ To run the parts of the project that use AWS from your computer, you need to set
     aws_access_key_id = <access key>
     aws_secret_access_key = <secret>
 
-
 ### aws tool
 
 To deploy the lambda from your computer, you'll need to [install the `aws` tool](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+
+## Updating the Bloom filter
+
+When you have a new list of words that should be in the Bloom filter, update the `build-bloom` target in the Makefile so that the build command points at the new JSON file (which is expected be a dictionary with a key named `words` that has an array of the words). Then, run `make build-bloom` and note the output, which will say something like:
+
+> When reconstituting, construct the bloom filter like this: BloomFilter(size=26576494, num_hashes=10)
+
+Update the code in simple_scrape.py and test/test_bloom_filter.py with that new constructor call. Then, update the tests if necessary.
 
 ## Deploying
 
@@ -75,7 +82,7 @@ You can try out the NYT parser with `python try_parser.py <NYT url>`.
 
 # Running in development
 
-Use `./tools/scrape-site.sh <site id from target_sites.json` to run locally.
+Use `./tools/scrape-site.sh <site id from target_sites.json>` to run locally.
 
 # Scheduled runs
 

@@ -14,6 +14,7 @@ from textblob import TextBlob
 import boto3
 import urllib.request as urllib2
 from utils.word_count_cache import WordCountCache
+from utils.bloom_filter import BloomFilter
 
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls, split_words_by_unicode_chars
@@ -25,6 +26,8 @@ new_words_found = 0
 today = date.today()
 s3 = boto3.client("s3")
 enable_redis = False
+bloom_filter = BloomFilter(size=26576494, num_hashes=10)
+bloom_filter.load("data/bloom_filter.bits")
 
 if enable_redis:
     r = redis.StrictRedis(host="localhost", port=6379, db=0)
@@ -48,12 +51,6 @@ if not site:
 
 # Assuming we're running from the project root.
 record = open("records/" + date + ".txt", "a+")
-
-# common_words_text = open("data/wordlist-20210729.txt", "r").read();
-# common_words = [word.lstrip('"').rstrip('"') for word in common_words_text.split("\n")]
-common_words_text = open("data/nltk-stop-words.json", "r").read()
-common_words = json.loads(common_words_text)
-
 
 def humanize_url(article):
     return article.split("/")[-1].split(".html")[0].replace("-", " ")
@@ -117,9 +114,6 @@ def ok_word(s):
 
     return not any(i.isdigit() or i in "(.@/#-_[" for i in s)
 
-def word_is_common(word):
-    return word in common_words
-
 def remove_punctuation(text):
     return re.sub(r"’s", "", re.sub(r"\p{P}+$", "", re.sub(r"^\p{P}+", "", text)))
 
@@ -140,8 +134,8 @@ def process_article(content, article, meta):
                     continue
                 record.write("\n" + word)
                 record.write("~" + word)
-                if word_is_common(word):
-                    # print("Word commonness rejection: {}.".format(word))
+                if bloom_filter.contains(word):
+                    print("Word is in Bloom filter: {}.".format(word))
                     continue
 
                 if ok_word(word):
