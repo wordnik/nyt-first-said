@@ -15,7 +15,7 @@ import boto3
 import urllib.request as urllib2
 from utils.word_count_cache import WordCountCache
 from utils.bloom_filter import BloomFilter
-from utils.summary import Summary
+from utils.summary import add_line
 
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls, split_words_by_unicode_chars
@@ -29,7 +29,8 @@ s3 = boto3.client("s3")
 enable_redis = False
 bloom_filter = BloomFilter(size=26576494, num_hashes=10)
 bloom_filter.load("data/bloom_filter.bits")
-summary = Summary()
+
+add_line("Summary test")
 
 if enable_redis:
     r = redis.StrictRedis(host="localhost", port=6379, db=0)
@@ -99,8 +100,7 @@ def post(word, article_url, sentence, meta):
             api=site["site"]
         )
         sentence_json = json.dumps(sentence_obj, indent=2)
-        summary.add_line('New word! {}'.format(sentence_json))
-        summary.commit()
+        add_line('New word! {}'.format(sentence_json))
         obj_path = word + ".json"
         s3.put_object(Bucket="nyt-said-sentences", Key=obj_path,
                       Body=sentence_json.encode(), ContentType="application/json")
@@ -207,6 +207,5 @@ record.close()
 
 
 elapsed_time = time.time() - start_time
-summary.add_line(f"Time Elapsed (seconds): {elapsed_time}")
-summary.add_line(f"Articles processed: {articles_processed}, new words found: {new_words_found}")
-summary.commit()
+add_line(f"Time Elapsed (seconds): {elapsed_time}")
+add_line(f"Articles processed: {articles_processed}, new words found: {new_words_found}")
