@@ -9,6 +9,9 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 # parser_fns need to take an html string and return an object with body and meta keys and, optionally, the soup instance.
 
 def article_based(html, get_additional_p_tags = None):
+    print("Working on html")
+    print(html)
+
     # if it's not a str, decode it:
     if not isinstance(html, str):
         html = html.decode("utf-8")
