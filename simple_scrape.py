@@ -98,7 +98,7 @@ def post(word, article_url, sentence, meta):
             api=site["site"]
         )
         sentence_json = json.dumps(sentence_obj, indent=2)
-        add_summary_line(f'New word: {sentence_json["word"]}. Example: {sentence_json["sentence"]}')
+        add_summary_line(f"New word: {sentence_obj['word']}. Example: {sentence_obj['sentence']}")
         obj_path = word + ".json"
         s3.put_object(Bucket="nyt-said-sentences", Key=obj_path,
                       Body=sentence_json.encode(), ContentType="application/json")
