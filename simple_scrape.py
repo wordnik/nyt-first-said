@@ -168,35 +168,45 @@ def process_links(links):
             time.sleep(30)
             print("Getting Article {}".format(link))
 
-            content_url = link
-            if site["use_archive"]:
-                print(f"Downloading via archive: {link}")
-                dl_result = download_via_archive(link)
-                if dl_result == False:
-                    print(f"Could not download via archive: {link}")
-                    continue
+            if site.get("use_headless_browser", False):
+                process_with_browser(url=link, site=site)
+            else:
+                process_with_request(link=link, site=site)
 
-                content_url = dl_result
-                print(f"Successfully downloaded via archive: {link}, content_url: {content_url}")
+def process_with_request(link, site):
+    content_url = link
+    if site["use_archive"]:
+        print(f"Downloading via archive: {link}")
+        dl_result = download_via_archive(link)
+        if dl_result == False:
+            print(f"Could not download via archive: {link}")
+            return
 
-            html = ""
-            try:
-                html = grab_url(content_url)
-            except urllib2.HTTPError as e:
-                if e.code == 404:
-                    self.real_article = False
-                    continue
-                raise
-            print("got html")
+        content_url = dl_result
+        print(f"Successfully downloaded via archive: {link}, content_url: {content_url}")
 
-            parse = parse_fns.get(site["parser_name"], parse_fns["article_based"])
-            parsed = parse(html)
+    html = ""
+    try:
+        html = grab_url(content_url)
+    except urllib2.HTTPError as e:
+        if e.code == 404:
+            self.real_article = False
+            return 
+        raise
+    print("got html")
 
-            if parsed: 
-                body = parsed.get("body", "")
-                if len(body) > 0:
-                    process_article(body, link, parsed.get("meta", {}))
-                    r.set(akey, "1")
+    parse = parse_fns.get(site["parser_name"], parse_fns["article_based"])
+    parsed = parse(html)
+
+    if parsed: 
+        body = parsed.get("body", "")
+        if len(body) > 0:
+            process_article(body, link, parsed.get("meta", {}))
+            r.set(akey, "1")
+
+
+def process_with_browser(url, site):
+    pass
 
 start_time = time.time()
 print("Started simple_scrape.")

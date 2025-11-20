@@ -80,7 +80,12 @@ def get_nyt_footer_ptags(soup):
 def nyt_style(html):
     return article_based(html, get_nyt_footer_ptags)
 
+def article_browser(page):
+    pass
+    # page.locator()
+
 parse_fns = {
     "nyt_style": nyt_style,
-    "article_based": article_based
+    "article_based": article_based,
+    "article_browser": article_browser
 }
