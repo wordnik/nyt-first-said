@@ -5,8 +5,8 @@ playwright = sync_playwright().start()
 # This class tries to keep only one browser, context, and page around at a time.
 class HeadlessBrowser():
     def __init__(self):
-        firefox = playwright.firefox
-        self.browser = firefox.launch()
+        launcher = playwright.chromium
+        self.browser = launcher.launch()
         self.context = None
         self.page = None
 
