@@ -83,8 +83,8 @@ def nyt_browser(page):
     window_globals = page.evaluate("Object.keys(window).filter(k => k.startsWith('_'))")
     print(f"Globals: {window_globals}")
     # time.sleep(300)
-    preloadedData = page.evaluate("window.__preloadedData")
-    print(f"Preloaded data: {json.dumps(preloadedData)}")
+    initialData = page.evaluate("window.__preloadedData.initialData")
+    print(f"__preloadedData.initialData: {json.dumps(initialData)}")
 
     article_content_paragraphs = page.evaluate("window.__preloadedData.initialData.data.article.sprinkledBody.content.filter(o => o.__typename === 'ParagraphBlock').map(b => b.content).flat().map(c => c.text)")
     metadata = page.evaluate("({ documentTitle: window.__preloadedData.initialData.data.article.headline.default, documentId: window.__preloadedData.initialData.data.article.id, description: window.__preloadedData.initialData.data.article.summary, subjects: window.__preloadedData.initialData.data.article.timesTags.map(t => t.displayName), pubDate: window.__preloadedData.initialData.data.article.firstPublished, author: window.__preloadedData.initialData.data.article.bylines.map(b => b.renderedRepresentation).join(',') })")
