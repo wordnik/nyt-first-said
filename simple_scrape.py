@@ -16,7 +16,8 @@ import urllib.request as urllib2
 from utils.word_count_cache import WordCountCache
 from utils.bloom_filter import BloomFilter
 from utils.summary import add_summary_line
-
+from utils.headless import HeadlessBrowser
+from utils.errors import ConfigError
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls, split_words_by_unicode_chars
 from parsers.parse_fns import parse_fns
@@ -29,6 +30,7 @@ s3 = boto3.client("s3")
 enable_redis = False
 bloom_filter = BloomFilter(size=26576494, num_hashes=10)
 bloom_filter.load("data/bloom_filter.bits")
+browser = HeadlessBrowser()
 
 if enable_redis:
     r = redis.StrictRedis(host="localhost", port=6379, db=0)
@@ -169,11 +171,11 @@ def process_links(links):
             print("Getting Article {}".format(link))
 
             if site.get("use_headless_browser", False):
-                process_with_browser(url=link, site=site)
+                process_with_browser(url=link, site=site, akey=akey)
             else:
-                process_with_request(link=link, site=site)
+                process_with_request(link=link, site=site, akey=akey)
 
-def process_with_request(link, site):
+def process_with_request(link, site, akey):
     content_url = link
     if site["use_archive"]:
         print(f"Downloading via archive: {link}")
@@ -204,15 +206,23 @@ def process_with_request(link, site):
             process_article(body, link, parsed.get("meta", {}))
             r.set(akey, "1")
 
+def process_with_browser(url, site, akey):
+    page = browser.get_page(url)
+    parse = parse_fns.get(site["parser_name"])
+    if not parse:
+        raise ConfigError(f"site {site.get('site', '[unnamed]')} config's {site['parser_name']} can't be found.")
 
-def process_with_browser(url, site):
-    pass
+    parsed = parse(page)
+    # print("parsed!")
+    # print(parsed)
+    process_article(parsed.get("body", ""), url, parsed.get("meta", {}))
+    r.set(akey, "1")
 
 start_time = time.time()
 print("Started simple_scrape.")
 process_links(get_feed_urls(site["feeder_pages"], site["feeder_pattern"]))
 record.close()
-
+browser.close()
 
 elapsed_time = time.time() - start_time
 add_summary_line(f"Time Elapsed (seconds): {elapsed_time}")

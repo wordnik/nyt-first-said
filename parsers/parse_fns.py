@@ -77,16 +77,12 @@ def get_nyt_footer_ptags(soup):
         )
     return p_tags
 
-def nyt_style(html):
-    return article_based(html, get_nyt_footer_ptags)
-
 def nyt_browser(page):
     article_content_paragraphs = page.evaluate("window.__preloadedData.initialData.data.article.sprinkledBody.content.filter(o => o.__typename === 'ParagraphBlock').map(b => b.content).flat().map(c => c.text)")
     metadata = page.evaluate("({ documentTitle: window.__preloadedData.initialData.data.article.headline.default, documentId: window.__preloadedData.initialData.data.article.id, description: window.__preloadedData.initialData.data.article.summary, subjects: window.__preloadedData.initialData.data.article.timesTags.map(t => t.displayName), pubDate: window.__preloadedData.initialData.data.article.firstPublished, author: window.__preloadedData.initialData.data.article.bylines.map(b => b.renderedRepresentation).join(',') })")
     return { "body": ' '.join(article_content_paragraphs), "meta": metadata }
 
 parse_fns = {
-    "nyt_style": nyt_style,
     "article_based": article_based,
     "nyt_browser": nyt_browser
 }

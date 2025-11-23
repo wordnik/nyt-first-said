@@ -26,9 +26,8 @@ class HeadlessBrowser():
             self.context.close()
             self.context = None
 
+        # TODO: Vary agent
         self.context = self.browser.new_context(user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:144.0) Gecko/20100101 Firefox/144.0")
         self.page = self.context.new_page()
-        # page.goto("https://www.nytimes.com/2025/11/13/arts/design/wifredo-lam-retrospective-moma.html")
         self.page.goto(url)
-        # page.screenshot(path="screenshot.png")
         return self.page

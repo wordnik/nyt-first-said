@@ -15,19 +15,13 @@ def get_meta_content_by_attr(bs_meta_list, attr, val, default=None):
     return default
 
 def fill_out_sentence_object(word, sentence, article_url, date, meta, api):
-    return {
+    sentence_obj = {
         "metadata": {
             "searchAPI": api,
-            "documentTitle": get_meta_content_by_attr(meta, "property", "og:title"),
             "crawlDate": date,
-            "documentId": get_meta_content_by_attr(meta, "name", "articleId", article_url),
-            "description": get_meta_content_by_attr(meta, "property", "og:description"),
             "source": article_url,
             "DOI": None,
-            "subjects": get_meta_content_by_attr(meta, "name", "news_keywords".split(","), [])
         },
-        "pubDate": get_meta_content_by_attr(meta, "property", "article:published_time"),
-        "author": get_meta_content_by_attr(meta, "name", "byl"),
         "hypothesisAccount": "",
         "exampleType": "sentence",
         "rating": 1,
@@ -39,6 +33,25 @@ def fill_out_sentence_object(word, sentence, article_url, date, meta, api):
         "labels": [],
         "fileId": "",
     }
+
+    metadata = sentence_obj["metadata"]
+
+    if type(meta) == dict:
+        for key in ["documentTitle", "documentId", "description", "subjects"]:
+            metadata[key] = meta[key]
+
+        sentence_obj["pubDate"] = meta["pubDate"]
+        sentence_obj["author"] = meta["author"]
+    else:
+        # meta is a Beautiful Soup element list in this case.
+        metadata["documentTitle"] = get_meta_content_by_attr(meta, "property", "og:title")
+        metadata["documentId"] = get_meta_content_by_attr(meta, "name", "articleId", article_url)
+        metadata["description"] = get_meta_content_by_attr(meta, "property", "og:description")
+        metadata["subjects"] = get_meta_content_by_attr(meta, "name", "news_keywords".split(","), [])
+        sentence_obj["pubDate"] = get_meta_content_by_attr(meta, "property", "article:published_time")
+        sentence_obj["author"] = get_meta_content_by_attr(meta, "name", "byl")
+
+    return sentence_obj
 
 def remove_ending_punc(s):
     return re.sub(r'([.\?!;:]+)$', '', s)
