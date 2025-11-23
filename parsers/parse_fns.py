@@ -81,6 +81,8 @@ def nyt_browser(page):
     page.wait_for_load_state("domcontentloaded")
     window_globals = page.evaluate("Object.keys(window).filter(k => k.startsWith('_'))")
     print(f"Globals: {window_globals}")
+    preloadedData = page.evaluate("window.__preloadedData")
+    print(f"Preloaded data: {json.dumps(preloadedData)")
 
     time.sleep(30)
     article_content_paragraphs = page.evaluate("window.__preloadedData.initialData.data.article.sprinkledBody.content.filter(o => o.__typename === 'ParagraphBlock').map(b => b.content).flat().map(c => c.text)")
