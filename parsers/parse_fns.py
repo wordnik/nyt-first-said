@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup, NavigableString, Comment
 from functools import reduce
 import logging
-
 import operator
+import time
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -79,6 +79,7 @@ def get_nyt_footer_ptags(soup):
 
 def nyt_browser(page):
     page.wait_for_load_state("domcontentloaded")
+    time.sleep(30)
     article_content_paragraphs = page.evaluate("window.__preloadedData.initialData.data.article.sprinkledBody.content.filter(o => o.__typename === 'ParagraphBlock').map(b => b.content).flat().map(c => c.text)")
     metadata = page.evaluate("({ documentTitle: window.__preloadedData.initialData.data.article.headline.default, documentId: window.__preloadedData.initialData.data.article.id, description: window.__preloadedData.initialData.data.article.summary, subjects: window.__preloadedData.initialData.data.article.timesTags.map(t => t.displayName), pubDate: window.__preloadedData.initialData.data.article.firstPublished, author: window.__preloadedData.initialData.data.article.bylines.map(b => b.renderedRepresentation).join(',') })")
     return { "body": ' '.join(article_content_paragraphs), "meta": metadata }
