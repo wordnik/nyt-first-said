@@ -1,9 +1,10 @@
 from playwright.sync_api import sync_playwright
 
+playwright = sync_playwright().start()
+
 # This class tries to keep only one browser, context, and page around at a time.
 class HeadlessBrowser():
     def __init__(self):
-        playwright = sync_playwright().start()
         firefox = playwright.firefox
         self.browser = firefox.launch()
         self.context = None
