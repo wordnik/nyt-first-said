@@ -109,17 +109,23 @@ def nyt_browser(page):
     print(f"Globals: {window_globals}")
     # page.wait_for_function("() => window.__preloadedData !== undefined")
 
+    page.locator('#site-content')
+    print("Saw site-content.")
+
+    page.screenshot(path="meta/" + page.url.replace("/", "_") + ".png")
     # On a laptop, this works.
     # In the GitHub Actions container, we get: playwright._impl._errors.Error: Page.evaluate: TypeError: undefined is not an object (evaluating 'window.__preloadedData.initialData')
     # article_content_paragraphs = page.evaluate("window.__preloadedData.initialData.data.article.sprinkledBody.content.filter(o => o.__typename === 'ParagraphBlock').map(b => b.content).flat().map(c => c.text)")
     # metadata = page.evaluate("({ documentTitle: window.__preloadedData.initialData.data.article.headline.default, documentId: window.__preloadedData.initialData.data.article.id, description: window.__preloadedData.initialData.data.article.summary, subjects: window.__preloadedData.initialData.data.article.timesTags.map(t => t.displayName), pubDate: window.__preloadedData.initialData.data.article.firstPublished, author: window.__preloadedData.initialData.data.article.bylines.map(b => b.renderedRepresentation).join(',') })")
+    # return { "body": article_content_paragraphs, "meta": metadata }
 
     # Fortunately, we can still get __preloadedData.initialData, so we'll just
     # process it in Python.
     # initialData = page.evaluate("window.__preloadedData.initialData")
     # print(f"__preloadedData.initialData: {json.dumps(initialData)}")
-    scriptLocator = page.get_by_text('window.__preloadedData');
-    initialData = scriptLocator.text_content()
+    # scriptLocator = page.get_by_text('window.__preloadedData');
+    # initialData = scriptLocator.text_content()
+    initialData = page.content()
     print("text_content", initialData)
     return parse_nyt_data(initialData)
 
