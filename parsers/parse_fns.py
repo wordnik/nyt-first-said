@@ -118,7 +118,7 @@ def nyt_browser(page):
     # process it in Python.
     # initialData = page.evaluate("window.__preloadedData.initialData")
     # print(f"__preloadedData.initialData: {json.dumps(initialData)}")
-    scriptLocator = page.get_by_text('__preloadedData.initialData');
+    scriptLocator = page.get_by_text('window.__preloadedData');
     initialData = scriptLocator.text_content()
     print("text_content", initialData)
     return parse_nyt_data(initialData)
