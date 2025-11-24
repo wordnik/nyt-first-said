@@ -78,17 +78,46 @@ def get_nyt_footer_ptags(soup):
         )
     return p_tags
 
+def parse_nyt_data(data_dict):
+    article = data_dict.get("data", {}).get("article", {})
+    content_array = article.get("sprinkledBody", {}).get("content", [])
+    paragraph_block_contents = []
+    for content in content_array:
+        if content.get("__typename", "") == "ParagraphBlock":
+            paragraph_block_contents.append(content.get("content", {}))
+
+    body_text = ""
+    for block in paragraph_block_contents:
+        for item in block:
+            if item.get("__typename", "") == "TextInline":
+                body_text += item.get("text", "")
+
+    meta = {
+            "documentTitle": article.get("headline", {}).get("default", ""),
+            "documentId": article.get("id", ""),
+            "description": article.get("summary", ""),
+            "subjects": [tag.get("displayName", "") for tag in article.get("timesTags")],
+            "pubDate": article.get("firstPublished", ""),
+            "author": ",".join([b.get("renderedRepresentation", "") for b in article.get("bylines", [])])
+            }
+
+    return {"body": body_text, "meta": meta }
+
 def nyt_browser(page):
     page.wait_for_load_state("domcontentloaded")
-    window_globals = page.evaluate("Object.keys(window).filter(k => k.startsWith('_'))")
-    print(f"Globals: {window_globals}")
-    # time.sleep(300)
-    initialData = page.evaluate("window.__preloadedData.initialData")
-    print(f"__preloadedData.initialData: {json.dumps(initialData)}")
+    # window_globals = page.evaluate("Object.keys(window).filter(k => k.startsWith('_'))")
+    # print(f"Globals: {window_globals}")
 
-    article_content_paragraphs = page.evaluate("window.__preloadedData.initialData.data.article.sprinkledBody.content.filter(o => o.__typename === 'ParagraphBlock').map(b => b.content).flat().map(c => c.text)")
-    metadata = page.evaluate("({ documentTitle: window.__preloadedData.initialData.data.article.headline.default, documentId: window.__preloadedData.initialData.data.article.id, description: window.__preloadedData.initialData.data.article.summary, subjects: window.__preloadedData.initialData.data.article.timesTags.map(t => t.displayName), pubDate: window.__preloadedData.initialData.data.article.firstPublished, author: window.__preloadedData.initialData.data.article.bylines.map(b => b.renderedRepresentation).join(',') })")
-    return { "body": ' '.join(article_content_paragraphs), "meta": metadata }
+    # On a laptop, this works.
+    # In the GitHub Actions container, we get: playwright._impl._errors.Error: Page.evaluate: TypeError: undefined is not an object (evaluating 'window.__preloadedData.initialData')
+    # article_content_paragraphs = page.evaluate("window.__preloadedData.initialData.data.article.sprinkledBody.content.filter(o => o.__typename === 'ParagraphBlock').map(b => b.content).flat().map(c => c.text)")
+    # metadata = page.evaluate("({ documentTitle: window.__preloadedData.initialData.data.article.headline.default, documentId: window.__preloadedData.initialData.data.article.id, description: window.__preloadedData.initialData.data.article.summary, subjects: window.__preloadedData.initialData.data.article.timesTags.map(t => t.displayName), pubDate: window.__preloadedData.initialData.data.article.firstPublished, author: window.__preloadedData.initialData.data.article.bylines.map(b => b.renderedRepresentation).join(',') })")
+
+    # Fortunately, we can still get __preloadedData.initialData, so we'll just
+    # process it in Python.
+    initialData = page.evaluate("window.__preloadedData.initialData")
+    # print(f"__preloadedData.initialData: {json.dumps(initialData)}")
+    return parse_nyt_data(initialData)
 
 parse_fns = {
     "article_based": article_based,
