@@ -105,8 +105,8 @@ def parse_nyt_data(data_dict):
 
 def nyt_browser(page):
     page.wait_for_load_state("domcontentloaded")
-    # window_globals = page.evaluate("Object.keys(window).filter(k => k.startsWith('_'))")
-    # print(f"Globals: {window_globals}")
+    window_globals = page.evaluate("Object.keys(window).filter(k => k.startsWith('_'))")
+    print(f"Globals: {window_globals}")
 
     # On a laptop, this works.
     # In the GitHub Actions container, we get: playwright._impl._errors.Error: Page.evaluate: TypeError: undefined is not an object (evaluating 'window.__preloadedData.initialData')
