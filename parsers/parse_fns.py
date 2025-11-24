@@ -107,7 +107,7 @@ def nyt_browser(page):
     page.wait_for_load_state("domcontentloaded")
     window_globals = page.evaluate("Object.keys(window).filter(k => k.startsWith('_'))")
     print(f"Globals: {window_globals}")
-    page.wait_for_function("() => window.__preloadedData !== undefined")
+    # page.wait_for_function("() => window.__preloadedData !== undefined")
 
     # On a laptop, this works.
     # In the GitHub Actions container, we get: playwright._impl._errors.Error: Page.evaluate: TypeError: undefined is not an object (evaluating 'window.__preloadedData.initialData')
@@ -116,8 +116,11 @@ def nyt_browser(page):
 
     # Fortunately, we can still get __preloadedData.initialData, so we'll just
     # process it in Python.
-    initialData = page.evaluate("window.__preloadedData.initialData")
+    # initialData = page.evaluate("window.__preloadedData.initialData")
     # print(f"__preloadedData.initialData: {json.dumps(initialData)}")
+    scriptLocator = page.get_by_text('__preloadedData.initialData');
+    initialData = scriptLocator.text_content()
+    print("text_content", initialData)
     return parse_nyt_data(initialData)
 
 parse_fns = {
