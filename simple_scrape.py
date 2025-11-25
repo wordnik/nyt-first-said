@@ -16,7 +16,8 @@ import urllib.request as urllib2
 from utils.word_count_cache import WordCountCache
 from utils.bloom_filter import BloomFilter
 from utils.summary import add_summary_line
-
+from utils.headless import HeadlessBrowser
+from utils.errors import ConfigError
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls, split_words_by_unicode_chars
 from parsers.parse_fns import parse_fns
@@ -29,6 +30,7 @@ s3 = boto3.client("s3")
 enable_redis = False
 bloom_filter = BloomFilter(size=26576494, num_hashes=10)
 bloom_filter.load("data/bloom_filter.bits")
+browser = HeadlessBrowser()
 
 if enable_redis:
     r = redis.StrictRedis(host="localhost", port=6379, db=0)
@@ -98,7 +100,7 @@ def post(word, article_url, sentence, meta):
             api=site["site"]
         )
         sentence_json = json.dumps(sentence_obj, indent=2)
-        add_summary_line(f"New word: {sentence_obj['word']}. Example: {sentence_obj['sentence']}")
+        add_summary_line(f"New word: {sentence_obj['word']}. Example: {sentence_obj['text']}")
         obj_path = word + ".json"
         s3.put_object(Bucket="nyt-said-sentences", Key=obj_path,
                       Body=sentence_json.encode(), ContentType="application/json")
@@ -168,41 +170,58 @@ def process_links(links):
             time.sleep(30)
             print("Getting Article {}".format(link))
 
-            content_url = link
-            if site["use_archive"]:
-                print(f"Downloading via archive: {link}")
-                dl_result = download_via_archive(link)
-                if dl_result == False:
-                    print(f"Could not download via archive: {link}")
-                    continue
+            if site.get("use_headless_browser", False):
+                process_with_browser(url=link, site=site, akey=akey)
+            else:
+                process_with_request(link=link, site=site, akey=akey)
 
-                content_url = dl_result
-                print(f"Successfully downloaded via archive: {link}, content_url: {content_url}")
+def process_with_request(link, site, akey):
+    content_url = link
+    if site["use_archive"]:
+        print(f"Downloading via archive: {link}")
+        dl_result = download_via_archive(link)
+        if dl_result == False:
+            print(f"Could not download via archive: {link}")
+            return
 
-            html = ""
-            try:
-                html = grab_url(content_url)
-            except urllib2.HTTPError as e:
-                if e.code == 404:
-                    self.real_article = False
-                    continue
-                raise
-            print("got html")
+        content_url = dl_result
+        print(f"Successfully downloaded via archive: {link}, content_url: {content_url}")
 
-            parse = parse_fns.get(site["parser_name"], parse_fns["article_based"])
-            parsed = parse(html)
+    html = ""
+    try:
+        html = grab_url(content_url)
+    except urllib2.HTTPError as e:
+        if e.code == 404:
+            self.real_article = False
+            return 
+        raise
+    print("got html")
 
-            if parsed: 
-                body = parsed.get("body", "")
-                if len(body) > 0:
-                    process_article(body, link, parsed.get("meta", {}))
-                    r.set(akey, "1")
+    parse = parse_fns.get(site["parser_name"], parse_fns["article_based"])
+    parsed = parse(html)
+
+    if parsed: 
+        body = parsed.get("body", "")
+        if len(body) > 0:
+            process_article(body, link, parsed.get("meta", {}))
+            r.set(akey, "1")
+
+def process_with_browser(url, site, akey):
+    parse = parse_fns.get(site["parser_name"])
+    if not parse:
+        raise ConfigError(f"site {site.get('site', '[unnamed]')} config's {site['parser_name']} can't be found.")
+
+    parsed = parse(browser, url)
+    # print("parsed!")
+    # print(parsed)
+    process_article(parsed.get("body", ""), url, parsed.get("meta", {}))
+    r.set(akey, "1")
 
 start_time = time.time()
 print("Started simple_scrape.")
 process_links(get_feed_urls(site["feeder_pages"], site["feeder_pattern"]))
 record.close()
-
+browser.close()
 
 elapsed_time = time.time() - start_time
 add_summary_line(f"Time Elapsed (seconds): {elapsed_time}")
