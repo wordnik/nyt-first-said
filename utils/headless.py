@@ -14,7 +14,7 @@ class HeadlessBrowser():
         self.browser.close()
         self.browser = None
 
-    def get_page(self, url):
+    def get_page(self, url, enable_js=True):
         if not self.browser:
             raise ChildProcessError("Browser not initialized (probably deinitialized).")
 
@@ -29,8 +29,8 @@ class HeadlessBrowser():
         # TODO: Vary agent
         self.context = self.browser.new_context(
                 user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:144.0) Gecko/20100101 Firefox/144.0",
-                java_script_enabled=False
+                java_script_enabled=enable_js
                 )
         self.page = self.context.new_page()
-        self.page.goto(url)
+        self.page.goto(url, timeout=60000)
         return self.page

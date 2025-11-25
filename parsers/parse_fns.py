@@ -4,6 +4,7 @@ import logging
 import operator
 import time
 import json
+import re
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -103,7 +104,8 @@ def parse_nyt_data(data_dict):
 
     return {"body": body_text, "meta": meta }
 
-def nyt_browser(page):
+def nyt_browser(browser, url):
+    page = browser.get_page(url, enable_js=False)
     page.wait_for_load_state("domcontentloaded")
     window_globals = page.evaluate("Object.keys(window).filter(k => k.startsWith('_'))")
     print(f"Globals: {window_globals}")
@@ -121,13 +123,18 @@ def nyt_browser(page):
 
     # Fortunately, we can still get __preloadedData.initialData, so we'll just
     # process it in Python.
-    # initialData = page.evaluate("window.__preloadedData.initialData")
-    # print(f"__preloadedData.initialData: {json.dumps(initialData)}")
-    # scriptLocator = page.get_by_text('window.__preloadedData');
-    # initialData = scriptLocator.text_content()
-    initialData = page.content()
-    print("text_content", initialData)
-    return parse_nyt_data(initialData)
+    content = page.content()
+    matches = re.findall(r'<script>window\.__preloadedData = (.*);</script>', content)
+    if len(matches) < 1:
+        print("Could not find __preloadedData.")
+        return {"body": "", "meta": {}}
+
+    preloaded_data_text = matches[0]
+    preloaded_data_text = preloaded_data_text.replace('undefined', 'null')
+    # print("preloaded_data_text", preloaded_data_text)
+    preloaded = json.loads(preloaded_data_text)
+                         
+    return parse_nyt_data(preloaded.get("initialData", {}))
 
 parse_fns = {
     "article_based": article_based,

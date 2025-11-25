@@ -100,7 +100,7 @@ def post(word, article_url, sentence, meta):
             api=site["site"]
         )
         sentence_json = json.dumps(sentence_obj, indent=2)
-        add_summary_line(f"New word: {sentence_obj['word']}. Example: {sentence_obj['sentence']}")
+        add_summary_line(f"New word: {sentence_obj['word']}. Example: {sentence_obj['text']}")
         obj_path = word + ".json"
         s3.put_object(Bucket="nyt-said-sentences", Key=obj_path,
                       Body=sentence_json.encode(), ContentType="application/json")
@@ -207,12 +207,11 @@ def process_with_request(link, site, akey):
             r.set(akey, "1")
 
 def process_with_browser(url, site, akey):
-    page = browser.get_page(url)
     parse = parse_fns.get(site["parser_name"])
     if not parse:
         raise ConfigError(f"site {site.get('site', '[unnamed]')} config's {site['parser_name']} can't be found.")
 
-    parsed = parse(page)
+    parsed = parse(browser, url)
     # print("parsed!")
     # print(parsed)
     process_article(parsed.get("body", ""), url, parsed.get("meta", {}))
