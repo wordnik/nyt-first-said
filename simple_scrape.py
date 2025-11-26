@@ -198,7 +198,11 @@ def process_with_request(link, site, akey):
     print("got html")
 
     parse = parse_fns.get(site["parser_name"], parse_fns["article_based"])
-    parsed = parse(html)
+    parser_params = site.get("parser_params")
+    if not parser_params:
+        parser_params = {}
+    parser_params.update({ "html": html }) 
+    parsed = parse(**parser_params)
 
     if parsed: 
         body = parsed.get("body", "")

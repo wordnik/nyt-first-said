@@ -80,6 +80,9 @@
       "https://farmersjournal.ie/farming-news/irish-country-living/3"
     ],
     "use_archive": false,
-    "parser_name": "article_based"
+    "parser_name": "custom_parent",
+    "parser_params": {
+      "parent_selector": "#article-body-gshowcase"
+    }
   }
 }
