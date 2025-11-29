@@ -74,7 +74,7 @@ That will create a zip file with the relevant files, then push it to AWS with th
 
 # Tests
 
-Run tests with `make run-test`.
+Run tests with `./tools/run-tests.sh`.
 
 # Exploratory tools
 
