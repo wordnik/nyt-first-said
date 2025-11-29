@@ -2,6 +2,7 @@ import unittest
 from parsers.parse_fns import parse_fns
 from parsers.utils import grab_url
 import json
+import jellyfish
 
 class ParsersSuite(unittest.TestCase):
     def test_farmersjournal(self):
@@ -11,7 +12,10 @@ class ParsersSuite(unittest.TestCase):
             f.close()
         html = grab_url("https://www.farmersjournal.ie/beef/markets/beef-trends-cattle-shortage-pushing-prices-upwards-892318")
 
-        target_sites_text = open("data/target_sites.json", "r").read()
+        with open("data/target_sites.json", "r") as f:
+            target_sites_text = f.read()
+            f.close()
+
         target_sites = json.loads(target_sites_text)
         site = target_sites.get("farmersjournal")
         parse = parse_fns.get(site.get("parser_name"))
@@ -19,7 +23,29 @@ class ParsersSuite(unittest.TestCase):
         parser_params.update({ "html": html }) 
 
         parsed = parse(**parser_params)
-            # with open("test/fixtures/farmersjournal-example-contents.txt", "w") as out:
+        # print(parsed["body"])
+        self.assertTrue(jellyfish.levenshtein_distance(parsed["body"], expected_contents) < 0.1, "Parser gets close to expected body from live content.")
+
+    def test_sciam(self):
+        self.maxDiff = None
+        with open("test/fixtures/sciam-example-contents.txt") as f:
+            expected_contents = f.read()
+            f.close()
+
+        html = grab_url("https://www.scientificamerican.com/article/how-bad-will-flu-season-be-this-year/")
+
+        with open("data/target_sites.json", "r") as f:
+            target_sites_text = f.read()
+            f.close()
+
+        target_sites = json.loads(target_sites_text)
+        site = target_sites.get("sciam")
+        parse = parse_fns.get(site.get("parser_name"))
+        parser_params = site.get("parser_params", {})
+        parser_params.update({ "html": html }) 
+
+        parsed = parse(**parser_params)
+        # with open("test/fixtures/sciam-example-contents.txt", "w") as out:
         #     out.write(parsed["body"])
         #     out.close()
-        print(parsed["body"])
+        self.assertTrue(jellyfish.levenshtein_distance(parsed["body"], expected_contents) < 0.1, "Parser gets close to expected body from live content.")

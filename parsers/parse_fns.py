@@ -41,7 +41,7 @@ def article_based(html, get_additional_p_tags = None):
         
     soup = BeautifulSoup(html, "lxml")
 
-    for comment in soup.find_all(text=lambda text: isinstance(text, Comment)):
+    for comment in soup.find_all(string=lambda text: isinstance(text, Comment)):
         comment.extract()
 
     meta = soup.find_all("meta")
