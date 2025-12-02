@@ -2,10 +2,12 @@
   "nyt": {
     "site": "nyt",
     "suffix": "?pagewanted=all",
-    "domains": ["www.nytimes.com"],
+    "domains": [
+      "www.nytimes.com"
+    ],
     "feeder_pattern": "^https?://www.nytimes.com/202",
     "feeder_pages": [
-        "https://www.nytimes.com/"
+      "https://www.nytimes.com/"
     ],
     "use_archive": false,
     "use_headless_browser": true,
@@ -13,26 +15,30 @@
   },
   "eurogamer": {
     "site": "eurogamer",
-    "domains": ["www.eurogamer.net"],
+    "domains": [
+      "www.eurogamer.net"
+    ],
     "feeder_pattern": "^https?://www.eurogamer.net/",
     "feeder_pages": [
-        "https://www.eurogamer.net/latest",
-        "https://www.eurogamer.net/pc",
-        "https://www.eurogamer.net/nintendo",
-        "https://www.eurogamer.net/playstation",
-        "https://www.eurogamer.net/xbox",
-        "https://www.eurogamer.net/digital-foundry",
-        "https://www.eurogamer.net/news",
-        "https://www.eurogamer.net/reviews",
-        "https://www.eurogamer.net/features",
-        "https://www.eurogamer.net/guides"
+      "https://www.eurogamer.net/latest",
+      "https://www.eurogamer.net/pc",
+      "https://www.eurogamer.net/nintendo",
+      "https://www.eurogamer.net/playstation",
+      "https://www.eurogamer.net/xbox",
+      "https://www.eurogamer.net/digital-foundry",
+      "https://www.eurogamer.net/news",
+      "https://www.eurogamer.net/reviews",
+      "https://www.eurogamer.net/features",
+      "https://www.eurogamer.net/guides"
     ],
     "use_archive": false,
     "parser_name": "article_based"
   },
   "sciam": {
     "site": "sciam",
-    "domains": ["www.scientificamerican.com"],
+    "domains": [
+      "www.scientificamerican.com"
+    ],
     "feeder_pattern": "^https?://www.scientificamerican.com/article",
     "feeder_pages": [
       "https://www.scientificamerican.com/health/",
@@ -53,7 +59,9 @@
   },
   "news-medical": {
     "site": "news-medical",
-    "domains": ["www.news-medical.net"],
+    "domains": [
+      "www.news-medical.net"
+    ],
     "feeder_pattern": "^https://www.news-medical.net/",
     "feeder_pages": [
       "https://www.news-medical.net/"
@@ -63,7 +71,9 @@
   },
   "farmersjournal": {
     "site": "farmersjournal",
-    "domains": ["farmersjournal.ie"],
+    "domains": [
+      "farmersjournal.ie"
+    ],
     "feeder_pattern": "^https://farmersjournal.ie/",
     "feeder_pages": [
       "https://farmersjournal.ie/farming-news/beef/54",
@@ -84,5 +94,1305 @@
     "parser_params": {
       "parent_selector": "#article-body-gshowcase"
     }
+  },
+  "theage.com.au": {
+    "site": "theage.com.au",
+    "domains": [
+      "theage.com.au"
+    ],
+    "feeder_pattern": "^https://theage.com.au",
+    "feeder_pages": [
+      "https://theage.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "cnet.com": {
+    "site": "cnet.com",
+    "domains": [
+      "cnet.com"
+    ],
+    "feeder_pattern": "^https://cnet.com",
+    "feeder_pages": [
+      "https://cnet.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "news.com.au": {
+    "site": "news.com.au",
+    "domains": [
+      "news.com.au"
+    ],
+    "feeder_pattern": "^https://news.com.au",
+    "feeder_pages": [
+      "https://news.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "smh.com.au": {
+    "site": "smh.com.au",
+    "domains": [
+      "smh.com.au"
+    ],
+    "feeder_pattern": "^https://smh.com.au",
+    "feeder_pages": [
+      "https://smh.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "canberratimes.com.au": {
+    "site": "canberratimes.com.au",
+    "domains": [
+      "canberratimes.com.au"
+    ],
+    "feeder_pattern": "^https://canberratimes.com.au",
+    "feeder_pages": [
+      "https://canberratimes.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "theherald.com.au": {
+    "site": "theherald.com.au",
+    "domains": [
+      "theherald.com.au"
+    ],
+    "feeder_pattern": "^https://theherald.com.au",
+    "feeder_pages": [
+      "https://theherald.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "brisbanetimes.com.au": {
+    "site": "brisbanetimes.com.au",
+    "domains": [
+      "brisbanetimes.com.au"
+    ],
+    "feeder_pattern": "^https://brisbanetimes.com.au",
+    "feeder_pages": [
+      "https://brisbanetimes.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "gizmodo.com.au": {
+    "site": "gizmodo.com.au",
+    "domains": [
+      "gizmodo.com.au"
+    ],
+    "feeder_pattern": "^https://gizmodo.com.au",
+    "feeder_pages": [
+      "https://gizmodo.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "watoday.com.au": {
+    "site": "watoday.com.au",
+    "domains": [
+      "watoday.com.au"
+    ],
+    "feeder_pattern": "^https://watoday.com.au",
+    "feeder_pages": [
+      "https://watoday.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "mamamia.com.au": {
+    "site": "mamamia.com.au",
+    "domains": [
+      "mamamia.com.au"
+    ],
+    "feeder_pattern": "^https://mamamia.com.au",
+    "feeder_pages": [
+      "https://mamamia.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "sbs.com.au": {
+    "site": "sbs.com.au",
+    "domains": [
+      "sbs.com.au"
+    ],
+    "feeder_pattern": "^https://sbs.com.au",
+    "feeder_pages": [
+      "https://sbs.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "perthnow.com.au": {
+    "site": "perthnow.com.au",
+    "domains": [
+      "perthnow.com.au"
+    ],
+    "feeder_pattern": "^https://perthnow.com.au",
+    "feeder_pages": [
+      "https://perthnow.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "fool.com.au": {
+    "site": "fool.com.au",
+    "domains": [
+      "fool.com.au"
+    ],
+    "feeder_pattern": "^https://fool.com.au",
+    "feeder_pages": [
+      "https://fool.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "abc.net.au": {
+    "site": "abc.net.au",
+    "domains": [
+      "abc.net.au"
+    ],
+    "feeder_pattern": "^https://abc.net.au",
+    "feeder_pages": [
+      "https://abc.net.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "bandt.com.au": {
+    "site": "bandt.com.au",
+    "domains": [
+      "bandt.com.au"
+    ],
+    "feeder_pattern": "^https://bandt.com.au",
+    "feeder_pages": [
+      "https://bandt.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "espn.com.au": {
+    "site": "espn.com.au",
+    "domains": [
+      "espn.com.au"
+    ],
+    "feeder_pattern": "^https://espn.com.au",
+    "feeder_pages": [
+      "https://espn.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "thewest.com.au": {
+    "site": "thewest.com.au",
+    "domains": [
+      "thewest.com.au"
+    ],
+    "feeder_pattern": "^https://thewest.com.au",
+    "feeder_pages": [
+      "https://thewest.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "drive.com.au": {
+    "site": "drive.com.au",
+    "domains": [
+      "drive.com.au"
+    ],
+    "feeder_pattern": "^https://drive.com.au",
+    "feeder_pages": [
+      "https://drive.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "afl.com.au": {
+    "site": "afl.com.au",
+    "domains": [
+      "afl.com.au"
+    ],
+    "feeder_pattern": "^https://afl.com.au",
+    "feeder_pages": [
+      "https://afl.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "illawarramercury.com.au": {
+    "site": "illawarramercury.com.au",
+    "domains": [
+      "illawarramercury.com.au"
+    ],
+    "feeder_pattern": "^https://illawarramercury.com.au",
+    "feeder_pages": [
+      "https://illawarramercury.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "lifehacker.com.au": {
+    "site": "lifehacker.com.au",
+    "domains": [
+      "lifehacker.com.au"
+    ],
+    "feeder_pattern": "^https://lifehacker.com.au",
+    "feeder_pages": [
+      "https://lifehacker.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "reneweconomy.com.au": {
+    "site": "reneweconomy.com.au",
+    "domains": [
+      "reneweconomy.com.au"
+    ],
+    "feeder_pattern": "^https://reneweconomy.com.au",
+    "feeder_pages": [
+      "https://reneweconomy.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "au.eurosport.com": {
+    "site": "au.eurosport.com",
+    "domains": [
+      "au.eurosport.com"
+    ],
+    "feeder_pattern": "^https://au.eurosport.com",
+    "feeder_pages": [
+      "https://au.eurosport.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "sheppnews.com.au": {
+    "site": "sheppnews.com.au",
+    "domains": [
+      "sheppnews.com.au"
+    ],
+    "feeder_pattern": "^https://sheppnews.com.au",
+    "feeder_pages": [
+      "https://sheppnews.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "cyclingtips.com": {
+    "site": "cyclingtips.com",
+    "domains": [
+      "cyclingtips.com"
+    ],
+    "feeder_pattern": "^https://cyclingtips.com",
+    "feeder_pages": [
+      "https://cyclingtips.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "9news.com.au": {
+    "site": "9news.com.au",
+    "domains": [
+      "9news.com.au"
+    ],
+    "feeder_pattern": "^https://9news.com.au",
+    "feeder_pages": [
+      "https://9news.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "crikey.com.au": {
+    "site": "crikey.com.au",
+    "domains": [
+      "crikey.com.au"
+    ],
+    "feeder_pattern": "^https://crikey.com.au",
+    "feeder_pages": [
+      "https://crikey.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "thecourier.com.au": {
+    "site": "thecourier.com.au",
+    "domains": [
+      "thecourier.com.au"
+    ],
+    "feeder_pattern": "^https://thecourier.com.au",
+    "feeder_pages": [
+      "https://thecourier.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "farmweekly.com.au": {
+    "site": "farmweekly.com.au",
+    "domains": [
+      "farmweekly.com.au"
+    ],
+    "feeder_pattern": "^https://farmweekly.com.au",
+    "feeder_pages": [
+      "https://farmweekly.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "bendigoadvertiser.com.au": {
+    "site": "bendigoadvertiser.com.au",
+    "domains": [
+      "bendigoadvertiser.com.au"
+    ],
+    "feeder_pattern": "^https://bendigoadvertiser.com.au",
+    "feeder_pages": [
+      "https://bendigoadvertiser.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "westernadvocate.com.au": {
+    "site": "westernadvocate.com.au",
+    "domains": [
+      "westernadvocate.com.au"
+    ],
+    "feeder_pattern": "^https://westernadvocate.com.au",
+    "feeder_pages": [
+      "https://westernadvocate.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "thesaturdaypaper.com.au": {
+    "site": "thesaturdaypaper.com.au",
+    "domains": [
+      "thesaturdaypaper.com.au"
+    ],
+    "feeder_pattern": "^https://thesaturdaypaper.com.au",
+    "feeder_pages": [
+      "https://thesaturdaypaper.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "bordermail.com.au": {
+    "site": "bordermail.com.au",
+    "domains": [
+      "bordermail.com.au"
+    ],
+    "feeder_pattern": "^https://bordermail.com.au",
+    "feeder_pages": [
+      "https://bordermail.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "wwos.nine.com.au": {
+    "site": "wwos.nine.com.au",
+    "domains": [
+      "wwos.nine.com.au"
+    ],
+    "feeder_pattern": "^https://wwos.nine.com.au",
+    "feeder_pages": [
+      "https://wwos.nine.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "theland.com.au": {
+    "site": "theland.com.au",
+    "domains": [
+      "theland.com.au"
+    ],
+    "feeder_pattern": "^https://theland.com.au",
+    "feeder_pages": [
+      "https://theland.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "examiner.com.au": {
+    "site": "examiner.com.au",
+    "domains": [
+      "examiner.com.au"
+    ],
+    "feeder_pattern": "^https://examiner.com.au",
+    "feeder_pages": [
+      "https://examiner.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "au.sports.yahoo.com": {
+    "site": "au.sports.yahoo.com",
+    "domains": [
+      "au.sports.yahoo.com"
+    ],
+    "feeder_pattern": "^https://au.sports.yahoo.com",
+    "feeder_pages": [
+      "https://au.sports.yahoo.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "northerndailyleader.com.au": {
+    "site": "northerndailyleader.com.au",
+    "domains": [
+      "northerndailyleader.com.au"
+    ],
+    "feeder_pattern": "^https://northerndailyleader.com.au",
+    "feeder_pages": [
+      "https://northerndailyleader.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "riverineherald.com.au": {
+    "site": "riverineherald.com.au",
+    "domains": [
+      "riverineherald.com.au"
+    ],
+    "feeder_pattern": "^https://riverineherald.com.au",
+    "feeder_pages": [
+      "https://riverineherald.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "themandarin.com.au": {
+    "site": "themandarin.com.au",
+    "domains": [
+      "themandarin.com.au"
+    ],
+    "feeder_pattern": "^https://themandarin.com.au",
+    "feeder_pages": [
+      "https://themandarin.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "theaureview.com": {
+    "site": "theaureview.com",
+    "domains": [
+      "theaureview.com"
+    ],
+    "feeder_pattern": "^https://theaureview.com",
+    "feeder_pages": [
+      "https://theaureview.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "nrl.com": {
+    "site": "nrl.com",
+    "domains": [
+      "nrl.com"
+    ],
+    "feeder_pattern": "^https://nrl.com",
+    "feeder_pages": [
+      "https://nrl.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "theadvocate.com.au": {
+    "site": "theadvocate.com.au",
+    "domains": [
+      "theadvocate.com.au"
+    ],
+    "feeder_pattern": "^https://theadvocate.com.au",
+    "feeder_pages": [
+      "https://theadvocate.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "stockandland.com.au": {
+    "site": "stockandland.com.au",
+    "domains": [
+      "stockandland.com.au"
+    ],
+    "feeder_pattern": "^https://stockandland.com.au",
+    "feeder_pages": [
+      "https://stockandland.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "adnews.com.au": {
+    "site": "adnews.com.au",
+    "domains": [
+      "adnews.com.au"
+    ],
+    "feeder_pattern": "^https://adnews.com.au",
+    "feeder_pages": [
+      "https://adnews.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "aspistrategist.org.au": {
+    "site": "aspistrategist.org.au",
+    "domains": [
+      "aspistrategist.org.au"
+    ],
+    "feeder_pattern": "^https://aspistrategist.org.au",
+    "feeder_pages": [
+      "https://aspistrategist.org.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "cosmosmagazine.com": {
+    "site": "cosmosmagazine.com",
+    "domains": [
+      "cosmosmagazine.com"
+    ],
+    "feeder_pattern": "^https://cosmosmagazine.com",
+    "feeder_pages": [
+      "https://cosmosmagazine.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "broadsheet.com.au": {
+    "site": "broadsheet.com.au",
+    "domains": [
+      "broadsheet.com.au"
+    ],
+    "feeder_pattern": "^https://broadsheet.com.au",
+    "feeder_pages": [
+      "https://broadsheet.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "racing.com": {
+    "site": "racing.com",
+    "domains": [
+      "racing.com"
+    ],
+    "feeder_pattern": "^https://racing.com",
+    "feeder_pages": [
+      "https://racing.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "mumbrella.com.au": {
+    "site": "mumbrella.com.au",
+    "domains": [
+      "mumbrella.com.au"
+    ],
+    "feeder_pattern": "^https://mumbrella.com.au",
+    "feeder_pages": [
+      "https://mumbrella.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "rugby.com.au": {
+    "site": "rugby.com.au",
+    "domains": [
+      "rugby.com.au"
+    ],
+    "feeder_pattern": "^https://rugby.com.au",
+    "feeder_pages": [
+      "https://rugby.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "sharecafe.com.au": {
+    "site": "sharecafe.com.au",
+    "domains": [
+      "sharecafe.com.au"
+    ],
+    "feeder_pattern": "^https://sharecafe.com.au",
+    "feeder_pages": [
+      "https://sharecafe.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "architectureanddesign.com.au": {
+    "site": "architectureanddesign.com.au",
+    "domains": [
+      "architectureanddesign.com.au"
+    ],
+    "feeder_pattern": "^https://architectureanddesign.com.au",
+    "feeder_pages": [
+      "https://architectureanddesign.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "investordaily.com.au": {
+    "site": "investordaily.com.au",
+    "domains": [
+      "investordaily.com.au"
+    ],
+    "feeder_pattern": "^https://investordaily.com.au",
+    "feeder_pages": [
+      "https://investordaily.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "dynamicbusiness.com.au": {
+    "site": "dynamicbusiness.com.au",
+    "domains": [
+      "dynamicbusiness.com.au"
+    ],
+    "feeder_pattern": "^https://dynamicbusiness.com.au",
+    "feeder_pages": [
+      "https://dynamicbusiness.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "brokernews.com.au": {
+    "site": "brokernews.com.au",
+    "domains": [
+      "brokernews.com.au"
+    ],
+    "feeder_pattern": "^https://brokernews.com.au",
+    "feeder_pages": [
+      "https://brokernews.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "carsguide.com.au": {
+    "site": "carsguide.com.au",
+    "domains": [
+      "carsguide.com.au"
+    ],
+    "feeder_pattern": "^https://carsguide.com.au",
+    "feeder_pages": [
+      "https://carsguide.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "mysailing.com.au": {
+    "site": "mysailing.com.au",
+    "domains": [
+      "mysailing.com.au"
+    ],
+    "feeder_pattern": "^https://mysailing.com.au",
+    "feeder_pages": [
+      "https://mysailing.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "moneymanagement.com.au": {
+    "site": "moneymanagement.com.au",
+    "domains": [
+      "moneymanagement.com.au"
+    ],
+    "feeder_pattern": "^https://moneymanagement.com.au",
+    "feeder_pages": [
+      "https://moneymanagement.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "independentaustralia.net": {
+    "site": "independentaustralia.net",
+    "domains": [
+      "independentaustralia.net"
+    ],
+    "feeder_pattern": "^https://independentaustralia.net",
+    "feeder_pages": [
+      "https://independentaustralia.net"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "smartcompany.com.au": {
+    "site": "smartcompany.com.au",
+    "domains": [
+      "smartcompany.com.au"
+    ],
+    "feeder_pattern": "^https://smartcompany.com.au",
+    "feeder_pages": [
+      "https://smartcompany.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "noise11.com": {
+    "site": "noise11.com",
+    "domains": [
+      "noise11.com"
+    ],
+    "feeder_pattern": "^https://noise11.com",
+    "feeder_pages": [
+      "https://noise11.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "au.news.yahoo.com": {
+    "site": "au.news.yahoo.com",
+    "domains": [
+      "au.news.yahoo.com"
+    ],
+    "feeder_pattern": "^https://au.news.yahoo.com",
+    "feeder_pages": [
+      "https://au.news.yahoo.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "communitynews.com.au": {
+    "site": "communitynews.com.au",
+    "domains": [
+      "communitynews.com.au"
+    ],
+    "feeder_pattern": "^https://communitynews.com.au",
+    "feeder_pages": [
+      "https://communitynews.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "itnews.com.au": {
+    "site": "itnews.com.au",
+    "domains": [
+      "itnews.com.au"
+    ],
+    "feeder_pattern": "^https://itnews.com.au",
+    "feeder_pages": [
+      "https://itnews.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "dmarge.com": {
+    "site": "dmarge.com",
+    "domains": [
+      "dmarge.com"
+    ],
+    "feeder_pattern": "^https://dmarge.com",
+    "feeder_pages": [
+      "https://dmarge.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "afr.com": {
+    "site": "afr.com",
+    "domains": [
+      "afr.com"
+    ],
+    "feeder_pattern": "^https://afr.com",
+    "feeder_pages": [
+      "https://afr.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "cricket.com.au": {
+    "site": "cricket.com.au",
+    "domains": [
+      "cricket.com.au"
+    ],
+    "feeder_pattern": "^https://cricket.com.au",
+    "feeder_pages": [
+      "https://cricket.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "au.finance.yahoo.com": {
+    "site": "au.finance.yahoo.com",
+    "domains": [
+      "au.finance.yahoo.com"
+    ],
+    "feeder_pattern": "^https://au.finance.yahoo.com",
+    "feeder_pages": [
+      "https://au.finance.yahoo.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "apcmag.com": {
+    "site": "apcmag.com",
+    "domains": [
+      "apcmag.com"
+    ],
+    "feeder_pattern": "^https://apcmag.com",
+    "feeder_pages": [
+      "https://apcmag.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "lawyersweekly.com.au": {
+    "site": "lawyersweekly.com.au",
+    "domains": [
+      "lawyersweekly.com.au"
+    ],
+    "feeder_pattern": "^https://lawyersweekly.com.au",
+    "feeder_pages": [
+      "https://lawyersweekly.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "eurekastreet.com.au": {
+    "site": "eurekastreet.com.au",
+    "domains": [
+      "eurekastreet.com.au"
+    ],
+    "feeder_pattern": "^https://eurekastreet.com.au",
+    "feeder_pages": [
+      "https://eurekastreet.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "crn.com.au": {
+    "site": "crn.com.au",
+    "domains": [
+      "crn.com.au"
+    ],
+    "feeder_pattern": "^https://crn.com.au",
+    "feeder_pages": [
+      "https://crn.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "greenandgoldrugby.com": {
+    "site": "greenandgoldrugby.com",
+    "domains": [
+      "greenandgoldrugby.com"
+    ],
+    "feeder_pattern": "^https://greenandgoldrugby.com",
+    "feeder_pages": [
+      "https://greenandgoldrugby.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "ajp.com.au": {
+    "site": "ajp.com.au",
+    "domains": [
+      "ajp.com.au"
+    ],
+    "feeder_pattern": "^https://ajp.com.au",
+    "feeder_pages": [
+      "https://ajp.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "musicfeeds.com.au": {
+    "site": "musicfeeds.com.au",
+    "domains": [
+      "musicfeeds.com.au"
+    ],
+    "feeder_pattern": "^https://musicfeeds.com.au",
+    "feeder_pages": [
+      "https://musicfeeds.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "propertyobserver.com.au": {
+    "site": "propertyobserver.com.au",
+    "domains": [
+      "propertyobserver.com.au"
+    ],
+    "feeder_pattern": "^https://propertyobserver.com.au",
+    "feeder_pages": [
+      "https://propertyobserver.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "australasianlawyer.com.au": {
+    "site": "australasianlawyer.com.au",
+    "domains": [
+      "australasianlawyer.com.au"
+    ],
+    "feeder_pattern": "^https://australasianlawyer.com.au",
+    "feeder_pages": [
+      "https://australasianlawyer.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "pursuit.unimelb.edu.au": {
+    "site": "pursuit.unimelb.edu.au",
+    "domains": [
+      "pursuit.unimelb.edu.au"
+    ],
+    "feeder_pattern": "^https://pursuit.unimelb.edu.au",
+    "feeder_pages": [
+      "https://pursuit.unimelb.edu.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "newsofthearea.com.au": {
+    "site": "newsofthearea.com.au",
+    "domains": [
+      "newsofthearea.com.au"
+    ],
+    "feeder_pattern": "^https://newsofthearea.com.au",
+    "feeder_pages": [
+      "https://newsofthearea.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "tendaily.com.au": {
+    "site": "tendaily.com.au",
+    "domains": [
+      "tendaily.com.au"
+    ],
+    "feeder_pattern": "^https://tendaily.com.au",
+    "feeder_pages": [
+      "https://tendaily.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "traveller.com.au": {
+    "site": "traveller.com.au",
+    "domains": [
+      "traveller.com.au"
+    ],
+    "feeder_pattern": "^https://traveller.com.au",
+    "feeder_pages": [
+      "https://traveller.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "exploretravel.com.au": {
+    "site": "exploretravel.com.au",
+    "domains": [
+      "exploretravel.com.au"
+    ],
+    "feeder_pattern": "^https://exploretravel.com.au",
+    "feeder_pages": [
+      "https://exploretravel.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "mygc.com.au": {
+    "site": "mygc.com.au",
+    "domains": [
+      "mygc.com.au"
+    ],
+    "feeder_pattern": "^https://mygc.com.au",
+    "feeder_pages": [
+      "https://mygc.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "kalkinemedia.com": {
+    "site": "kalkinemedia.com",
+    "domains": [
+      "kalkinemedia.com"
+    ],
+    "feeder_pattern": "^https://kalkinemedia.com",
+    "feeder_pages": [
+      "https://kalkinemedia.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "goodfood.com.au": {
+    "site": "goodfood.com.au",
+    "domains": [
+      "goodfood.com.au"
+    ],
+    "feeder_pattern": "^https://goodfood.com.au",
+    "feeder_pages": [
+      "https://goodfood.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "radioaustralia.net.au": {
+    "site": "radioaustralia.net.au",
+    "domains": [
+      "radioaustralia.net.au"
+    ],
+    "feeder_pattern": "^https://radioaustralia.net.au",
+    "feeder_pages": [
+      "https://radioaustralia.net.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "prwire.com.au": {
+    "site": "prwire.com.au",
+    "domains": [
+      "prwire.com.au"
+    ],
+    "feeder_pattern": "^https://prwire.com.au",
+    "feeder_pages": [
+      "https://prwire.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "indaily.com.au": {
+    "site": "indaily.com.au",
+    "domains": [
+      "indaily.com.au"
+    ],
+    "feeder_pattern": "^https://indaily.com.au",
+    "feeder_pages": [
+      "https://indaily.com.au"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "hcamag.com": {
+    "site": "hcamag.com",
+    "domains": [
+      "hcamag.com"
+    ],
+    "feeder_pattern": "^https://hcamag.com",
+    "feeder_pages": [
+      "https://hcamag.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "lowyinstitute.org": {
+    "site": "lowyinstitute.org",
+    "domains": [
+      "lowyinstitute.org"
+    ],
+    "feeder_pattern": "^https://lowyinstitute.org",
+    "feeder_pages": [
+      "https://lowyinstitute.org"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "thedailystar.net": {
+    "site": "thedailystar.net",
+    "domains": [
+      "thedailystar.net"
+    ],
+    "feeder_pattern": "^https://thedailystar.net",
+    "feeder_pages": [
+      "https://thedailystar.net"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "unb.com.bd": {
+    "site": "unb.com.bd",
+    "domains": [
+      "unb.com.bd"
+    ],
+    "feeder_pattern": "^https://unb.com.bd",
+    "feeder_pages": [
+      "https://unb.com.bd"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "bdnews24.com": {
+    "site": "bdnews24.com",
+    "domains": [
+      "bdnews24.com"
+    ],
+    "feeder_pattern": "^https://bdnews24.com",
+    "feeder_pages": [
+      "https://bdnews24.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "theglobeandmail.com": {
+    "site": "theglobeandmail.com",
+    "domains": [
+      "theglobeandmail.com"
+    ],
+    "feeder_pattern": "^https://theglobeandmail.com",
+    "feeder_pages": [
+      "https://theglobeandmail.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "huffingtonpost.ca": {
+    "site": "huffingtonpost.ca",
+    "domains": [
+      "huffingtonpost.ca"
+    ],
+    "feeder_pattern": "^https://huffingtonpost.ca",
+    "feeder_pages": [
+      "https://huffingtonpost.ca"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "psychologytoday.com": {
+    "site": "psychologytoday.com",
+    "domains": [
+      "psychologytoday.com"
+    ],
+    "feeder_pattern": "^https://psychologytoday.com",
+    "feeder_pages": [
+      "https://psychologytoday.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "thestar.com": {
+    "site": "thestar.com",
+    "domains": [
+      "thestar.com"
+    ],
+    "feeder_pattern": "^https://thestar.com",
+    "feeder_pages": [
+      "https://thestar.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "winnipegfreepress.com": {
+    "site": "winnipegfreepress.com",
+    "domains": [
+      "winnipegfreepress.com"
+    ],
+    "feeder_pattern": "^https://winnipegfreepress.com",
+    "feeder_pages": [
+      "https://winnipegfreepress.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
+  },
+  "thehockeywriters.com": {
+    "site": "thehockeywriters.com",
+    "domains": [
+      "thehockeywriters.com"
+    ],
+    "feeder_pattern": "^https://thehockeywriters.com",
+    "feeder_pages": [
+      "https://thehockeywriters.com"
+    ],
+    "use_archive": false,
+    "parser_name": "article_based",
+    "parser_params": {}
   }
 }

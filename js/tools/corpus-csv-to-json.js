@@ -37,6 +37,9 @@ function parseLine(line) {
   var url = '';
   if (name.includes('.') && !name.includes(' ')) {
     url = name.toLowerCase();
+    if (!url.startsWith('http')) {
+      url = 'https://' + url;
+    }
   }
   return { name, url };
 }

@@ -12,8 +12,8 @@ if (process.argv.length < 5) {
 }
 
 const targetSitesPath = process.argv[2];
-const lineRange = process.argv[3].split('-').map((n) => (isNaN(n) ? 0 : +n));
-const siteListPath = process.argv[4];
+const siteListPath = process.argv[3];
+const lineRange = process.argv[4].split('-').map((n) => (isNaN(n) ? 0 : +n));
 
 var targetSitesObject = JSON.parse(
   fs.readFileSync(targetSitesPath, { encoding: 'utf8' })
@@ -32,6 +32,7 @@ function addSiteEntry({ name, url }) {
   }
   targetSitesObject[name] = {
     site: name,
+    domains: [url.replace('https://', '')],
     feeder_pattern: `^${url}`,
     feeder_pages: [url],
     use_archive: false,
