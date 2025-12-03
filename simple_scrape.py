@@ -225,7 +225,7 @@ start_time = time.time()
 print("Started simple_scrape.")
 
 feed_requester = grab_url
-if site["use_headless_browser"]:
+if site.get("use_headless_browser", False):
     feed_requester = browser.get_content
 
 process_links(get_feed_urls(site["feeder_pages"], site["feeder_pattern"], feed_requester))
