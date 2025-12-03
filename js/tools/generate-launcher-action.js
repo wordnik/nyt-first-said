@@ -24,15 +24,15 @@ var sites = JSON.parse(sitesText);
 
 var jobs = {};
 
-for (let site in sites) {
-  if (!site.working) {
+for (let siteName in sites) {
+  if (!sites[siteName].works) {
     continue;
   }
-  jobs[site] = {
+  jobs[siteName] = {
     uses: 'wordnik/nyt-first-said/.github/workflows/brush.yml@master',
     secrets: 'inherit',
     with: {
-      site,
+      site: siteName,
     },
   };
 }

@@ -29,4 +29,19 @@ jobs:
     secrets: inherit
     with:
       site: farmersjournal
+  theage.com.au:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: theage.com.au
+  cnet.com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: cnet.com
+  news.com.au:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: news.com.au
 
