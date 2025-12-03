@@ -11,7 +11,8 @@
     ],
     "use_archive": false,
     "use_headless_browser": true,
-    "parser_name": "nyt_browser"
+    "parser_name": "nyt_browser",
+    "works": true
   },
   "eurogamer": {
     "site": "eurogamer",
@@ -32,7 +33,9 @@
       "https://www.eurogamer.net/guides"
     ],
     "use_archive": false,
-    "parser_name": "article_based"
+    "parser_name": "article_based",
+    "works": true
+
   },
   "sciam": {
     "site": "sciam",
@@ -55,7 +58,9 @@
       "https://www.scientificamerican.com/reports/"
     ],
     "use_archive": false,
-    "parser_name": "article_based"
+    "parser_name": "article_based",
+    "works": true
+
   },
   "news-medical": {
     "site": "news-medical",
@@ -67,7 +72,9 @@
       "https://www.news-medical.net/"
     ],
     "use_archive": false,
-    "parser_name": "article_based"
+    "parser_name": "article_based",
+    "works": true
+
   },
   "farmersjournal": {
     "site": "farmersjournal",
@@ -93,20 +100,23 @@
     "parser_name": "custom_parent",
     "parser_params": {
       "parent_selector": "#article-body-gshowcase"
-    }
+    },
+    "works": true
   },
   "theage.com.au": {
     "site": "theage.com.au",
     "domains": [
-      "theage.com.au"
+      "www.theage.com.au"
     ],
-    "feeder_pattern": "^https://theage.com.au",
+    "feeder_pattern": "^https://www.theage.com.au",
     "feeder_pages": [
-      "https://theage.com.au"
+      "https://www.theage.com.au"
     ],
     "use_archive": false,
     "parser_name": "article_based",
-    "parser_params": {}
+    "parser_params": {
+    },
+    "works": true
   },
   "cnet.com": {
     "site": "cnet.com",
@@ -119,14 +129,15 @@
     ],
     "use_archive": false,
     "parser_name": "article_based",
-    "parser_params": {}
+    "parser_params": {},
+    "works": true
   },
   "news.com.au": {
     "site": "news.com.au",
     "domains": [
-      "news.com.au"
+      "www.news.com.au"
     ],
-    "feeder_pattern": "^https://news.com.au",
+    "feeder_pattern": "^https://www.news.com.au",
     "feeder_pages": [
       "https://news.com.au"
     ],
@@ -139,9 +150,9 @@
     "domains": [
       "smh.com.au"
     ],
-    "feeder_pattern": "^https://smh.com.au",
+    "feeder_pattern": "^https://www.smh.com.au/",
     "feeder_pages": [
-      "https://smh.com.au"
+      "https://smh.com.au/"
     ],
     "use_archive": false,
     "parser_name": "article_based",
