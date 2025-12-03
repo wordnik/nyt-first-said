@@ -40,7 +40,7 @@ for (let siteName in sites) {
     }
   }
 
-  jobs[siteName] = {
+  jobs[siteName.replace(/\./g, '_')] = {
     uses: 'wordnik/nyt-first-said/.github/workflows/brush.yml@master',
     secrets: 'inherit',
     with: {
