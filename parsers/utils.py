@@ -105,10 +105,10 @@ def grab_url(url, max_depth=5, opener=None):
 def concat(domain, url):
     return domain + url if url.startswith("/") else domain + "/" + url
 
-def get_feed_urls(feeder_pages, feeder_pattern):
+def get_feed_urls(feeder_pages, feeder_pattern, requester=grab_url):
     all_urls = []
     for feeder_url in feeder_pages:
-        html = grab_url(feeder_url)
+        html = requester(feeder_url)
         soup = BeautifulSoup(html, "html5lib")
 
         # "or ''" to make None into str

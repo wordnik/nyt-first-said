@@ -143,7 +143,6 @@ def nyt_browser(browser, url):
     page.locator('#site-content')
     print("Saw site-content.")
 
-    page.screenshot(path="meta/" + page.url.replace("/", "_") + ".png")
     # On a laptop, this works.
     # In the GitHub Actions container, we get: playwright._impl._errors.Error: Page.evaluate: TypeError: undefined is not an object (evaluating 'window.__preloadedData.initialData')
     # article_content_paragraphs = page.evaluate("window.__preloadedData.initialData.data.article.sprinkledBody.content.filter(o => o.__typename === 'ParagraphBlock').map(b => b.content).flat().map(c => c.text)")
@@ -165,8 +164,15 @@ def nyt_browser(browser, url):
                          
     return parse_nyt_data(preloaded.get("initialData", {}))
 
+def browser_article_based(browser, url):
+    parsed = article_based(browser.get_content(url))
+    if parsed == None:
+        return {"body": "", "meta": {}}
+    return parsed
+
 parse_fns = {
     "article_based": article_based,
     "custom_parent": custom_parent,
-    "nyt_browser": nyt_browser
+    "nyt_browser": nyt_browser,
+    "browser_article_based": browser_article_based
 }

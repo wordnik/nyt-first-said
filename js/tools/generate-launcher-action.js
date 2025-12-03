@@ -25,6 +25,9 @@ var sites = JSON.parse(sitesText);
 var jobs = {};
 
 for (let site in sites) {
+  if (!site.working) {
+    continue;
+  }
   jobs[site] = {
     uses: 'wordnik/nyt-first-said/.github/workflows/brush.yml@master',
     secrets: 'inherit',
