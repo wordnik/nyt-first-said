@@ -6,7 +6,7 @@ var yaml = require('js-yaml');
 
 if (process.argv.length < 3) {
   console.error(
-    'Usage: node js/tools/generate-launcher-action.js data/target-sites.json > .github/workflows/daily_launcher.yml'
+    'Usage: node js/tools/generate-launcher-action.js data/target-sites.json <includeWorks=true> .github/workflows/daily_launcher.yml'
   );
   process.exit(1);
 }
@@ -21,15 +21,34 @@ on:
 const sitesPath = process.argv[2];
 var sitesText = fs.readFileSync(sitesPath, { encoding: 'utf8' });
 var sites = JSON.parse(sitesText);
+var targetWorksStatus = true;
 
+if (process.argv.length > 3) {
+  targetWorksStatus = JSON.parse(process.argv[3]);
+}
 var jobs = {};
 
-for (let site in sites) {
-  jobs[site] = {
+for (let siteName in sites) {
+  if (targetWorksStatus) {
+    if (!sites[siteName].works) {
+      continue;
+    }
+  } else {
+    // Skip if works is falsy, not just false.
+    if (sites[siteName].works) {
+      continue;
+    }
+  }
+
+  var id = siteName.replace(/\./g, '_');
+  if (/^\d/.test(id)) {
+    id = '_' + id;
+  }
+  jobs[id] = {
     uses: 'wordnik/nyt-first-said/.github/workflows/brush.yml@master',
     secrets: 'inherit',
     with: {
-      site,
+      site: siteName,
     },
   };
 }

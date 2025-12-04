@@ -8,6 +8,27 @@ import re
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+def p_tags_to_body(p_tags):
+    p_contents = reduce(
+        operator.concat, [p.contents + [NavigableString("\n")] for p in p_tags], []
+    )
+
+    body_strings = []
+    for node in p_contents:
+        if type(node) is NavigableString:
+            body_strings.append(node)
+        else:
+            if node.name == "br":
+                body_strings.append(" \n ")
+            else:
+                try:
+                    body_strings.append(node.get_text())
+                except:
+                    body_strings.append(node)
+
+    return "".join(body_strings)
+
+
 # parser_fns need to take an html string and return an object with body and meta keys and, optionally, the soup instance.
 
 def article_based(html, get_additional_p_tags = None):
@@ -20,7 +41,7 @@ def article_based(html, get_additional_p_tags = None):
         
     soup = BeautifulSoup(html, "lxml")
 
-    for comment in soup.find_all(text=lambda text: isinstance(text, Comment)):
+    for comment in soup.find_all(string=lambda text: isinstance(text, Comment)):
         comment.extract()
 
     meta = soup.find_all("meta")
@@ -40,26 +61,34 @@ def article_based(html, get_additional_p_tags = None):
     if get_additional_p_tags:
         p_tags += get_additional_p_tags(soup)
 
-    p_contents = reduce(
-        operator.concat, [p.contents + [NavigableString("\n")] for p in p_tags], []
-    )
-
-    body_strings = []
-    for node in p_contents:
-        if type(node) is NavigableString:
-            body_strings.append(node)
-        else:
-            if node.name == "br":
-                body_strings.append(" \n ")
-            else:
-                try:
-                    body_strings.append(node.get_text())
-                except:
-                    body_strings.append(node)
-
-    body = "".join(body_strings)
+    body = p_tags_to_body(p_tags)
 
     return { "body": body, "meta": meta, "soup": soup }
+
+def custom_parent(html, parent_selector):
+    # if it's not a str, decode it:
+    if not isinstance(html, str):
+        html = html.decode("utf-8")
+    
+    body = ""
+    soup = BeautifulSoup(html, "lxml")
+    meta = soup.find_all("meta")
+
+    try:
+        article = soup.select_one(parent_selector)
+        if not article:
+            logging.info("No article in html.")
+            return
+
+        logging.info("Article found in html.")
+        p_tags = list(article.find_all("p"))
+        body = p_tags_to_body(p_tags)
+    except Exception as e:
+        logging.info(f"Error {e} while parsing html: {html}")
+        return
+
+    return { "body": body, "meta": meta, "soup": soup }
+
 
 def get_nyt_footer_ptags(soup):
     div = soup.find(
@@ -114,7 +143,6 @@ def nyt_browser(browser, url):
     page.locator('#site-content')
     print("Saw site-content.")
 
-    page.screenshot(path="meta/" + page.url.replace("/", "_") + ".png")
     # On a laptop, this works.
     # In the GitHub Actions container, we get: playwright._impl._errors.Error: Page.evaluate: TypeError: undefined is not an object (evaluating 'window.__preloadedData.initialData')
     # article_content_paragraphs = page.evaluate("window.__preloadedData.initialData.data.article.sprinkledBody.content.filter(o => o.__typename === 'ParagraphBlock').map(b => b.content).flat().map(c => c.text)")
@@ -136,7 +164,15 @@ def nyt_browser(browser, url):
                          
     return parse_nyt_data(preloaded.get("initialData", {}))
 
+def browser_article_based(browser, url):
+    parsed = article_based(browser.get_content(url))
+    if parsed == None:
+        return {"body": "", "meta": {}}
+    return parsed
+
 parse_fns = {
     "article_based": article_based,
-    "nyt_browser": nyt_browser
+    "custom_parent": custom_parent,
+    "nyt_browser": nyt_browser,
+    "browser_article_based": browser_article_based
 }

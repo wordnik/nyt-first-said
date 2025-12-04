@@ -34,3 +34,8 @@ class HeadlessBrowser():
         self.page = self.context.new_page()
         self.page.goto(url, timeout=60000)
         return self.page
+
+    def get_content(self, url):
+        self.get_page(url, enable_js=False)
+        self.page.wait_for_load_state("domcontentloaded")
+        return self.page.content()

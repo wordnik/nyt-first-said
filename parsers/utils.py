@@ -3,7 +3,7 @@ import re
 import socket
 from bs4 import BeautifulSoup
 import http.cookiejar as cookielib
-import urllib.request as urllib2
+import urllib
 import time
 
 def get_meta_content_by_attr(bs_meta_list, attr, val, default=None):
@@ -73,7 +73,7 @@ def find_pos_for_word(pos_tags, word):
 def grab_url(url, max_depth=5, opener=None):
     if opener is None:
         cj = cookielib.CookieJar()
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+        opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
     retry = False
     print("grabbing " + url)
     try:
@@ -84,7 +84,7 @@ def grab_url(url, max_depth=5, opener=None):
     except socket.timeout:
         print("socket retry")
         retry = True
-    except urllib2.HTTPError as e:
+    except urllib.error.HTTPError as e:
         print(url)
         print("http error retry")
         print(e.reason)
@@ -105,10 +105,10 @@ def grab_url(url, max_depth=5, opener=None):
 def concat(domain, url):
     return domain + url if url.startswith("/") else domain + "/" + url
 
-def get_feed_urls(feeder_pages, feeder_pattern):
+def get_feed_urls(feeder_pages, feeder_pattern, requester=grab_url):
     all_urls = []
     for feeder_url in feeder_pages:
-        html = grab_url(feeder_url)
+        html = requester(feeder_url)
         soup = BeautifulSoup(html, "html5lib")
 
         # "or ''" to make None into str

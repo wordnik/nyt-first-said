@@ -167,7 +167,7 @@ def process_links(links):
         # seen = False
         # unseen article
         if not seen:
-            time.sleep(30)
+            time.sleep(5)
             print("Getting Article {}".format(link))
 
             if site.get("use_headless_browser", False):
@@ -198,7 +198,11 @@ def process_with_request(link, site, akey):
     print("got html")
 
     parse = parse_fns.get(site["parser_name"], parse_fns["article_based"])
-    parsed = parse(html)
+    parser_params = site.get("parser_params")
+    if not parser_params:
+        parser_params = {}
+    parser_params.update({ "html": html }) 
+    parsed = parse(**parser_params)
 
     if parsed: 
         body = parsed.get("body", "")
@@ -219,7 +223,12 @@ def process_with_browser(url, site, akey):
 
 start_time = time.time()
 print("Started simple_scrape.")
-process_links(get_feed_urls(site["feeder_pages"], site["feeder_pattern"]))
+
+feed_requester = grab_url
+if site.get("use_headless_browser", False):
+    feed_requester = browser.get_content
+
+process_links(get_feed_urls(site["feeder_pages"], site["feeder_pattern"], feed_requester))
 record.close()
 browser.close()
 
