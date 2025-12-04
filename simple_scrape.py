@@ -13,6 +13,7 @@ from datetime import date
 from textblob import TextBlob 
 import boto3
 import urllib.request as urllib2
+import random
 from utils.word_count_cache import WordCountCache
 from utils.bloom_filter import BloomFilter
 from utils.summary import add_summary_line
@@ -88,7 +89,7 @@ def check_word(word, article_url, sentence, meta):
 
     return example_exists 
 
-def post(word, article_url, sentence, meta):
+def post(word, article_url, sentence, meta, bucket="nyt-said-sentences"):
     global new_words_found
     try:
         sentence_obj = fill_out_sentence_object(
@@ -100,9 +101,12 @@ def post(word, article_url, sentence, meta):
             api=site["site"]
         )
         sentence_json = json.dumps(sentence_obj, indent=2)
-        add_summary_line(f"New word: {sentence_obj['word']}. Example: {sentence_obj['text']}")
+        if bucket == "nyt-said-sentences":
+            add_summary_line(f"New word: {sentence_obj['word']}. Example: {sentence_obj['text']}")
+        else:
+            print(f"Uninteresting: {sentence_obj['word']}. Example: {sentence_obj['text']}")
         obj_path = word + ".json"
-        s3.put_object(Bucket="nyt-said-sentences", Key=obj_path,
+        s3.put_object(Bucket=bucket, Key=obj_path,
                       Body=sentence_json.encode(), ContentType="application/json")
         new_words_found += 1
     except UnicodeDecodeError as e:
@@ -123,6 +127,7 @@ def remove_punctuation(text):
 def process_article(content, article, meta):
     global articles_processed
 
+    uninteresting_sentence_params = []
     # record = open("records/"+article.replace("/", "_")+".txt", "w+")
     record.write("\nARTICLE:" + article)
     print("Processing Article")
@@ -139,6 +144,14 @@ def process_article(content, article, meta):
                 record.write("~" + word)
                 if bloom_filter.contains(word):
                     # print("Word is in Bloom filter: {}.".format(word))
+                    if len(uninteresting_sentence_params) < 10:
+                        uninteresting_sentence_params.append({
+                            "word": word,
+                            "article_url": article,
+                            "sentence": sentence.string,
+                            "meta": meta,
+                            "bucket": "uninteresting-sentences"
+                        })
                     continue
 
                 if ok_word(word):
@@ -155,6 +168,11 @@ def process_article(content, article, meta):
                         r.set(
                             wkey,
                             1 * check_word(word, article, sentence.string, meta))
+
+    if len(uninteresting_sentence_params) > 0:
+        sentence_params = random.sample(uninteresting_sentence_params, 1)[0]
+        post(**sentence_params)
+
     articles_processed += 1
 
 def process_links(links):
