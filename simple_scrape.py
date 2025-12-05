@@ -185,7 +185,7 @@ def process_links(links):
         # seen = False
         # unseen article
         if not seen:
-            time.sleep(5)
+            time.sleep(site.get("article_pause_secs", 5))
             print("Getting Article {}".format(link))
 
             if site.get("use_headless_browser", False):
