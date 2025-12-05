@@ -33,13 +33,18 @@ on:
 var jobs = {};
 
 for (let siteName in sites) {
+  let site = sites[siteName];
+  if (site.skip) {
+    continue;
+  }
+
   if (targetWorksStatus) {
-    if (!sites[siteName].works) {
+    if (!site.works) {
       continue;
     }
   } else {
     // Skip if works is falsy, not just false.
-    if (sites[siteName].works) {
+    if (site.works) {
       continue;
     }
   }
