@@ -72,7 +72,7 @@ def find_pos_for_word(pos_tags, word):
 
 def make_url_safe(url):
     parsed = urllib.parse.urlparse(url)
-    return parsed._replace(path=parsed.path.replace(" ", "%20").geturl()
+    return parsed._replace(path=parsed.path.replace(" ", "%20").geturl())
 
 def grab_url(url, max_depth=5, opener=None):
     if opener is None:
