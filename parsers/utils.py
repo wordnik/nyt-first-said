@@ -70,11 +70,16 @@ def find_pos_for_word(pos_tags, word):
         print("Could not find {} in {}".format(word, pos_tags))
         return None
 
+def make_url_safe(url):
+    parsed = urllib.parse.urlparse(url)
+    return parsed._replace(path=parsed.path.replace(" ", "%20").geturl()
+
 def grab_url(url, max_depth=5, opener=None):
     if opener is None:
         cj = cookielib.CookieJar()
         opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
     retry = False
+    url = make_url_safe(url) 
     print("grabbing " + url)
     try:
         text = opener.open(url, timeout=10).read()
