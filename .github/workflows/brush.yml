@@ -34,7 +34,15 @@ jobs:
     - run: |
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        playwright install --with-deps
+    - name: Cache playwright install
+      id: cache-playright-install
+      uses: actions/cache@v4
+      with:
+        path: /home/runner/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright
+    - name: Install playwright
+      if: steps.cache-playwright-install.outputs.cache-hit != 'true'
+      run: playwright install --with-deps
     - name: Restore nltk_data from cache
       id: restore-nltk-cache
       uses: actions/cache@v4
