@@ -35,7 +35,7 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Cache playwright install
-      id: cache-playright-install
+      id: cache-playwright-install
       uses: actions/cache@v4
       with:
         path: /home/runner/.cache/ms-playwright
