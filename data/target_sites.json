@@ -861,9 +861,12 @@
       "https://architectureanddesign.com.au"
     ],
     "use_archive": false,
-    "parser_name": "article_based",
-    "parser_params": {},
-    "notes": "Spaces in url. https://github.com/wordnik/nyt-first-said/actions/runs/19995391001/job/57342118980#step:9:173"
+    "parser_name": "custom_parent",
+    "parser_params": {
+      "parent_selector": "main"
+    },
+    "notes": "Spaces in url. https://github.com/wordnik/nyt-first-said/actions/runs/19995391001/job/57342118980#step:9:173",
+    "works": true
   },
   "investordaily.com.au": {
     "site": "investordaily.com.au",
@@ -1034,6 +1037,7 @@
       "https://itnews.com.au"
     ],
     "use_archive": false,
+    "parser_name": "article_based",
     "parser_params": {},
     "works": true
   },
