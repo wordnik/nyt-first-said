@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import http.cookiejar as cookielib
 import urllib
 import time
+import logging
 
 def get_meta_content_by_attr(bs_meta_list, attr, val, default=None):
     # print("name: {}".format(bs_meta_list.name))
@@ -80,23 +81,26 @@ def grab_url(url, max_depth=5, opener=None):
         opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
     retry = False
     url = make_url_safe(url) 
-    print("grabbing " + url)
+    logging.info("grabbing " + url)
     try:
         text = opener.open(url, timeout=10).read()
         if b"<title>NY Times Advertisement</title>" in text:
-            print("advert retry")
+            logging.info("advert retry")
             retry = True
     except socket.timeout:
-        print("socket retry")
+        logging.info("socket retry")
         retry = True
     except urllib.error.HTTPError as e:
-        print(url)
-        print("http error retry")
-        print(e.reason)
+        logging.info(url)
+        logging.info("http error retry")
+        logging.info(e.reason)
         retry = True
+    except Exception as e:
+        logging.info(f"Error {e} while opening {url}.")
+        return ""
 
     if max_depth == 0:
-        print("bad url")
+        logging.info("bad url")
         return ""
 
     if retry:
