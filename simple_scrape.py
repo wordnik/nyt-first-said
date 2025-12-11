@@ -180,6 +180,9 @@ def process_links(links):
         akey = "article:" + link
         seen = r.get(akey)
         link = link.replace("http://", "https://")
+        if not link.startswith("https://"):
+            # Avoid mailto:, tel:, ftp:, etc.
+            continue
 
         #    	print(akey+" seen: " + str(seen))
         # seen = False
