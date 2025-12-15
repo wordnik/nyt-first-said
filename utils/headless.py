@@ -1,4 +1,5 @@
 from playwright.sync_api import sync_playwright
+import logging
 
 playwright = sync_playwright().start()
 
@@ -36,6 +37,10 @@ class HeadlessBrowser():
         return self.page
 
     def get_content(self, url):
-        self.get_page(url, enable_js=False)
-        self.page.wait_for_load_state("domcontentloaded")
-        return self.page.content()
+        try:
+            self.get_page(url, enable_js=False)
+            self.page.wait_for_load_state("domcontentloaded")
+            return self.page.content()
+        except Exception as e:
+            logging.error(f"Error {e} while trying to get content from {url}.")
+            return ""
