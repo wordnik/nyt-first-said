@@ -14,6 +14,7 @@ from textblob import TextBlob
 import boto3
 import urllib.request as urllib2
 import random
+import logging
 from utils.word_count_cache import WordCountCache
 from utils.bloom_filter import BloomFilter
 from utils.summary import add_summary_line
@@ -28,6 +29,7 @@ articles_processed = 0
 new_words_found = 0
 today = date.today()
 s3 = boto3.client("s3")
+dynamo = boto3.client("dynamodb")
 enable_redis = False
 bloom_filter = BloomFilter(size=26576494, num_hashes=10)
 bloom_filter.load("data/bloom_filter.bits")
@@ -256,3 +258,9 @@ browser.close()
 elapsed_time = time.time() - start_time
 add_summary_line(f"Time Elapsed (seconds): {elapsed_time}")
 add_summary_line(f"Articles processed: {articles_processed}, new words found: {new_words_found}")
+
+site_name = site.get("site", "[unnamed]")
+
+if site.get("works", False) == False:
+    # Report how it went.
+    res = dynamo.put_item(TableName="nyt-said-site-results", Item={"site": {"S": site_name}, "articles_processed": {"N": str(articles_processed)}})
