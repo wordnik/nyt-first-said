@@ -32,7 +32,6 @@ var docClient = DynamoDBDocumentClient.from(dbClient);
   var resultsWithUpdates = siteResults.filter(
     (res) => !isNaN(res?.articles_processed)
   );
-  debugger;
   for (let result of resultsWithUpdates) {
     if (result?.articles_processed > 0) {
       let site = targetSitesObject[result?.site];
@@ -51,21 +50,6 @@ var docClient = DynamoDBDocumentClient.from(dbClient);
     }
   );
 })();
-
-// function addSiteEntry({ name, url }) {
-//   if (name in targetSitesObject) {
-//     return;
-//   }
-//   targetSitesObject[name] = {
-//     site: name,
-//     domains: [url.replace('https://', '')],
-//     feeder_pattern: `^${url}`,
-//     feeder_pages: [url],
-//     use_archive: false,
-//     parser_name: 'article_based',
-//     parser_params: {},
-//   };
-// }
 
 async function getSiteResults({ siteNames }) {
   var q = queue(10);
