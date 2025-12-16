@@ -38,6 +38,21 @@ var docClient = DynamoDBDocumentClient.from(dbClient);
       if (site) {
         site.works = true;
         console.error('Setting works to true for', site.site);
+        if (
+          result?.succeeding_parser_name &&
+          site.parser_name !== result.succeeding_parser_name
+        ) {
+          site.parser_name = result.succeeding_parser_name;
+          if (site.parser_name === 'custom_parent') {
+            site.parser_params = { parent_selector: 'main' };
+          }
+          console.error(
+            'Setting parser_name to',
+            site.parser_name,
+            'for',
+            site.site
+          );
+        }
       }
     }
   }

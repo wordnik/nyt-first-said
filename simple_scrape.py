@@ -264,6 +264,8 @@ def process_with_browser(url, site, akey, parser_name, parser_params):
     r.set(akey, "1")
 
 def run_brush(parser_name, parser_params):
+    global run_count
+
     start_time = time.time()
 
     print(f"Started simple_scrape run {run_count}.")
