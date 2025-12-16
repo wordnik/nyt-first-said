@@ -49,7 +49,7 @@ else:
     r = WordCountCache()
 
 date = today.isoformat()
-md5_fn = hashlib.md2()
+md5_fn = hashlib.md5()
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument('site_name')
