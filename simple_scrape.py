@@ -22,6 +22,7 @@ from utils.bloom_filter import BloomFilter
 from utils.summary import add_summary_line
 from utils.headless import HeadlessBrowser
 from utils.errors import ConfigError
+from utils.uninteresting_words import get_uninteresting_count_for_word, increment_uninteresting_count_for_word
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls, split_words_by_unicode_chars
 from parsers.parse_fns import parse_fns
@@ -182,18 +183,16 @@ def process_article(content, article, meta):
 
     if len(uninteresting_sentence_params) > 0:
         sentence_params = random.sample(uninteresting_sentence_params, 1)[0]
-        post(**sentence_params)
+        word = sentence_params.get("word") 
+        if word and get_uninteresting_count_for_word(word) < 1000:
+            post(**sentence_params)
 
-        md5_fn.update(sentence_params.get("sentence").encode("utf-8"))
-        sentence_hash = md5_fn.hexdigest()
+            md5_fn.update(sentence_params.get("sentence").encode("utf-8"))
+            sentence_hash = md5_fn.hexdigest()
 
-        res = dynamo.put_item(
-                TableName="nyt-said-uninteresting-words",
-                Item={
-                    "word": {"S": sentence_params.get("word")},
-                    "sentence_hash": {"S": sentence_hash},
-                })
-        logging.info("Uninteresting words DB update response:", res)
+            increment_uninteresting_count_for_word(word)
+        else:
+            logging.info("We already have 1000 sentences for", word)
 
     articles_processed += 1
 
