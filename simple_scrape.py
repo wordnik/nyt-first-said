@@ -183,7 +183,7 @@ def process_article(content, article, meta):
 
     if len(uninteresting_sentence_params) > 0:
         sentence_params = random.sample(uninteresting_sentence_params, 1)[0]
-        word = sentence_params.get("word") 
+        word = sentence_params.get("word").lower()
         if word and get_uninteresting_count_for_word(word) < 1000:
             post(**sentence_params)
 
