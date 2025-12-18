@@ -14,11 +14,15 @@ from textblob import TextBlob
 import boto3
 import urllib.request as urllib2
 import random
+import logging
+import hashlib
+
 from utils.word_count_cache import WordCountCache
 from utils.bloom_filter import BloomFilter
 from utils.summary import add_summary_line
 from utils.headless import HeadlessBrowser
 from utils.errors import ConfigError
+from utils.uninteresting_words import get_uninteresting_count_for_word, increment_uninteresting_count_for_word
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls, split_words_by_unicode_chars
 from parsers.parse_fns import parse_fns
@@ -28,10 +32,17 @@ articles_processed = 0
 new_words_found = 0
 today = date.today()
 s3 = boto3.client("s3")
+dynamo = boto3.client("dynamodb")
 enable_redis = False
 bloom_filter = BloomFilter(size=26576494, num_hashes=10)
 bloom_filter.load("data/bloom_filter.bits")
 browser = HeadlessBrowser()
+run_count = 0
+strategies_unused = [
+        { "parser_name": "article_based", "parser_params": {} },
+        { "parser_name": "custom_parent", "parser_params": { "parent_selector": "main" } },
+        { "parser_name": "browser_article_based", "parser_params": {} },
+        ]
 
 if enable_redis:
     r = redis.StrictRedis(host="localhost", port=6379, db=0)
@@ -39,6 +50,7 @@ else:
     r = WordCountCache()
 
 date = today.isoformat()
+md5_fn = hashlib.md5()
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument('site_name')
@@ -171,15 +183,27 @@ def process_article(content, article, meta):
 
     if len(uninteresting_sentence_params) > 0:
         sentence_params = random.sample(uninteresting_sentence_params, 1)[0]
-        post(**sentence_params)
+        word = sentence_params.get("word").lower()
+        if word and get_uninteresting_count_for_word(word) < 1000:
+            post(**sentence_params)
+
+            md5_fn.update(sentence_params.get("sentence").encode("utf-8"))
+            sentence_hash = md5_fn.hexdigest()
+
+            increment_uninteresting_count_for_word(word)
+        else:
+            logging.info("We already have 1000 sentences for", word)
 
     articles_processed += 1
 
-def process_links(links):
+def process_links(links, parser_name, parser_params):
     for link in links:
         akey = "article:" + link
         seen = r.get(akey)
         link = link.replace("http://", "https://")
+        if not link.startswith("https://"):
+            # Avoid mailto:, tel:, ftp:, etc.
+            continue
 
         #    	print(akey+" seen: " + str(seen))
         # seen = False
@@ -188,22 +212,22 @@ def process_links(links):
             time.sleep(site.get("article_pause_secs", 5))
             print("Getting Article {}".format(link))
 
-            if site.get("use_headless_browser", False):
-                process_with_browser(url=link, site=site, akey=akey)
+            if parser_name.startswith("browser_") or parser_name.startswith("nyt_browser"):
+                process_with_browser(url=link, site=site, akey=akey, parser_name=parser_name, parser_params=parser_params)
             else:
-                process_with_request(link=link, site=site, akey=akey)
+                process_with_request(link=link, site=site, akey=akey, parser_name=parser_name, parser_params=parser_params)
 
-def process_with_request(link, site, akey):
+def process_with_request(link, site, akey, parser_name, parser_params):
     content_url = link
-    if site["use_archive"]:
-        print(f"Downloading via archive: {link}")
-        dl_result = download_via_archive(link)
-        if dl_result == False:
-            print(f"Could not download via archive: {link}")
-            return
+    # if site["use_archive"]:
+    #     print(f"Downloading via archive: {link}")
+    #     dl_result = download_via_archive(link)
+    #     if dl_result == False:
+    #         print(f"Could not download via archive: {link}")
+    #         return
 
-        content_url = dl_result
-        print(f"Successfully downloaded via archive: {link}, content_url: {content_url}")
+    #     content_url = dl_result
+    #     print(f"Successfully downloaded via archive: {link}, content_url: {content_url}")
 
     html = ""
     try:
@@ -215,11 +239,10 @@ def process_with_request(link, site, akey):
         raise
     print("got html")
 
-    parse = parse_fns.get(site["parser_name"], parse_fns["article_based"])
-    parser_params = site.get("parser_params")
+    parse = parse_fns.get(parser_name, parse_fns["article_based"])
     if not parser_params:
         parser_params = {}
-    parser_params.update({ "html": html }) 
+    parser_params.update({ "html": html })
     parsed = parse(**parser_params)
 
     if parsed: 
@@ -228,8 +251,8 @@ def process_with_request(link, site, akey):
             process_article(body, link, parsed.get("meta", {}))
             r.set(akey, "1")
 
-def process_with_browser(url, site, akey):
-    parse = parse_fns.get(site["parser_name"])
+def process_with_browser(url, site, akey, parser_name, parser_params):
+    parse = parse_fns.get(parser_name)
     if not parse:
         raise ConfigError(f"site {site.get('site', '[unnamed]')} config's {site['parser_name']} can't be found.")
 
@@ -239,17 +262,46 @@ def process_with_browser(url, site, akey):
     process_article(parsed.get("body", ""), url, parsed.get("meta", {}))
     r.set(akey, "1")
 
-start_time = time.time()
-print("Started simple_scrape.")
+def run_brush(parser_name, parser_params):
+    global run_count
 
-feed_requester = grab_url
-if site.get("use_headless_browser", False):
-    feed_requester = browser.get_content
+    start_time = time.time()
 
-process_links(get_feed_urls(site["feeder_pages"], site["feeder_pattern"], feed_requester))
+    print(f"Started simple_scrape run {run_count}.")
+
+    feed_requester = grab_url
+    if parser_name.startswith("browser_"):
+        feed_requester = browser.get_content
+
+    process_links(
+            get_feed_urls(site["feeder_pages"], site["feeder_pattern"], feed_requester),
+            parser_name,
+            parser_params
+            )
+
+    elapsed_time = time.time() - start_time
+    add_summary_line(f"Time Elapsed for run {run_count} (seconds): {elapsed_time}")
+    add_summary_line(f"Articles processed for run {run_count}: {articles_processed}, new words found: {new_words_found}")
+    run_count += 1
+
+    site_name = site.get("site", "[unnamed]")
+
+    if site.get("works", False) == False:
+        # Report how it went.
+        res = dynamo.put_item(
+                TableName="nyt-said-site-results",
+                Item={
+                    "site": {"S": site_name},
+                    "articles_processed": {"N": str(articles_processed)},
+                    "succeeding_parser_name": {"S": parser_name}
+                })
+
+        if articles_processed < 1 and len(strategies_unused) > 0:
+            # Try again if we didn't get anything.
+            strategy = strategies_unused.pop()
+            run_brush(**strategy)
+
+run_brush(site.get("parser_name"), site.get("parser_params"))
+
 record.close()
 browser.close()
-
-elapsed_time = time.time() - start_time
-add_summary_line(f"Time Elapsed (seconds): {elapsed_time}")
-add_summary_line(f"Articles processed: {articles_processed}, new words found: {new_words_found}")

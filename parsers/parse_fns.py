@@ -37,7 +37,11 @@ def article_based(html, get_additional_p_tags = None):
 
     # if it's not a str, decode it:
     if not isinstance(html, str):
-        html = html.decode("utf-8")
+        try:
+            html = html.decode("utf-8")
+        except Exception as e:
+            logging.info(f"Error {e} while decoding html: {html}")
+            return
         
     soup = BeautifulSoup(html, "lxml")
 

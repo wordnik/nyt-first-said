@@ -64,6 +64,7 @@ When you have a new list of words that should be in the Bloom filter, update the
 
 > When reconstituting, construct the bloom filter like this: BloomFilter(size=26576494, num_hashes=10)
 
+
 Update the code in simple_scrape.py and test/test_bloom_filter.py with that new constructor call. Then, update the tests if necessary.
 
 ## Deploying
@@ -93,3 +94,22 @@ The script runs on GitHub Actions.
 The definition for the runner action is in `brush.yml`. It takes an input named `site` that corresponds to a key in `data/target_sites.json`. That input tells the action what which site `simple_scrape.py` should run on.
 
 `daily_launcher.yml` defines when the Brush action runs. It is generated vi`make generate-launcher`.
+
+# Adding new batches of sites
+
+1. There's a JSON list of sites in `data/now-corpus-sources.json` that has a name and URL for each site. To convert those to entries in the `data/target_sites.json` config file, run `node tools/add-to-target-sites.js data/target_sites.json data/now-corpus-sources.json \<start\>-\<end\>`, where `start` is the index of the first site in `data/now-corpus-sources.json` that you want to add and `end` is the index of the site you want to stop at. (The site at `end` is not added.)
+
+2. Run these two commands to update the Daily Launcher and Unproven Sites Launcher GitHub Actions:
+
+- `node js/tools/generate-launcher-action.js data/target_sites.json > .github/workflows/daily_launcher.yml`
+- `node js/tools/generate-launcher-action.js data/target_sites.json false "Unproven sites launcher" > .github/workflows/unproven_sites_launcher.yml`
+
+3. Commit the changes, then push to GitHub.
+
+4. Go to the [Unproven Site Launcher action](https://github.com/wordnik/nyt-first-said/actions/workflows/unproven_sites_launcher.yml) and use the "Run workflow" button to launch runs of the unproven sites. In the subsequent dialog, make sure to select whichever branch your changes are in.
+
+5. When the action's runs are over, the results of the runs (`articles_processed` and `succeeding_parser_name`) should be in the `nyt-said-site-results` DynamoDB table. To use those to update the settings, run `node js/tools/sync-sites-with-db.js data/target_sites.json`.
+
+6. After that, some sites' `works` and `parser_name` properties will be updated. Re-run the launcher action generators so that the sites are in the appropriate launchers.
+
+7. Commit the changes, then push to GitHub.

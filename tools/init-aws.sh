@@ -4,3 +4,4 @@
 # executed in the current shell and makes the environment variables available there.
 # Assumes you have a `[profile wordnik]` section in ~/.aws/config.
 export AWS_PROFILE=wordnik
+export AWS_REGION=us-west-1
