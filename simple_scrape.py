@@ -15,7 +15,6 @@ import boto3
 import urllib.request as urllib2
 import random
 import logging
-import hashlib
 
 from utils.word_count_cache import WordCountCache
 from utils.bloom_filter import BloomFilter
@@ -23,6 +22,7 @@ from utils.summary import add_summary_line
 from utils.headless import HeadlessBrowser
 from utils.errors import ConfigError
 from utils.uninteresting_words import get_uninteresting_count_for_word, increment_uninteresting_count_for_word
+from utils.url_visits import log_url_visit, was_url_visited
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls, split_words_by_unicode_chars
 from parsers.parse_fns import parse_fns
@@ -50,7 +50,6 @@ else:
     r = WordCountCache()
 
 date = today.isoformat()
-md5_fn = hashlib.md5()
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument('site_name')
@@ -136,12 +135,19 @@ def ok_word(s):
 def remove_punctuation(text):
     return re.sub(r"’s", "", re.sub(r"\p{P}+$", "", re.sub(r"^\p{P}+", "", text)))
 
-def process_article(content, article, meta):
+def process_article(content, url, meta):
     global articles_processed
 
+    if was_url_visited(url):
+        # We count it as processed because we use articles_processed as a
+        # measure of success for the run. 0 articles_processed means failure.
+        articles_processed += 1
+        logging.info(f"Skipping {url} because we've already visited it before.")
+        return
+
     uninteresting_sentence_params = []
-    # record = open("records/"+article.replace("/", "_")+".txt", "w+")
-    record.write("\nARTICLE:" + article)
+    # record = open("records/"+url.replace("/", "_")+".txt", "w+")
+    record.write("\nARTICLE:" + url)
     print("Processing Article")
     text = clean_text(str(content))
     sentence_blob = TextBlob(text)
@@ -159,7 +165,7 @@ def process_article(content, article, meta):
                     if len(uninteresting_sentence_params) < 10:
                         uninteresting_sentence_params.append({
                             "word": word,
-                            "article_url": article,
+                            "article_url": url,
                             "sentence": sentence.string,
                             "meta": meta,
                             "bucket": "uninteresting-sentences"
@@ -179,22 +185,19 @@ def process_article(content, article, meta):
                         # Multiply by 1 to cast the boolean into a number.
                         r.set(
                             wkey,
-                            1 * check_word(word, article, sentence.string, meta))
+                            1 * check_word(word, url, sentence.string, meta))
 
     if len(uninteresting_sentence_params) > 0:
         sentence_params = random.sample(uninteresting_sentence_params, 1)[0]
         word = sentence_params.get("word").lower()
         if word and get_uninteresting_count_for_word(word) < 1000:
             post(**sentence_params)
-
-            md5_fn.update(sentence_params.get("sentence").encode("utf-8"))
-            sentence_hash = md5_fn.hexdigest()
-
             increment_uninteresting_count_for_word(word)
         else:
-            logging.info("We already have 1000 sentences for", word)
+            logging.info(f"We already have 1000 sentences for {word}.")
 
     articles_processed += 1
+    log_url_visit(url)
 
 def process_links(links, parser_name, parser_params):
     for link in links:
@@ -219,6 +222,7 @@ def process_links(links, parser_name, parser_params):
 
 def process_with_request(link, site, akey, parser_name, parser_params):
     content_url = link
+
     # if site["use_archive"]:
     #     print(f"Downloading via archive: {link}")
     #     dl_result = download_via_archive(link)
