@@ -138,13 +138,6 @@ def remove_punctuation(text):
 def process_article(content, url, meta):
     global articles_processed
 
-    if was_url_visited(url):
-        # We count it as processed because we use articles_processed as a
-        # measure of success for the run. 0 articles_processed means failure.
-        articles_processed += 1
-        logging.info(f"Skipping {url} because we've already visited it before.")
-        return
-
     uninteresting_sentence_params = []
     # record = open("records/"+url.replace("/", "_")+".txt", "w+")
     record.write("\nARTICLE:" + url)
@@ -200,38 +193,32 @@ def process_article(content, url, meta):
     log_url_visit(url)
 
 def process_links(links, parser_name, parser_params):
+    global articles_processed
+
     for link in links:
-        akey = "article:" + link
-        seen = r.get(akey)
+        if was_url_visited(link):
+            # We count it as processed because we use articles_processed as a
+            # measure of success for the run. 0 articles_processed means failure.
+            articles_processed += 1
+            logging.info(f"Skipping {link} because we've already visited it before.")
+            continue
+
         link = link.replace("http://", "https://")
         if not link.startswith("https://"):
             # Avoid mailto:, tel:, ftp:, etc.
             continue
 
-        #    	print(akey+" seen: " + str(seen))
-        # seen = False
         # unseen article
-        if not seen:
-            time.sleep(site.get("article_pause_secs", 5))
-            print("Getting Article {}".format(link))
+        time.sleep(site.get("article_pause_secs", 5))
+        print("Getting Article {}".format(link))
 
-            if parser_name.startswith("browser_") or parser_name.startswith("nyt_browser"):
-                process_with_browser(url=link, site=site, akey=akey, parser_name=parser_name, parser_params=parser_params)
-            else:
-                process_with_request(link=link, site=site, akey=akey, parser_name=parser_name, parser_params=parser_params)
+        if parser_name.startswith("browser_") or parser_name.startswith("nyt_browser"):
+            process_with_browser(url=link, site=site, parser_name=parser_name, parser_params=parser_params)
+        else:
+            process_with_request(link=link, site=site, parser_name=parser_name, parser_params=parser_params)
 
-def process_with_request(link, site, akey, parser_name, parser_params):
+def process_with_request(link, site, parser_name, parser_params):
     content_url = link
-
-    # if site["use_archive"]:
-    #     print(f"Downloading via archive: {link}")
-    #     dl_result = download_via_archive(link)
-    #     if dl_result == False:
-    #         print(f"Could not download via archive: {link}")
-    #         return
-
-    #     content_url = dl_result
-    #     print(f"Successfully downloaded via archive: {link}, content_url: {content_url}")
 
     html = ""
     try:
@@ -253,9 +240,8 @@ def process_with_request(link, site, akey, parser_name, parser_params):
         body = parsed.get("body", "")
         if len(body) > 0:
             process_article(body, link, parsed.get("meta", {}))
-            r.set(akey, "1")
 
-def process_with_browser(url, site, akey, parser_name, parser_params):
+def process_with_browser(url, site, parser_name, parser_params):
     parse = parse_fns.get(parser_name)
     if not parse:
         raise ConfigError(f"site {site.get('site', '[unnamed]')} config's {site['parser_name']} can't be found.")
@@ -264,7 +250,6 @@ def process_with_browser(url, site, akey, parser_name, parser_params):
     # print("parsed!")
     # print(parsed)
     process_article(parsed.get("body", ""), url, parsed.get("meta", {}))
-    r.set(akey, "1")
 
 def run_brush(parser_name, parser_params):
     global run_count
