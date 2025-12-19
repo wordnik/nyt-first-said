@@ -31,6 +31,6 @@ jobs:
         node-version: '20.x'
         cache: 'npm'
     - run: |
-        npm ci
+        cd js && npm ci
     - name: Run script
       run: node js/tools/generate-sentences-report.js '${{ inputs.daysBackToGo }}'
