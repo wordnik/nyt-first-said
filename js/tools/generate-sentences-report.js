@@ -1,0 +1,131 @@
+#!/usr/bin/env node
+
+var {
+  S3Client,
+  paginateListObjectsV2,
+  S3ServiceException,
+  GetObjectCommand,
+} = require('@aws-sdk/client-s3');
+var fs = require('fs');
+
+// TODO:
+// kaikki entries
+// s3-epub entries
+
+/* global process */
+
+const header = '|Word|Filename|Date|Source|Sentence|\n|--|--|--|--|--|\n';
+const footer = '|--|--|--|--|--|\n';
+
+if (process.argv.length < 3) {
+  console.error(
+    'Usage: GITHUB_STEP_SUMMARY=path-to-file.txt node tools/generate-sentences-report.js <days back to go>'
+  );
+  process.exit(1);
+}
+
+var s3Client = new S3Client();
+const summaryPath = process.env.GITHUB_STEP_SUMMARY;
+const daysBack = +process.argv[2];
+
+var endDate = new Date();
+endDate.setHours(0);
+endDate.setMinutes(0);
+endDate.setSeconds(0);
+
+var startDate = new Date(endDate);
+startDate.setDate(endDate.getDate() - daysBack);
+
+console.error('Getting sentences from', startDate, 'to', endDate);
+getObjects({ bucketName: 'nyt-said-sentences' });
+
+async function getObjects({ bucketName }) {
+  var objectPages = [];
+
+  try {
+    const paginator = paginateListObjectsV2(
+      { client: s3Client, pageSize: 100 },
+      { Bucket: bucketName }
+    );
+
+    for await (const page of paginator) {
+      let contentsInRange = page.Contents.filter((c) => {
+        let contentsDate = new Date(c.LastModified);
+        return contentsDate >= startDate && contentsDate < endDate;
+      });
+      objectPages.push(
+        contentsInRange.map((o) => ({
+          key: o.Key,
+          date: new Date(o.LastModified),
+        }))
+      );
+    }
+    for (let pageNum = 0; pageNum < objectPages.length; ++pageNum) {
+      await getEntryDetails(objectPages[pageNum], pageNum, bucketName);
+    }
+
+    if (summaryPath) {
+      fs.writeFileSync(summaryPath, header, { encoding: 'utf8' });
+    } else {
+      process.stdout.write(header);
+    }
+
+    objectPages.flat().forEach(reportEntry);
+
+    if (summaryPath) {
+      fs.appendFileSync(summaryPath, footer, { encoding: 'utf8' });
+    } else {
+      process.stdout.write(footer);
+    }
+  } catch (caught) {
+    if (
+      caught instanceof S3ServiceException &&
+      caught.name === 'NoSuchBucket'
+    ) {
+      console.error(
+        `Error from S3 while listing objects for "${bucketName}". The bucket doesn't exist.`
+      );
+    } else if (caught instanceof S3ServiceException) {
+      console.error(
+        `Error from S3 while listing objects for "${bucketName}".  ${caught.name}: ${caught.message}`
+      );
+    } else {
+      throw caught;
+    }
+  }
+}
+
+async function getEntryDetails(objectList, pageNum, bucketName) {
+  for (let obj of objectList) {
+    try {
+      let getCommand = new GetObjectCommand({
+        Bucket: bucketName,
+        Key: obj.key,
+      });
+      let res = await s3Client.send(getCommand);
+      const entryString = await res.Body.transformToString();
+      let entry = JSON.parse(entryString);
+      obj.word = entry?.word;
+      obj.sentence = entry?.text;
+      obj.source = entry?.metadata?.source;
+    } catch (error) {
+      console.error(
+        'Error while getting details for',
+        obj.key,
+        'entry:',
+        error
+      );
+    }
+  }
+}
+
+function reportEntry(entryObj) {
+  var entryText = `|${entryObj.word}|${
+    entryObj.key
+  }|${entryObj.date.toISOString()}|${entryObj.source}|${entryObj.sentence}|\n`;
+  if (summaryPath) {
+    fs.appendFileSync(summaryPath, entryText, { encoding: 'utf8' });
+  } else {
+    process.stdout.write(entryText);
+  }
+}
