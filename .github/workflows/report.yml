@@ -17,7 +17,6 @@ on:
 jobs:
   report:
     runs-on: ubuntu-latest
-    working-directory: 'js'
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v5
@@ -31,7 +30,8 @@ jobs:
       with:
         node-version: '20.x'
         cache: 'npm'
+        cache-dependency-path: 'js/package-lock.json'
     - run: |
         cd js && npm ci
     - name: Run script
-      run: node tools/generate-sentences-report.js '${{ inputs.daysBackToGo }}'
+      run: node js/tools/generate-sentences-report.js '${{ inputs.daysBackToGo }}'
