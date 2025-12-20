@@ -30,8 +30,8 @@ jobs:
       with:
         node-version: '20.x'
         cache: 'npm'
-        cache-dependency-path: 'js/package-lock.json'
+        cache-dependency-path: 'js/tools/package-lock.json'
     - run: |
-        cd js && npm ci
+        cd js/tools && npm ci
     - name: Run script
       run: node js/tools/generate-sentences-report.js '${{ inputs.daysBackToGo }}'
