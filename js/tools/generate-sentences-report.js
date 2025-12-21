@@ -122,7 +122,9 @@ async function getEntryDetails(objectList, pageNum, bucketName) {
 function reportEntry(entryObj) {
   var entryText = `|${entryObj.word}|${
     entryObj.key
-  }|${entryObj.date.toISOString()}|${entryObj.source}|${entryObj.sentence}|\n`;
+  }|${entryObj.date.toISOString()}|${entryObj.source}|${entryObj.sentence
+    ?.replace(/\n/g, ' ')
+    ?.replace(/\r/g, ' ')}|\n`;
   if (summaryPath) {
     fs.appendFileSync(summaryPath, entryText, { encoding: 'utf8' });
   } else {
