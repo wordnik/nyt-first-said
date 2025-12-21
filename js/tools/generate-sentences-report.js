@@ -14,7 +14,7 @@ var fs = require('fs');
 
 /* global process */
 
-const header = '|Word|Filename|Date|Source|Sentence|\n|--|--|--|--|--|\n';
+const header = '|Word|Sentence|Source|Filename|Date|\n|--|--|--|--|--|\n';
 const footer = '|--|--|--|--|--|\n';
 
 if (process.argv.length < 3) {
@@ -120,11 +120,11 @@ async function getEntryDetails(objectList, pageNum, bucketName) {
 }
 
 function reportEntry(entryObj) {
-  var entryText = `|${entryObj.word}|${
-    entryObj.key
-  }|${entryObj.date.toISOString()}|${entryObj.source}|${entryObj.sentence
+  var entryText = `|${entryObj.word}|${entryObj.sentence
     ?.replace(/\n/g, ' ')
-    ?.replace(/\r/g, ' ')}|\n`;
+    ?.replace(/\r/g, ' ')}|${entryObj.source}|${
+    entryObj.key
+  }|${entryObj.date.toISOString()}|\n`;
   if (summaryPath) {
     fs.appendFileSync(summaryPath, entryText, { encoding: 'utf8' });
   } else {
