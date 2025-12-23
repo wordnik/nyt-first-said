@@ -13,3 +13,8 @@ def remove_trouble_characters(text):
     cleaned = regex.sub(r"\u00A0", "", cleaned)
 
     return cleaned
+
+def has_username(text):
+    if not text.find("@") == -1:
+        return True
+    return False
