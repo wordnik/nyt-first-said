@@ -22,7 +22,7 @@ from utils.headless import HeadlessBrowser
 from utils.errors import ConfigError
 from utils.uninteresting_words import get_uninteresting_count_for_word, increment_uninteresting_count_for_word
 from utils.url_visits import log_url_visit, was_url_visited
-from utils.text_cleaning import remove_punctuation
+from utils.text_cleaning import remove_punctuation, remove_trouble_characters
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls, split_words_by_unicode_chars
 from parsers.parse_fns import parse_fns
@@ -144,7 +144,9 @@ def process_article(content, url, meta):
     for sentence in sentence_blob.sentences:
         for token in sentence.tokens:
             # TODO: New inner loop with word split among tokens.
-            words = split_words_by_unicode_chars(remove_punctuation(token.string))
+            words = split_words_by_unicode_chars(
+                    remove_trouble_characters(remove_punctuation(token.string))
+            )
             for word in words:
                 if len(word) < 2:
                     continue
