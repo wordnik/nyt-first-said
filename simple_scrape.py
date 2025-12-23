@@ -3,7 +3,6 @@
 import sys
 import redis
 import string
-import regex as re
 import time
 import langid
 import os
@@ -23,6 +22,7 @@ from utils.headless import HeadlessBrowser
 from utils.errors import ConfigError
 from utils.uninteresting_words import get_uninteresting_count_for_word, increment_uninteresting_count_for_word
 from utils.url_visits import log_url_visit, was_url_visited
+from utils.text_cleaning import remove_punctuation
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls, split_words_by_unicode_chars
 from parsers.parse_fns import parse_fns
@@ -115,7 +115,7 @@ def post(word, article_url, sentence, meta, bucket="nyt-said-sentences"):
         if bucket == "nyt-said-sentences":
             add_summary_line(f"New word: {sentence_obj['word']}. Example: {sentence_obj['text']}")
         else:
-            print(f"Uninteresting: {sentence_obj['word']}. Example: {sentence_obj['text']}")
+            logging.info(f"Uninteresting: {sentence_obj['word']}. Example: {sentence_obj['text']}")
         obj_path = word + ".json"
         s3.put_object(Bucket=bucket, Key=obj_path,
                       Body=sentence_json.encode(), ContentType="application/json")
@@ -131,9 +131,6 @@ def ok_word(s):
         return False
 
     return not any(i.isdigit() or i in "(.@/#-_[" for i in s)
-
-def remove_punctuation(text):
-    return re.sub(r"’s", "", re.sub(r"\p{P}+$", "", re.sub(r"^\p{P}+", "", text)))
 
 def process_article(content, url, meta):
     global articles_processed
