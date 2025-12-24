@@ -9,8 +9,8 @@ on:
           type: number
   workflow_call:
     inputs:
-        site:
-          description: site
+        daysBackToGo:
+          description: Days back to go
           required: false
           default: 1
           type: number
