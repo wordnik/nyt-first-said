@@ -30,9 +30,14 @@ function addSiteEntry({ name, url }) {
   if (name in targetSitesObject) {
     return;
   }
+  const domain = url.replace('https://', '');
+  if (!url.includes(':')) {
+    // There's no protocol, so assume https.
+    url = 'https://' + url;
+  }
   targetSitesObject[name] = {
     site: name,
-    domains: [url.replace('https://', '')],
+    domains: [domain],
     feeder_pattern: `^${url}`,
     feeder_pages: [url],
     use_archive: false,
