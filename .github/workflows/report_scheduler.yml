@@ -2,7 +2,7 @@ name: Report scheduler
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 12 * * *'
+    - cron: '20 21 * * *'
 jobs:
   report:
     uses: wordnik/nyt-first-said/.github/workflows/report.yml@batch-3
