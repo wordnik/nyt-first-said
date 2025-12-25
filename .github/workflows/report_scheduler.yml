@@ -5,6 +5,6 @@ on:
     - cron: '0 12 * * *'
 jobs:
   report:
-    uses: wordnik/nyt-first-said/.github/workflows/report.yml@master
+    uses: wordnik/nyt-first-said/.github/workflows/report.yml
     with:
       daysBackToGo: 1
