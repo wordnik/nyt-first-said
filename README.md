@@ -97,7 +97,7 @@ The definition for the runner action is in `brush.yml`. It takes an input named 
 
 # Adding new batches of sites
 
-1. There's a JSON list of sites in `data/now-corpus-sources.json` that has a name and URL for each site. To convert those to entries in the `data/target_sites.json` config file, run from the `js` directory `node tools/add-to-target-sites.js data/target_sites.json data/now-corpus-sources.json \<start\>-\<end\>`, where `start` is the index of the first site in `data/now-corpus-sources.json` that you want to add and `end` is the index of the site you want to stop at. (The site at `end` is not added.)
+1. There's a JSON list of sites in `data/now-corpus-sources.json` that has a name and URL for each site. To convert those to entries in the `data/target_sites.json` config file, run `node js/tools/add-to-target-sites.js data/target_sites.json data/now-corpus-sources.json \<start\>-\<end\>`, where `start` is the index of the first site in `data/now-corpus-sources.json` that you want to add and `end` is the index of the site you want to stop at. (The site at `end` is not added.)
 
 2. Run these two commands to update the Daily Launcher and Unproven Sites Launcher GitHub Actions:
 

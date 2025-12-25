@@ -208,6 +208,11 @@ def process_links(links, parser_name, parser_params):
             continue
 
         link = link.replace("http://", "https://")
+
+        if link.find(":") == -1:
+            # No protocol. Assume https.
+            link = "https://" + link
+
         if not link.startswith("https://"):
             # Avoid mailto:, tel:, ftp:, etc.
             continue
@@ -292,6 +297,7 @@ def run_brush(parser_name, parser_params):
         if articles_processed < 1 and len(strategies_unused) > 0:
             # Try again if we didn't get anything.
             strategy = strategies_unused.pop()
+            breakpoint()
             run_brush(**strategy)
 
 run_brush(site.get("parser_name"), site.get("parser_params"))
