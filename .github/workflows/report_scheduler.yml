@@ -1,0 +1,10 @@
+name: Report scheduler
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * *'
+jobs:
+  report:
+    uses: wordnik/nyt-first-said/.github/workflows/report.yml@master
+    with:
+      daysBackToGo: 1
