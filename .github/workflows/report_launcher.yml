@@ -1,0 +1,11 @@
+name: Report launcher
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '20 21 * * *'
+jobs:
+  report:
+    uses: wordnik/nyt-first-said/.github/workflows/report.yml@batch-3
+    secrets: inherit
+    with:
+      daysBackToGo: 1

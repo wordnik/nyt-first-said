@@ -117,6 +117,9 @@ def concat(domain, url):
 def get_feed_urls(feeder_pages, feeder_pattern, requester=grab_url):
     all_urls = []
     for feeder_url in feeder_pages:
+        if feeder_url.find(":") == -1:
+            # No protocol. Assume https.
+            feeder_url = "https://" + feeder_url
         html = requester(feeder_url)
         soup = BeautifulSoup(html, "html5lib")
 
