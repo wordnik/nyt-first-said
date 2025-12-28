@@ -198,7 +198,6 @@ def process_article(content, url, meta):
 
 def process_links(links, parser_name, parser_params):
     global articles_processed
-
     for link in links:
         if was_url_visited(link):
             # We count it as processed because we use articles_processed as a
@@ -272,7 +271,7 @@ def run_brush(parser_name, parser_params):
         feed_requester = browser.get_content
 
     process_links(
-            get_feed_urls(site["feeder_pages"], site["feeder_pattern"], feed_requester),
+            get_feed_urls(site["feeder_pages"], site["domains"][0], feed_requester),
             parser_name,
             parser_params
             )

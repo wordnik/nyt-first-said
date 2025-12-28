@@ -38,7 +38,6 @@ function addSiteEntry({ name, url }) {
   targetSitesObject[name] = {
     site: name,
     domains: [domain],
-    feeder_pattern: `^${url}`,
     feeder_pages: [url],
     use_archive: false,
     parser_name: 'article_based',
