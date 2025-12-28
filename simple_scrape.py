@@ -3,7 +3,6 @@
 import sys
 import redis
 import string
-import regex as re
 import time
 import langid
 import os
@@ -15,7 +14,6 @@ import boto3
 import urllib.request as urllib2
 import random
 import logging
-import hashlib
 
 from utils.word_count_cache import WordCountCache
 from utils.bloom_filter import BloomFilter
@@ -23,6 +21,8 @@ from utils.summary import add_summary_line
 from utils.headless import HeadlessBrowser
 from utils.errors import ConfigError
 from utils.uninteresting_words import get_uninteresting_count_for_word, increment_uninteresting_count_for_word
+from utils.url_visits import log_url_visit, was_url_visited
+from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls, split_words_by_unicode_chars
 from parsers.parse_fns import parse_fns
@@ -50,7 +50,6 @@ else:
     r = WordCountCache()
 
 date = today.isoformat()
-md5_fn = hashlib.md5()
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument('site_name')
@@ -116,7 +115,7 @@ def post(word, article_url, sentence, meta, bucket="nyt-said-sentences"):
         if bucket == "nyt-said-sentences":
             add_summary_line(f"New word: {sentence_obj['word']}. Example: {sentence_obj['text']}")
         else:
-            print(f"Uninteresting: {sentence_obj['word']}. Example: {sentence_obj['text']}")
+            logging.info(f"Uninteresting: {sentence_obj['word']}. Example: {sentence_obj['text']}")
         obj_path = word + ".json"
         s3.put_object(Bucket=bucket, Key=obj_path,
                       Body=sentence_json.encode(), ContentType="application/json")
@@ -133,22 +132,26 @@ def ok_word(s):
 
     return not any(i.isdigit() or i in "(.@/#-_[" for i in s)
 
-def remove_punctuation(text):
-    return re.sub(r"’s", "", re.sub(r"\p{P}+$", "", re.sub(r"^\p{P}+", "", text)))
-
-def process_article(content, article, meta):
+def process_article(content, url, meta):
     global articles_processed
 
     uninteresting_sentence_params = []
-    # record = open("records/"+article.replace("/", "_")+".txt", "w+")
-    record.write("\nARTICLE:" + article)
+    # record = open("records/"+url.replace("/", "_")+".txt", "w+")
+    record.write("\nARTICLE:" + url)
     print("Processing Article")
     text = clean_text(str(content))
     sentence_blob = TextBlob(text)
     for sentence in sentence_blob.sentences:
+        if has_username(str(sentence)):
+            # If the sentence has "@word" tokens, they will parse as separate
+            # "@" and "word" tokens, so we'll avoid this situation.
+            continue
+
         for token in sentence.tokens:
             # TODO: New inner loop with word split among tokens.
-            words = split_words_by_unicode_chars(remove_punctuation(token.string))
+            words = split_words_by_unicode_chars(
+                    remove_trouble_characters(remove_punctuation(token.string))
+            )
             for word in words:
                 if len(word) < 2:
                     continue
@@ -159,7 +162,7 @@ def process_article(content, article, meta):
                     if len(uninteresting_sentence_params) < 10:
                         uninteresting_sentence_params.append({
                             "word": word,
-                            "article_url": article,
+                            "article_url": url,
                             "sentence": sentence.string,
                             "meta": meta,
                             "bucket": "uninteresting-sentences"
@@ -179,55 +182,51 @@ def process_article(content, article, meta):
                         # Multiply by 1 to cast the boolean into a number.
                         r.set(
                             wkey,
-                            1 * check_word(word, article, sentence.string, meta))
+                            1 * check_word(word, url, sentence.string, meta))
 
     if len(uninteresting_sentence_params) > 0:
         sentence_params = random.sample(uninteresting_sentence_params, 1)[0]
         word = sentence_params.get("word").lower()
         if word and get_uninteresting_count_for_word(word) < 1000:
             post(**sentence_params)
-
-            md5_fn.update(sentence_params.get("sentence").encode("utf-8"))
-            sentence_hash = md5_fn.hexdigest()
-
             increment_uninteresting_count_for_word(word)
         else:
-            logging.info("We already have 1000 sentences for", word)
+            logging.info(f"We already have 1000 sentences for {word}.")
 
     articles_processed += 1
+    log_url_visit(url)
 
 def process_links(links, parser_name, parser_params):
+    global articles_processed
     for link in links:
-        akey = "article:" + link
-        seen = r.get(akey)
+        if was_url_visited(link):
+            # We count it as processed because we use articles_processed as a
+            # measure of success for the run. 0 articles_processed means failure.
+            articles_processed += 1
+            logging.info(f"Skipping {link} because we've already visited it before.")
+            continue
+
         link = link.replace("http://", "https://")
+
+        if link.find(":") == -1:
+            # No protocol. Assume https.
+            link = "https://" + link
+
         if not link.startswith("https://"):
             # Avoid mailto:, tel:, ftp:, etc.
             continue
 
-        #    	print(akey+" seen: " + str(seen))
-        # seen = False
         # unseen article
-        if not seen:
-            time.sleep(site.get("article_pause_secs", 5))
-            print("Getting Article {}".format(link))
+        time.sleep(site.get("article_pause_secs", 5))
+        print("Getting Article {}".format(link))
 
-            if parser_name.startswith("browser_") or parser_name.startswith("nyt_browser"):
-                process_with_browser(url=link, site=site, akey=akey, parser_name=parser_name, parser_params=parser_params)
-            else:
-                process_with_request(link=link, site=site, akey=akey, parser_name=parser_name, parser_params=parser_params)
+        if parser_name.startswith("browser_") or parser_name.startswith("nyt_browser"):
+            process_with_browser(url=link, site=site, parser_name=parser_name, parser_params=parser_params)
+        else:
+            process_with_request(link=link, site=site, parser_name=parser_name, parser_params=parser_params)
 
-def process_with_request(link, site, akey, parser_name, parser_params):
+def process_with_request(link, site, parser_name, parser_params):
     content_url = link
-    # if site["use_archive"]:
-    #     print(f"Downloading via archive: {link}")
-    #     dl_result = download_via_archive(link)
-    #     if dl_result == False:
-    #         print(f"Could not download via archive: {link}")
-    #         return
-
-    #     content_url = dl_result
-    #     print(f"Successfully downloaded via archive: {link}, content_url: {content_url}")
 
     html = ""
     try:
@@ -249,9 +248,8 @@ def process_with_request(link, site, akey, parser_name, parser_params):
         body = parsed.get("body", "")
         if len(body) > 0:
             process_article(body, link, parsed.get("meta", {}))
-            r.set(akey, "1")
 
-def process_with_browser(url, site, akey, parser_name, parser_params):
+def process_with_browser(url, site, parser_name, parser_params):
     parse = parse_fns.get(parser_name)
     if not parse:
         raise ConfigError(f"site {site.get('site', '[unnamed]')} config's {site['parser_name']} can't be found.")
@@ -260,7 +258,6 @@ def process_with_browser(url, site, akey, parser_name, parser_params):
     # print("parsed!")
     # print(parsed)
     process_article(parsed.get("body", ""), url, parsed.get("meta", {}))
-    r.set(akey, "1")
 
 def run_brush(parser_name, parser_params):
     global run_count
@@ -274,7 +271,7 @@ def run_brush(parser_name, parser_params):
         feed_requester = browser.get_content
 
     process_links(
-            get_feed_urls(site["feeder_pages"], site["feeder_pattern"], feed_requester),
+            get_feed_urls(site["feeder_pages"], site["domains"][0], feed_requester),
             parser_name,
             parser_params
             )
