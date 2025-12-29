@@ -130,7 +130,7 @@ def parse_nyt_data(data_dict):
             "documentTitle": article.get("headline", {}).get("default", ""),
             "documentId": article.get("id", ""),
             "description": article.get("summary", ""),
-            "subjects": [tag.get("displayName", "") for tag in article.get("timesTags")],
+            "subjects": [tag.get("displayName", "") for tag in article.get("timesTags", {})],
             "pubDate": article.get("firstPublished", ""),
             "author": ",".join([b.get("renderedRepresentation", "") for b in article.get("bylines", [])])
             }
