@@ -248,6 +248,8 @@ def process_with_request(link, site, parser_name, parser_params):
         body = parsed.get("body", "")
         if len(body) > 0:
             process_article(body, link, site.get('site', '[unnamed]'), parsed.get("meta", {}))
+        else:
+            logging.info(f"No body obtained via {parser_name} from {content_url}.")
 
 def process_with_browser(url, site, parser_name, parser_params):
     parse = parse_fns.get(parser_name)
@@ -258,7 +260,11 @@ def process_with_browser(url, site, parser_name, parser_params):
     parsed = parse(browser, url)
     # print("parsed!")
     # print(parsed)
-    process_article(parsed.get("body", ""), url, site_name, parsed.get("meta", {}))
+    body = parsed.get("body")
+    if body and len(body) > 0:
+        process_article(body, url, site_name, parsed.get("meta", {}))
+    else:
+        logging.info(f"No body obtained via {parser_name} from {url}.")
 
 def run_brush(parser_name, parser_params):
     global run_count
