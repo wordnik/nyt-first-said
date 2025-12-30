@@ -1,8 +1,8 @@
 name: Daily launcher 2
-  on:
-    workflow_dispatch:
-    schedule:
-      - cron: '0 19 * * *'
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 19 * * *'
 jobs:
   pbs_org:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
