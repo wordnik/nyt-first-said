@@ -37,10 +37,10 @@ for (
     siteStartIndex + maxSitesInLauncher
   );
   const baseYAML = `name: ${name} ${launcherIndex}
-  on:
-    workflow_dispatch:
-    schedule:
-      - cron: '0 ${(17 + launcherIndex) % 24} * * *'
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 ${(17 + launcherIndex) % 24} * * *'
 `;
 
   var jobs = {};
