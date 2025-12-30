@@ -1,8 +1,8 @@
-name: Daily launcher
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 4 * * *'
+name: Daily launcher 0
+  on:
+    workflow_dispatch:
+    schedule:
+      - cron: '0 17 * * *'
 jobs:
   nyt:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
@@ -2399,6 +2399,7 @@ jobs:
     secrets: inherit
     with:
       site: telanganatoday.com
+<<<<<<< HEAD:.github/workflows/daily_launcher.yml
   newkerala_com:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -4759,4 +4760,3 @@ jobs:
     secrets: inherit
     with:
       site: kvoa.com
-

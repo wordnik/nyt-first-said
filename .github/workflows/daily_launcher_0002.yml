@@ -1,0 +1,21 @@
+name: Daily launcher 2
+  on:
+    workflow_dispatch:
+    schedule:
+      - cron: '0 19 * * *'
+jobs:
+  pbs_org:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: pbs.org
+  wtvr_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: wtvr.com
+  kvoa_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: kvoa.com
