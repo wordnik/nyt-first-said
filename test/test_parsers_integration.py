@@ -75,3 +75,24 @@ class ParsersSuite(unittest.TestCase):
 
         parsed = parse(**parser_params)
         self.assertEqual(parsed["body"], "", "Gets no content but does not cash.")
+
+    def test_lawyersweekly_page(self):
+        self.maxDiff = None
+
+        with open("data/target_sites.json", "r") as f:
+            target_sites_text = f.read()
+            f.close()
+        with open("test/fixtures/lawyersweekly-example-contents.txt") as f:
+            expected_contents = f.read()
+            f.close()
+
+        html = grab_url("https://lawyersweekly.com.au/sme-law/43536-expelled-barrister-accused-of-launching-collateral-attack-on-firm")
+        target_sites = json.loads(target_sites_text)
+        site = target_sites.get("lawyersweekly.com.au")
+        parse = parse_fns.get(site.get("parser_name"))
+        parser_params = site.get("parser_params", {})
+        parser_params.update({ "html": html }) 
+
+        parsed = parse(**parser_params)
+        # print(parsed["body"])
+        self.assertTrue(jellyfish.levenshtein_distance(parsed["body"], expected_contents) < 0.1, "Parser gets close to expected body from live content.")

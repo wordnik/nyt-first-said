@@ -1058,8 +1058,9 @@
     ],
     "use_archive": false,
     "use_headless_browser": true,
-    "parser_name": "browser_article_based",
-    "parser_params": {}
+    "parser_name": "custom_parent",
+    "parser_params": {"parent_selector": ".paywall"},
+    "article_pause_secs": 0.5
   },
   "eurekastreet.com.au": {
     "site": "eurekastreet.com.au",
