@@ -4,16 +4,6 @@ on:
   schedule:
     - cron: '0 4 * * *'
 jobs:
-  theaureview_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: theaureview.com
-  adnews_com_au:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: adnews.com.au
   lawyersweekly_com_au:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -24,11 +14,6 @@ jobs:
     secrets: inherit
     with:
       site: eurekastreet.com.au
-  crn_com_au:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: crn.com.au
   stockhouse_com:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -44,11 +29,6 @@ jobs:
     secrets: inherit
     with:
       site: kitco.com
-  zawya_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: zawya.com
   thisismoney_co_uk:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit

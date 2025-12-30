@@ -647,7 +647,8 @@
     "use_archive": false,
     "use_headless_browser": true,
     "parser_name": "browser_article_based",
-    "parser_params": {}
+    "parser_params": {},
+    "works": true
   },
   "nrl.com": {
     "site": "nrl.com",
@@ -701,7 +702,8 @@
     "use_archive": false,
     "use_headless_browser": true,
     "parser_name": "browser_article_based",
-    "parser_params": {}
+    "parser_params": {},
+    "works": true
   },
   "aspistrategist.org.au": {
     "site": "aspistrategist.org.au",
@@ -1082,8 +1084,11 @@
     ],
     "use_archive": false,
     "use_headless_browser": true,
-    "parser_name": "browser_article_based",
-    "parser_params": {}
+    "parser_name": "custom_parent",
+    "parser_params": {
+      "parent_selector": "main"
+    },
+    "works": true
   },
   "greenandgoldrugby.com": {
     "site": "greenandgoldrugby.com",
@@ -3125,7 +3130,8 @@
     ],
     "use_archive": false,
     "parser_name": "article_based",
-    "parser_params": {}
+    "parser_params": {},
+    "works": true
   },
   "gamesradar.com": {
     "site": "gamesradar.com",
