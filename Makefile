@@ -49,3 +49,9 @@ generate-launcher:
 
 build-bloom:
 	python -m tools.build-bloom-filter -f data/nospace-examplesWords20250910.json -o data/bloom_filter.bits
+
+update-working-sites:
+	node js/tools/sync-sites-with-db.js data/target_sites.json
+	node js/tools/generate-launcher-action.js data/target_sites.json > .github/workflows/daily_launcher.yml
+	node js/tools/generate-launcher-action.js data/target_sites.json false "Unproven sites launcher" > .github/workflows/unproven_sites_launcher.yml
+	git add data/target_sites.json .github/workflows/daily_launcher.yml .github/workflows/unproven_sites_launcher.yml && git commit -m"Update working sites."
