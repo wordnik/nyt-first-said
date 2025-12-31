@@ -4,9 +4,9 @@
 var fs = require('fs');
 var yaml = require('js-yaml');
 
-if (process.argv.length < 3) {
+if (process.argv.length < 4) {
   console.error(
-    'Usage: node js/tools/generate-launcher-action.js data/target-sites.json <includeWorks=true> <name=Daily launcher>'
+    'Usage: node js/tools/generate-launcher-action.js data/target-sites.json <yaml base file path> [includeWorks=true] [name=Daily launcher]'
   );
   process.exit(1);
 }
@@ -17,12 +17,14 @@ var allSites = JSON.parse(sitesText);
 var targetWorksStatus = true;
 const maxSitesInLauncher = 500;
 
-if (process.argv.length > 3) {
-  targetWorksStatus = JSON.parse(process.argv[3]);
+const yamlBasePath = process.argv[3];
+
+if (process.argv.length > 4) {
+  targetWorksStatus = JSON.parse(process.argv[4]);
 }
 var name = 'Daily launcher';
-if (process.argv.length > 4) {
-  name = process.argv[4];
+if (process.argv.length > 5) {
+  name = process.argv[5];
 }
 
 var allSiteNames = Object.keys(allSites);
@@ -76,7 +78,7 @@ on:
   }
 
   const dailyLauncherYaml = baseYAML + yaml.dump({ jobs });
-  const yamlPath = `.github/workflows/daily_launcher_${launcherIndex
+  const yamlPath = `${yamlBasePath}_${launcherIndex
     .toString()
     .padStart(4, '0')}.yml`;
   fs.writeFileSync(yamlPath, dailyLauncherYaml, { encoding: 'utf8' });

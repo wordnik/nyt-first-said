@@ -52,6 +52,6 @@ build-bloom:
 
 update-working-sites:
 	node js/tools/sync-sites-with-db.js data/target_sites.json
-	node js/tools/generate-launcher-action.js data/target_sites.json > .github/workflows/daily_launcher.yml
-	node js/tools/generate-launcher-action.js data/target_sites.json false "Unproven sites launcher" > .github/workflows/unproven_sites_launcher.yml
-	git add data/target_sites.json .github/workflows/daily_launcher.yml .github/workflows/unproven_sites_launcher.yml && git commit -m"Update working sites."
+	node js/tools/generate-launcher-action.js data/target_sites.json .github/workflows/daily_launcher
+	node js/tools/generate-launcher-action.js data/target_sites.json .github/workflows/unproven_sites_launcher false "Unproven sites launcher"
+	git add data/target_sites.json .github/workflows/daily_launcher_*.yml .github/workflows/unproven_sites_launcher_*.yml && git commit -m"Update working sites."
