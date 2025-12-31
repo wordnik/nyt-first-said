@@ -1059,7 +1059,9 @@
     "use_archive": false,
     "use_headless_browser": true,
     "parser_name": "custom_parent",
-    "parser_params": {"parent_selector": ".paywall"},
+    "parser_params": {
+      "parent_selector": ".paywall"
+    },
     "article_pause_secs": 0.5
   },
   "eurekastreet.com.au": {
@@ -3286,8 +3288,9 @@
       "https://thisismoney.co.uk"
     ],
     "use_archive": false,
-    "parser_name": "article_based",
-    "parser_params": {}
+    "parser_name": "browser_article_based",
+    "parser_params": {},
+    "works": true
   },
   "kentonline.co.uk": {
     "site": "kentonline.co.uk",
