@@ -113,6 +113,9 @@ def get_nyt_footer_ptags(soup):
     return p_tags
 
 def parse_nyt_data(data_dict):
+    if not data_dict:
+        return return {"body": "", "meta": {}}
+
     article = data_dict.get("data", {}).get("article", {})
     content_array = article.get("sprinkledBody", {}).get("content", [])
     paragraph_block_contents = []
