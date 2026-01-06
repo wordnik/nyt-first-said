@@ -1099,6 +1099,11 @@ jobs:
     secrets: inherit
     with:
       site: topgear.com.ph
+  pageone_ph:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: pageone.ph
   bulatlat_com:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
