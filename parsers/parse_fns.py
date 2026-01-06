@@ -5,6 +5,10 @@ import operator
 import time
 import json
 import re
+import boto3
+from utils.summary import add_summary_line
+
+s3 = boto3.client("s3")
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -93,7 +97,6 @@ def custom_parent(html, parent_selector):
 
     return { "body": body, "meta": meta, "soup": soup }
 
-
 def get_nyt_footer_ptags(soup):
     div = soup.find(
         "div", attrs={"class": "story-addendum story-content theme-correction"}
@@ -171,15 +174,26 @@ def nyt_browser(browser, url):
                          
     return parse_nyt_data(preloaded.get("initialData", {}))
 
+# Warning: This depends on the browser not having closed the page or navigated away.
+# Redesign if this can no longer be depended on.
+def browser_report_failure(browser, url):
+    shot_path = "failed_parse_" + url.replace("/", "_") + ".png"
+    image = browser.screenshot(shot_path)
+    s3.put_object(Bucket="nyt-said-failure-reports", Key=shot_path, Body=image, ContentType="image/png")
+    add_summary_line(f"browser_article_based parser failed to get content from {url}. See screenshot at s3://nyt-said-failure-report/{shot_path}.")
+
 def browser_article_based(browser, url):
     parsed = article_based(browser.get_content(url))
     if parsed == None:
-        return {"body": "", "meta": {}}
+        return {"body": "", "meta": {}, "report_failure_fn": browser_report_failure }
     return parsed
 
 parse_fns = {
     "article_based": article_based,
     "custom_parent": custom_parent,
     "nyt_browser": nyt_browser,
-    "browser_article_based": browser_article_based
+    "browser_article_based": browser_article_based,
+
+    # This is not an actual parser.
+    "browser_report_failure": browser_report_failure
 }
