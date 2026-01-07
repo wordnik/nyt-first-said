@@ -110,4 +110,4 @@ The definition for the runner action is in `brush.yml`. It takes an input named 
 
 5. When the action's runs are over, the results of the runs (`articles_processed` and `succeeding_parser_name`) should be in the `nyt-said-site-results` DynamoDB table. To use those to update the settings, run `make update-working-sites` to update `target-sites.json`, `daily_launcher.yml`, and `unproven_sites_launcher.yml` and commit them to git.
 
-6. Push to GitHub.
+6. Commit the changes, then push to GitHub.
