@@ -54,4 +54,3 @@ update-working-sites:
 	node js/tools/sync-sites-with-db.js data/target_sites.json
 	node js/tools/generate-launcher-action.js data/target_sites.json .github/workflows/daily_launcher
 	node js/tools/generate-launcher-action.js data/target_sites.json .github/workflows/unproven_sites_launcher false "Unproven sites launcher"
-	git add data/target_sites.json .github/workflows/daily_launcher_*.yml .github/workflows/unproven_sites_launcher_*.yml && git commit -m"Update working sites."

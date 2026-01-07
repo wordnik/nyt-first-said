@@ -3,6 +3,7 @@
 
 var fs = require('fs');
 var yaml = require('js-yaml');
+var pick = require('lodash.pick');
 
 if (process.argv.length < 4) {
   console.error(
@@ -27,6 +28,7 @@ if (process.argv.length > 5) {
   name = process.argv[5];
 }
 
+var targetJobs = {};
 var allSiteNames = Object.keys(allSites);
 for (
   let launcherIndex = 0;
@@ -38,14 +40,6 @@ for (
     siteStartIndex,
     siteStartIndex + maxSitesInLauncher
   );
-  const baseYAML = `name: ${name} ${launcherIndex}
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 ${(17 + launcherIndex) % 24} * * *'
-`;
-
-  var jobs = {};
 
   for (let siteName of siteNames) {
     let site = allSites[siteName];
@@ -68,7 +62,8 @@ on:
     if (/^\d/.test(id)) {
       id = '_' + id;
     }
-    jobs[id] = {
+
+    targetJobs[id] = {
       uses: 'wordnik/nyt-first-said/.github/workflows/brush.yml@master',
       secrets: 'inherit',
       with: {
@@ -76,8 +71,27 @@ on:
       },
     };
   }
+}
 
-  const dailyLauncherYaml = baseYAML + yaml.dump({ jobs });
+var targetJobKeys = Object.keys(targetJobs);
+
+for (
+  let launcherIndex = 0;
+  launcherIndex < Math.ceil(targetJobKeys.length / maxSitesInLauncher);
+  ++launcherIndex
+) {
+  const jobIndexStart = launcherIndex * maxSitesInLauncher;
+  var launcherJobs = pick(
+    targetJobs,
+    targetJobKeys.slice(jobIndexStart, jobIndexStart + maxSitesInLauncher)
+  );
+  const baseYAML = `name: ${name} ${launcherIndex}
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 ${(17 + launcherIndex) % 24} * * *'
+`;
+  const dailyLauncherYaml = baseYAML + yaml.dump({ jobs: launcherJobs });
   const yamlPath = `${yamlBasePath}_${launcherIndex
     .toString()
     .padStart(4, '0')}.yml`;
