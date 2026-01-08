@@ -44,3 +44,13 @@ class HeadlessBrowser():
         except Exception as e:
             logging.error(f"Error {e} while trying to get content from {url}.")
             return ""
+
+    def screenshot(self, path_to_put_screenshot):
+        if not self.browser:
+            raise ChildProcessError("Browser not initialized (probably deinitialized).")
+
+        if not self.page:
+            raise ChildProcessError("No page loaded.")
+
+        return self.page.screenshot()
+

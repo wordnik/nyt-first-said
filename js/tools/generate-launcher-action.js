@@ -3,10 +3,11 @@
 
 var fs = require('fs');
 var yaml = require('js-yaml');
+var pick = require('lodash.pick');
 
-if (process.argv.length < 3) {
+if (process.argv.length < 4) {
   console.error(
-    'Usage: node js/tools/generate-launcher-action.js data/target-sites.json <includeWorks=true> <name=Daily launcher>'
+    'Usage: node js/tools/generate-launcher-action.js data/target-sites.json <yaml base file path> [includeWorks=true] [name=Daily launcher]'
   );
   process.exit(1);
 }
@@ -17,14 +18,17 @@ var allSites = JSON.parse(sitesText);
 var targetWorksStatus = true;
 const maxSitesInLauncher = 500;
 
-if (process.argv.length > 3) {
-  targetWorksStatus = JSON.parse(process.argv[3]);
+const yamlBasePath = process.argv[3];
+
+if (process.argv.length > 4) {
+  targetWorksStatus = JSON.parse(process.argv[4]);
 }
 var name = 'Daily launcher';
-if (process.argv.length > 4) {
-  name = process.argv[4];
+if (process.argv.length > 5) {
+  name = process.argv[5];
 }
 
+var targetJobs = {};
 var allSiteNames = Object.keys(allSites);
 for (
   let launcherIndex = 0;
@@ -36,14 +40,6 @@ for (
     siteStartIndex,
     siteStartIndex + maxSitesInLauncher
   );
-  const baseYAML = `name: ${name} ${launcherIndex}
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 ${(17 + launcherIndex) % 24} * * *'
-`;
-
-  var jobs = {};
 
   for (let siteName of siteNames) {
     let site = allSites[siteName];
@@ -66,7 +62,8 @@ on:
     if (/^\d/.test(id)) {
       id = '_' + id;
     }
-    jobs[id] = {
+
+    targetJobs[id] = {
       uses: 'wordnik/nyt-first-said/.github/workflows/brush.yml@master',
       secrets: 'inherit',
       with: {
@@ -74,9 +71,28 @@ on:
       },
     };
   }
+}
 
-  const dailyLauncherYaml = baseYAML + yaml.dump({ jobs });
-  const yamlPath = `.github/workflows/daily_launcher_${launcherIndex
+var targetJobKeys = Object.keys(targetJobs);
+
+for (
+  let launcherIndex = 0;
+  launcherIndex < Math.ceil(targetJobKeys.length / maxSitesInLauncher);
+  ++launcherIndex
+) {
+  const jobIndexStart = launcherIndex * maxSitesInLauncher;
+  var launcherJobs = pick(
+    targetJobs,
+    targetJobKeys.slice(jobIndexStart, jobIndexStart + maxSitesInLauncher)
+  );
+  const baseYAML = `name: ${name} ${launcherIndex}
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 ${(17 + launcherIndex) % 24} * * *'
+`;
+  const dailyLauncherYaml = baseYAML + yaml.dump({ jobs: launcherJobs });
+  const yamlPath = `${yamlBasePath}_${launcherIndex
     .toString()
     .padStart(4, '0')}.yml`;
   fs.writeFileSync(yamlPath, dailyLauncherYaml, { encoding: 'utf8' });

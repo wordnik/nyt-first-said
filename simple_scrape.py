@@ -132,7 +132,7 @@ def ok_word(s):
 
     return not any(i.isdigit() or i in "(.@/#-_[" for i in s)
 
-def process_article(content, url, meta):
+def process_article(content, url, site_name, meta):
     global articles_processed
 
     uninteresting_sentence_params = []
@@ -194,7 +194,7 @@ def process_article(content, url, meta):
             logging.info(f"We already have 1000 sentences for {word}.")
 
     articles_processed += 1
-    log_url_visit(url)
+    log_url_visit(url, site_name)
 
 def process_links(links, parser_name, parser_params):
     global articles_processed
@@ -244,20 +244,30 @@ def process_with_request(link, site, parser_name, parser_params):
     parser_params.update({ "html": html })
     parsed = parse(**parser_params)
 
-    if parsed: 
+    if parsed:
         body = parsed.get("body", "")
         if len(body) > 0:
-            process_article(body, link, parsed.get("meta", {}))
+            process_article(body, link, site.get('site', '[unnamed]'), parsed.get("meta", {}))
+        else:
+            logging.info(f"No body obtained via {parser_name} from {content_url}.")
 
 def process_with_browser(url, site, parser_name, parser_params):
     parse = parse_fns.get(parser_name)
+    site_name = site.get('site', '[unnamed]')
     if not parse:
-        raise ConfigError(f"site {site.get('site', '[unnamed]')} config's {site['parser_name']} can't be found.")
+        raise ConfigError(f"site {site_name} config's {site['parser_name']} can't be found.")
 
     parsed = parse(browser, url)
     # print("parsed!")
     # print(parsed)
-    process_article(parsed.get("body", ""), url, parsed.get("meta", {}))
+    body = parsed.get("body")
+    if body and len(body) > 0:
+        process_article(body, url, site_name, parsed.get("meta", {}))
+    else:
+        logging.info(f"No body obtained via {parser_name} from {url}.")
+        report_failure = parsed.get("report_failure_fn", null)
+        if report_failure:
+            report_failure(browser=browser, url=url)
 
 def run_brush(parser_name, parser_params):
     global run_count
@@ -269,12 +279,15 @@ def run_brush(parser_name, parser_params):
     feed_requester = grab_url
     if parser_name.startswith("browser_"):
         feed_requester = browser.get_content
-
-    process_links(
-            get_feed_urls(site["feeder_pages"], site["domains"][0], feed_requester),
-            parser_name,
-            parser_params
-            )
+    
+    links = get_feed_urls(site["feeder_pages"], site["domains"][0], feed_requester)
+    if len(links) < 1:
+        add_summary_line("Could not get any top-level links with " + parser_name + ".")
+        # TODO: Look into making this part of the target site definition.
+        if feed_requester == browser.get_content:
+            parse_fns["browser_report_failure"](browser, site["domains"][0] + "_links")
+    else:
+        process_links(links, parser_name, parser_params)
 
     elapsed_time = time.time() - start_time
     add_summary_line(f"Time Elapsed for run {run_count} (seconds): {elapsed_time}")

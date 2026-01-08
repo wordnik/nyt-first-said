@@ -108,8 +108,6 @@ The definition for the runner action is in `brush.yml`. It takes an input named 
 
 4. Go to the [Unproven Site Launcher action](https://github.com/wordnik/nyt-first-said/actions/workflows/unproven_sites_launcher.yml) and use the "Run workflow" button to launch runs of the unproven sites. In the subsequent dialog, make sure to select whichever branch your changes are in.
 
-5. When the action's runs are over, the results of the runs (`articles_processed` and `succeeding_parser_name`) should be in the `nyt-said-site-results` DynamoDB table. To use those to update the settings, run `node js/tools/sync-sites-with-db.js data/target_sites.json`.
+5. When the action's runs are over, the results of the runs (`articles_processed` and `succeeding_parser_name`) should be in the `nyt-said-site-results` DynamoDB table. To use those to update the settings, run `make update-working-sites` to update `target-sites.json`, `daily_launcher.yml`, and `unproven_sites_launcher.yml` and commit them to git.
 
-6. After that, some sites' `works` and `parser_name` properties will be updated. Re-run the launcher action generators so that the sites are in the appropriate launchers.
-
-7. Commit the changes, then push to GitHub.
+6. Commit the changes, then push to GitHub.
