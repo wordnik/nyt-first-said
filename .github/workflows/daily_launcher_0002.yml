@@ -169,6 +169,11 @@ jobs:
     secrets: inherit
     with:
       site: newscientist.com
+  greennews_ie:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: greennews.ie
   her_ie:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit

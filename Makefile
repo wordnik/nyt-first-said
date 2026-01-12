@@ -54,3 +54,6 @@ update-working-sites:
 	node js/tools/sync-sites-with-db.js data/target_sites.json
 	node js/tools/generate-launcher-action.js data/target_sites.json .github/workflows/daily_launcher
 	node js/tools/generate-launcher-action.js data/target_sites.json .github/workflows/unproven_sites_launcher false "Unproven sites launcher"
+
+get-failure-screenshots:
+	aws s3 sync s3://nyt-said-failure-reports/ meta/failure-reports/
