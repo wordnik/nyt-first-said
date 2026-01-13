@@ -4,31 +4,6 @@ on:
   schedule:
     - cron: '0 18 * * *'
 jobs:
-  Healthline:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Healthline
-  Harvard_Business_Review:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Harvard Business Review
-  Dallas_Morning_News:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Dallas Morning News
-  Ars_Technica:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Ars Technica
-  Mercury_News:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Mercury News
   Game_Rant:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
