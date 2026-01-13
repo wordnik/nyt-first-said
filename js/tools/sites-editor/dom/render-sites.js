@@ -22,11 +22,23 @@ function renderSites({ siteData }) {
   if (siteData.length < 1) {
     return;
   }
-  var newSites = sites.enter().append('li').classed('site', true);
+
+  var fields = Object.keys(siteData[0]);
+
+  // Header row
+  var headerRow = siteRoot.append('thead');
+  headerRow
+    .selectAll('.field-label')
+    .data(fields, (x) => x)
+    .enter()
+    .append('th')
+    .classed('field-label', true)
+    .text((x) => x);
+
+  var newSites = sites.enter().append('tr').classed('site', true);
   appendElementsForSites(newSites, siteData[0]);
 
   var sitesToUpdate = newSites.merge(sites);
-  var fields = Object.keys(siteData[0]);
   fields.forEach(curry(updateSitesField)(sitesToUpdate));
 }
 
@@ -39,13 +51,14 @@ function appendElementsForSites(sitesSel, exampleSite) {
   fields.forEach(appendElementsForField);
 
   function appendElementsForField(field) {
-    let container = sitesSel.append('div').classed('field-container', true);
-    container.append('div').classed('field-label', true).text(field);
+    let container = sitesSel.append('td').classed('field-container', true);
+    // container.append('div').classed('field-label', true).text(field);
     appendControlForValue(container, field, typeof exampleSite[field]);
   }
 }
 
 function appendControlForValue(container, field, valueType) {
+  // TODO JSON textarea
   if (field === 'description') {
     container.append('textarea').attr('data-of', field);
   } else if (selectFields.includes(field)) {
