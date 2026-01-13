@@ -24,11 +24,11 @@ fs.writeFileSync(siteListPath, formatList(dedupedList), {
 console.log(dupesFound, 'Duplicates found.');
 
 function addSiteEntry({ name, url }) {
-  if (namesInList.includes(name)) {
+  if (namesInList.includes(name.toLowerCase())) {
     dupesFound += 1;
     return;
   }
-  namesInList.push(name);
+  namesInList.push(name.toLowerCase());
   dedupedList.push({ name, url });
 }
 
