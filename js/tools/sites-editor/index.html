@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>Sites Editor</title>
+    <link rel="stylesheet" href="app.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <div id="status-message" class="hidden"></div>
+
+    <section id="file-load-section">
+      <div>Pick a site file to edit.</div>
+      <input type="file" id="sites-file" accept="application/json" />
+    </section>
+
+    <section id="save-section">
+      <button id="save-button">Save</button>
+    </section>
+
+    <section id="sites">
+      <table id="site-root">
+      </table>
+    </section>
+
+    <script src="index.js"></script>
+  </body>
+</html>

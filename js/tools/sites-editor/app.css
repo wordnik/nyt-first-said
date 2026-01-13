@@ -1,0 +1,84 @@
+body {
+  font-size: 24pt;
+  font-family: futura, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  color: #444;
+}
+
+.hidden {
+  display: none !important;
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+#status-message {
+  background-color: #ffffee;
+  box-shadow: #666 inset 0 0 6px;
+  margin: 1em;
+  padding: 1em;
+}
+
+#file-load-section {
+  margin: 1em;
+}
+
+#file-load-section input {
+  margin-top: 0.5em;
+}
+
+.field-label {
+  margin-bottom: 0.5em;
+  border-left: solid 1px #444;
+  border-right: solid 1px #444;
+}
+
+.field-container {
+  border-left: solid 1px #444;
+  border-right: solid 1px #444;
+}
+
+button,input[type=file] {
+  color: #444;
+  font-size: 0.8em;
+  cursor: pointer;
+  background-color: white;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  border-width: 1px;
+  border-color: #aaa;
+  border-style: solid;
+  font-family: sans-serif;
+  min-width: 44px;
+  box-shadow: #444 0 0 4px;
+}
+
+/*
+Source - https://stackoverflow.com/a
+Posted by Joe, modified by community. See post 'Timeline' for change history
+Retrieved 2026-01-12, License - CC BY-SA 4.0
+*/
+
+table {
+  text-align: left;
+  position: relative;
+  border-collapse: collapse;
+}
+
+th {
+  background: white;
+  position: sticky;
+  top: 0;
+}
+
+td {
+  padding: 2px;
+}
+
+@media all and (max-height: 568px) {
+  body {
+    font-size: 18px;
+  }
+}
