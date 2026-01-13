@@ -8,8 +8,8 @@ var normalizeObjects = require('normalize-objects')({
 });
 var curry = require('lodash.curry');
 var fieldsThatShouldRenderAsJSON = require('../json-fields');
+var jsonFieldNames = fieldsThatShouldRenderAsJSON.map((obj) => obj.field);
 var dateFields = [];
-// Not great to reach outside of the site, but what're you gonna do, make a package?
 
 var selectFields = ['environment', 'form', 'purpose', 'releaseState'];
 var fixedValuesForFields = {};
@@ -58,8 +58,7 @@ function appendElementsForSites(sitesSel, exampleSite) {
 }
 
 function appendControlForValue(container, field, valueType) {
-  // TODO JSON textarea
-  if (field === 'description') {
+  if (jsonFieldNames.includes(field)) {
     container.append('textarea').attr('data-of', field);
   } else if (selectFields.includes(field)) {
     let selectControl = container.append('select').attr('data-of', field);
@@ -86,8 +85,8 @@ function appendControlForValue(container, field, valueType) {
 }
 
 function updateSitesField(sitesSel, field) {
-  if (field === 'description') {
-    sitesSel.select(`[data-of=${field}]`).text(accessor(field));
+  if (jsonFieldNames.includes(field)) {
+    sitesSel.select(`[data-of=${field}]`).text(curry(getValueForField)(field));
   } else if (selectFields.includes(field)) {
     sitesSel
       .select(`[data-of=${field}]`)
