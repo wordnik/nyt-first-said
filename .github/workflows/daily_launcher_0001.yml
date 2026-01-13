@@ -4,11 +4,6 @@ on:
   schedule:
     - cron: '0 18 * * *'
 jobs:
-  ibtimes_co_in:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: ibtimes.co.in
   zeebiz_com:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -594,11 +589,6 @@ jobs:
     secrets: inherit
     with:
       site: thewhistler.ng
-  leadership_ng:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: leadership.ng
   theeagleonline_com_ng:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -924,11 +914,6 @@ jobs:
     secrets: inherit
     with:
       site: rugbypass.com
-  horsetalk_co_nz:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: horsetalk.co.nz
   inquirer_net:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -1819,11 +1804,6 @@ jobs:
     secrets: inherit
     with:
       site: thewrap.com
-  fairfieldcurrent_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: fairfieldcurrent.com
   gamespot_com:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2504,3 +2484,23 @@ jobs:
     secrets: inherit
     with:
       site: au.lifehacker.com
+  nine_com_au:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: nine.com.au
+  thenightly_com_au:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: thenightly.com.au
+  jamaica-gleaner_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: jamaica-gleaner.com
+  toronto_ctvnews_ca:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: toronto.ctvnews.ca

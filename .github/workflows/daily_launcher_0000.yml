@@ -234,11 +234,6 @@ jobs:
     secrets: inherit
     with:
       site: stockandland.com.au
-  adnews_com_au:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: adnews.com.au
   aspistrategist_org_au:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2504,3 +2499,8 @@ jobs:
     secrets: inherit
     with:
       site: newindianexpress.com
+  ibtimes_co_in:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: ibtimes.co.in

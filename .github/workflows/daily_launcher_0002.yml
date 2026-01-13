@@ -4,26 +4,6 @@ on:
   schedule:
     - cron: '0 19 * * *'
 jobs:
-  nine_com_au:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: nine.com.au
-  thenightly_com_au:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: thenightly.com.au
-  jamaica-gleaner_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: jamaica-gleaner.com
-  toronto_ctvnews_ca:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: toronto.ctvnews.ca
   atlantic_ctvnews_ca:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -169,11 +149,6 @@ jobs:
     secrets: inherit
     with:
       site: newscientist.com
-  greennews_ie:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: greennews.ie
   her_ie:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
