@@ -58,7 +58,7 @@ for (
       }
     }
 
-    var id = siteName.replace(/\.| |'/g, '_');
+    var id = siteName.replace(/[^a-zA-Z\d]/g, '_');
     if (/^\d/.test(id)) {
       id = '_' + id;
     }
