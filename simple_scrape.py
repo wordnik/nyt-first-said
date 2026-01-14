@@ -280,7 +280,14 @@ def run_brush(parser_name, parser_params):
     if parser_name.startswith("browser_"):
         feed_requester = browser.get_content
     
-    links = get_feed_urls(site["feeder_pages"], site["domains"][0], feed_requester)
+    domain = ""
+    domains = site["domains"]
+    if len(domains) > 0:
+        domain = domains[0]
+    else:
+        domain = site["feeder_pages"][0].replace("https://", "")
+
+    links = get_feed_urls(site["feeder_pages"], domain, feed_requester)
     if len(links) < 1:
         add_summary_line("Could not get any top-level links with " + parser_name + ".")
         # TODO: Look into making this part of the target site definition.
