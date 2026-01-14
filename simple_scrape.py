@@ -265,7 +265,7 @@ def process_with_browser(url, site, parser_name, parser_params):
         process_article(body, url, site_name, parsed.get("meta", {}))
     else:
         logging.info(f"No body obtained via {parser_name} from {url}.")
-        report_failure = parsed.get("report_failure_fn", null)
+        report_failure = parsed.get("report_failure_fn", None)
         if report_failure:
             report_failure(browser=browser, url=url)
 
