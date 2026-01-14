@@ -334,6 +334,11 @@ jobs:
     secrets: inherit
     with:
       site: kenyanews.go.ke
+  kbc_co_ke:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: kbc.co.ke
   capitalfm_co_ke:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2499,8 +2504,3 @@ jobs:
     secrets: inherit
     with:
       site: jamaica-gleaner.com
-  toronto_ctvnews_ca:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: toronto.ctvnews.ca
