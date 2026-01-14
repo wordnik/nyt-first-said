@@ -83,7 +83,7 @@ def grab_url(url, max_depth=5, opener=None):
     url = make_url_safe(url) 
     logging.info("grabbing " + url)
     try:
-        text = opener.open(url, timeout=10).read()
+        text = opener.open(url, timeout=30).read()
         if b"<title>NY Times Advertisement</title>" in text:
             logging.info("advert retry")
             retry = True
