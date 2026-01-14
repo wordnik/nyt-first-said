@@ -292,7 +292,7 @@ def run_brush(parser_name, parser_params):
         add_summary_line("Could not get any top-level links with " + parser_name + ".")
         # TODO: Look into making this part of the target site definition.
         if feed_requester == browser.get_content:
-            parse_fns["browser_report_failure"](browser, site["domains"][0] + "_links")
+            parse_fns["browser_report_failure"](browser, domain + "_links")
     else:
         process_links(links, parser_name, parser_params)
 
