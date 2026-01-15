@@ -67,7 +67,7 @@ jobs:
       id: extract_branch
 
     - name: Run script
-      run: python simple_scrape.py '${{ inputs.site }}' '${{ steps.extract_branch.outputs.branch }}'
+      run: python simple_scrape.py '${{ inputs.site }}' --branch '${{ steps.extract_branch.outputs.branch }}'
       env:
         S3A: ${{ secrets.S3A }}
         WORDNIK_API_KEY: ${{ secrets.WORDNIK_API_KEY }}
