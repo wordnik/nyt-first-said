@@ -53,6 +53,7 @@ date = today.isoformat()
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument('site_name')
+argparser.add_argument('revisit')
 args = argparser.parse_args()
 
 # Open the site configs.
@@ -199,7 +200,7 @@ def process_article(content, url, site_name, meta):
 def process_links(links, parser_name, parser_params):
     global articles_processed
     for link in links:
-        if was_url_visited(link):
+        if not args.revisit and was_url_visited(link):
             # We count it as processed because we use articles_processed as a
             # measure of success for the run. 0 articles_processed means failure.
             articles_processed += 1
