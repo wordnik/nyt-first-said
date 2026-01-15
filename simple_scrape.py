@@ -53,6 +53,7 @@ date = today.isoformat()
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument('site_name')
+argparser.add_argument('branch')
 argparser.add_argument('revisit')
 args = argparser.parse_args()
 
@@ -60,6 +61,9 @@ args = argparser.parse_args()
 target_sites_text = open("data/target_sites.json", "r").read()
 target_sites = json.loads(target_sites_text)
 site = target_sites.get(args.site_name)
+branch = "master"
+if args.branch:
+    branch = args.branch
 
 if not site:
     print("Could not find site config for " + args.site_name)
@@ -117,7 +121,7 @@ def post(word, article_url, sentence, meta, bucket="nyt-said-sentences"):
             add_summary_line(f"New word: {sentence_obj['word']}. Example: {sentence_obj['text']}")
         else:
             logging.info(f"Uninteresting: {sentence_obj['word']}. Example: {sentence_obj['text']}")
-        obj_path = word + ".json"
+        obj_path = branch + "/" + word + ".json"
         s3.put_object(Bucket=bucket, Key=obj_path,
                       Body=sentence_json.encode(), ContentType="application/json")
         new_words_found += 1
