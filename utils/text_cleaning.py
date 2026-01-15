@@ -53,9 +53,17 @@ def remove_trouble_characters(text):
     for trub in trouble_chars:
         cleaned = regex.sub(trub, "", cleaned)
 
+    # Keep things in the Basic Multilingual Plane, so we don't get fake bold
+    # characters like 𝗱𝗮𝘁𝗮 .
+    cleaned = "".join([c for c in cleaned if is_on_basic_multilingual_plane(c)])
+
     return cleaned
 
 def has_username(text):
     if not text.find("@") == -1:
         return True
     return False
+
+# https://jhale.dev/posts/detecting-basic-multilingual-plane/
+def is_on_basic_multilingual_plane(char):
+    return int(char.encode().hex(), 16) <= 0xFFFF

@@ -14,6 +14,9 @@ class TestCleaningSuite(unittest.TestCase):
         ),
                          "The stores earmarked for closure from February 2 include one in suburban Shanghai, another in Guangzhou, and several more in second-tier Chinese cities such as Nantong, Xuzhou and Harbin, IKEA said in a post on its official WeChat account.",
                          "Non-breaking space removed.")
+    def test_markup(self):
+        self.maxDiff = None
+        self.assertEqual(remove_trouble_characters("𝗱𝗼𝗻'𝘁 be evil"), "' be evil", "Characters from the High Surrogates Plane removed.")
 
     def test_has_username(self):
         self.assertEqual(has_username("@ausmencricket"), True, "@-based username found.")
