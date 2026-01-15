@@ -67,3 +67,11 @@ def has_username(text):
 # https://jhale.dev/posts/detecting-basic-multilingual-plane/
 def is_on_basic_multilingual_plane(char):
     return int(char.encode().hex(), 16) <= 0xFFFF
+
+def prepare_text_for_parsing(text):
+    # u200b is a zero-width space (https://en.wikipedia.org/wiki/Zero-width_space)
+    # that trips up TextBlob.
+    cleaned = text.replace(u"\u200b", " ")
+    # Get TextBlob to parse things on the sides of the emdash as separate words.
+    cleaned = cleaned.replace("—", " — ")
+    return cleaned

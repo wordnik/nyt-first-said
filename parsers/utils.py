@@ -57,11 +57,6 @@ def fill_out_sentence_object(word, sentence, article_url, date, meta, api):
 def remove_ending_punc(s):
     return re.sub(r'([.\?!;:]+)$', '', s)
 
-def clean_text(text):
-    # u200b is a zero-width space (https://en.wikipedia.org/wiki/Zero-width_space)
-    # that trips up TextBlob.
-    return text.replace(u'\u200b', ' ')
-
 def find_pos_for_word(pos_tags, word):
     try:
         pos_tuple = next(x for x in pos_tags if remove_ending_punc(x[0]) == word)
