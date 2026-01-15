@@ -43,4 +43,4 @@ jobs:
     - run: |
         cd js/tools && npm ci
     - name: Run script
-      run: node js/tools/generate-sentences-report.js '${{ inputs.daysBackToGo }}' --branch '${{ steps.extract_branch.outputs.branch }}'
+      run: node js/tools/generate-sentences-report.js '${{ inputs.daysBackToGo }}' '${{ steps.extract_branch.outputs.branch }}'
