@@ -217,7 +217,10 @@ def process_links(links, parser_name, parser_params):
             continue
 
         # unseen article
-        time.sleep(site.get("article_pause_secs", 5))
+        pause_secs = site.get("article_pause_secs", 5)
+        if pause_secs == None:
+            pause_secs = 0
+        time.sleep(pause_secs)
         print("Getting Article {}".format(link))
 
         if parser_name.startswith("browser_") or parser_name.startswith("nyt_browser"):
