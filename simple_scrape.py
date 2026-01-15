@@ -54,7 +54,7 @@ date = today.isoformat()
 argparser = argparse.ArgumentParser()
 argparser.add_argument('site_name')
 argparser.add_argument('branch')
-argparser.add_argument('revisit')
+argparser.add_argument('revisit', required=False)
 args = argparser.parse_args()
 
 # Open the site configs.
