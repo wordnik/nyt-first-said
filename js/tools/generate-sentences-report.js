@@ -15,11 +15,10 @@ var fs = require('fs');
 /* global process */
 
 const header = '|Word|Sentence|Source|Filename|Date|\n|--|--|--|--|--|\n';
-const footer = '|--|--|--|--|--|\n';
 
 if (process.argv.length < 3) {
   console.error(
-    'Usage: GITHUB_STEP_SUMMARY=path-to-file.txt node tools/generate-sentences-report.js <days back to go>'
+    'Usage: GITHUB_STEP_SUMMARY=path-to-file.txt node tools/generate-sentences-report.js <days back to go> [branch]'
   );
   process.exit(1);
 }
@@ -36,16 +35,33 @@ endDate.setSeconds(0);
 var startDate = new Date(endDate);
 startDate.setDate(endDate.getDate() - daysBack);
 
-console.error('Getting sentences from', startDate, 'to', endDate);
+var branch = 'master';
+if (process.argv.length > 3) {
+  branch = process.argv[3];
+}
+console.error(
+  'Getting sentences from',
+  startDate,
+  'to',
+  endDate,
+  'for branch',
+  branch
+);
+
 getObjects({ bucketName: 'nyt-said-sentences' });
 
 async function getObjects({ bucketName }) {
   var objectPages = [];
 
+  var listObjectOpts = { Bucket: bucketName };
+  if (branch) {
+    // listObjectOpts.Prefix = branch;
+  }
+
   try {
     const paginator = paginateListObjectsV2(
       { client: s3Client, pageSize: 100 },
-      { Bucket: bucketName }
+      listObjectOpts
     );
 
     for await (const page of paginator) {
@@ -71,12 +87,6 @@ async function getObjects({ bucketName }) {
     }
 
     objectPages.flat().forEach(reportEntry);
-
-    if (summaryPath) {
-      fs.appendFileSync(summaryPath, footer, { encoding: 'utf8' });
-    } else {
-      process.stdout.write(footer);
-    }
   } catch (caught) {
     if (
       caught instanceof S3ServiceException &&
