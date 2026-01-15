@@ -28,6 +28,8 @@ const summaryPath = process.env.GITHUB_STEP_SUMMARY;
 const daysBack = +process.argv[2];
 
 var endDate = new Date();
+// We want to include entries from today.
+endDate.setDate(endDate.getDate() + 1);
 endDate.setHours(0);
 endDate.setMinutes(0);
 endDate.setSeconds(0);
@@ -55,7 +57,8 @@ async function getObjects({ bucketName }) {
 
   var listObjectOpts = { Bucket: bucketName };
   if (branch) {
-    // listObjectOpts.Prefix = branch;
+    listObjectOpts.Prefix = branch + '/';
+    listObjectOpts.Delimiter = '/';
   }
 
   try {
@@ -63,14 +66,16 @@ async function getObjects({ bucketName }) {
       { client: s3Client, pageSize: 100 },
       listObjectOpts
     );
-
     for await (const page of paginator) {
-      let contentsInRange = page.Contents.filter((c) => {
+      if (!page.Contents) {
+        continue;
+      }
+      let contentsInRange = page?.Contents?.filter((c) => {
         let contentsDate = new Date(c.LastModified);
         return contentsDate >= startDate && contentsDate < endDate;
       });
       objectPages.push(
-        contentsInRange.map((o) => ({
+        contentsInRange?.map((o) => ({
           key: o.Key,
           date: new Date(o.LastModified),
         }))
@@ -95,12 +100,10 @@ async function getObjects({ bucketName }) {
       console.error(
         `Error from S3 while listing objects for "${bucketName}". The bucket doesn't exist.`
       );
-    } else if (caught instanceof S3ServiceException) {
+    } else {
       console.error(
         `Error from S3 while listing objects for "${bucketName}".  ${caught.name}: ${caught.message}`
       );
-    } else {
-      throw caught;
     }
   }
 }
