@@ -1,5 +1,5 @@
 import unittest
-from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username
+from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_parsing
 
 class TestCleaningSuite(unittest.TestCase):
     def test_punctuation(self):
@@ -14,11 +14,20 @@ class TestCleaningSuite(unittest.TestCase):
         ),
                          "The stores earmarked for closure from February 2 include one in suburban Shanghai, another in Guangzhou, and several more in second-tier Chinese cities such as Nantong, Xuzhou and Harbin, IKEA said in a post on its official WeChat account.",
                          "Non-breaking space removed.")
+    def test_markup(self):
+        self.maxDiff = None
+        self.assertEqual(remove_trouble_characters("𝗱𝗼𝗻'𝘁 be evil"), "' be evil", "Characters from the High Surrogates Plane removed.")
+        self.assertEqual(remove_trouble_characters("Cansino missed two crucial chances late-first a layup"), "Cansino missed two crucial chances late-first a layup", "Hyphen left alone.")
 
     def test_has_username(self):
         self.assertEqual(has_username("@ausmencricket"), True, "@-based username found.")
         self.assertEqual(has_username("cricket"), False, "Normal word identified.")
         self.assertEqual(has_username("ab@normal.com"), True, "Email found.")
+
+    def test_parse_prep(self):
+        self.maxDiff = None
+        self.assertEqual(prepare_text_for_parsing("Cansino missed two crucial chances late—first a layup"), "Cansino missed two crucial chances late — first a layup", "Emdash replaced")
+        self.assertEqual(prepare_text_for_parsing("election‑ready"), "election-ready", "Nonbreaking hyphen replaced")
 
 if __name__ == '__main__':
     unittest.main()

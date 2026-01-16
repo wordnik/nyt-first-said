@@ -88,6 +88,7 @@ var jsonFieldNames = fieldsThatShouldRenderAsJSON.map((obj) => obj.field);
 var dateFields = [];
 
 var selectFields = ['environment', 'form', 'purpose', 'releaseState'];
+var numFields = ['article_pause_secs'];
 var fixedValuesForFields = {};
 
 function renderSites({ siteData }) {
@@ -154,6 +155,8 @@ function appendControlForValue(container, field, valueType) {
       input.attr('type', 'checkbox');
     } else if (dateFields.indexOf(field) !== -1) {
       input.attr('type', 'date');
+    } else if (numFields.includes(field)) {
+      input.attr('data-oftype', 'int');
     } else {
       input.attr('type', 'text');
     }

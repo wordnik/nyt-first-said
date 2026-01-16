@@ -22,9 +22,9 @@ from utils.headless import HeadlessBrowser
 from utils.errors import ConfigError
 from utils.uninteresting_words import get_uninteresting_count_for_word, increment_uninteresting_count_for_word
 from utils.url_visits import log_url_visit, was_url_visited
-from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username
+from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_parsing
 from parsers.api_check import does_example_exist
-from parsers.utils import fill_out_sentence_object, clean_text, grab_url, get_feed_urls, split_words_by_unicode_chars
+from parsers.utils import fill_out_sentence_object, grab_url, get_feed_urls, split_words_by_unicode_chars
 from parsers.parse_fns import parse_fns
 from parsers.archive_bounce import download_via_archive
 
@@ -53,12 +53,17 @@ date = today.isoformat()
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument('site_name')
+argparser.add_argument('--branch')
+argparser.add_argument('--revisit')
 args = argparser.parse_args()
 
 # Open the site configs.
 target_sites_text = open("data/target_sites.json", "r").read()
 target_sites = json.loads(target_sites_text)
 site = target_sites.get(args.site_name)
+branch = "master"
+if args.branch:
+    branch = args.branch
 
 if not site:
     print("Could not find site config for " + args.site_name)
@@ -116,7 +121,7 @@ def post(word, article_url, sentence, meta, bucket="nyt-said-sentences"):
             add_summary_line(f"New word: {sentence_obj['word']}. Example: {sentence_obj['text']}")
         else:
             logging.info(f"Uninteresting: {sentence_obj['word']}. Example: {sentence_obj['text']}")
-        obj_path = word + ".json"
+        obj_path = branch + "/" + word + ".json"
         s3.put_object(Bucket=bucket, Key=obj_path,
                       Body=sentence_json.encode(), ContentType="application/json")
         new_words_found += 1
@@ -139,7 +144,7 @@ def process_article(content, url, site_name, meta):
     # record = open("records/"+url.replace("/", "_")+".txt", "w+")
     record.write("\nARTICLE:" + url)
     print("Processing Article")
-    text = clean_text(str(content))
+    text = prepare_text_for_parsing(str(content))
     sentence_blob = TextBlob(text)
     for sentence in sentence_blob.sentences:
         if has_username(str(sentence)):
@@ -199,7 +204,7 @@ def process_article(content, url, site_name, meta):
 def process_links(links, parser_name, parser_params):
     global articles_processed
     for link in links:
-        if was_url_visited(link):
+        if not args.revisit and was_url_visited(link):
             # We count it as processed because we use articles_processed as a
             # measure of success for the run. 0 articles_processed means failure.
             articles_processed += 1
@@ -217,7 +222,10 @@ def process_links(links, parser_name, parser_params):
             continue
 
         # unseen article
-        time.sleep(site.get("article_pause_secs", 5))
+        pause_secs = site.get("article_pause_secs", 5)
+        if pause_secs == None:
+            pause_secs = 0
+        time.sleep(pause_secs)
         print("Getting Article {}".format(link))
 
         if parser_name.startswith("browser_") or parser_name.startswith("nyt_browser"):
@@ -265,7 +273,7 @@ def process_with_browser(url, site, parser_name, parser_params):
         process_article(body, url, site_name, parsed.get("meta", {}))
     else:
         logging.info(f"No body obtained via {parser_name} from {url}.")
-        report_failure = parsed.get("report_failure_fn", null)
+        report_failure = parsed.get("report_failure_fn", None)
         if report_failure:
             report_failure(browser=browser, url=url)
 
@@ -280,12 +288,19 @@ def run_brush(parser_name, parser_params):
     if parser_name.startswith("browser_"):
         feed_requester = browser.get_content
     
-    links = get_feed_urls(site["feeder_pages"], site["domains"][0], feed_requester)
+    domain = ""
+    domains = site["domains"]
+    if len(domains) > 0:
+        domain = domains[0]
+    else:
+        domain = site["feeder_pages"][0].replace("https://", "")
+
+    links = get_feed_urls(site["feeder_pages"], domain, feed_requester)
     if len(links) < 1:
         add_summary_line("Could not get any top-level links with " + parser_name + ".")
         # TODO: Look into making this part of the target site definition.
         if feed_requester == browser.get_content:
-            parse_fns["browser_report_failure"](browser, site["domains"][0] + "_links")
+            parse_fns["browser_report_failure"](browser, domain + "_links")
     else:
         process_links(links, parser_name, parser_params)
 
