@@ -74,4 +74,5 @@ def prepare_text_for_parsing(text):
     cleaned = text.replace(u"\u200b", " ")
     # Get TextBlob to parse things on the sides of the emdash as separate words.
     cleaned = cleaned.replace("—", " — ")
+    cleaned = cleaned.replace("‑", "-")
     return cleaned

@@ -27,6 +27,7 @@ class TestCleaningSuite(unittest.TestCase):
     def test_parse_prep(self):
         self.maxDiff = None
         self.assertEqual(prepare_text_for_parsing("Cansino missed two crucial chances late—first a layup"), "Cansino missed two crucial chances late — first a layup", "Emdash replaced")
+        self.assertEqual(prepare_text_for_parsing("election‑ready"), "election-ready", "Nonbreaking hyphen replaced")
 
 if __name__ == '__main__':
     unittest.main()
