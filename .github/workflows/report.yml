@@ -31,7 +31,16 @@ jobs:
         node-version: '20.x'
         cache: 'npm'
         cache-dependency-path: 'js/tools/package-lock.json'
+
+    # Source - https://stackoverflow.com/a
+    # Posted by aborilov, modified by community. See post 'Timeline' for change history
+    # Retrieved 2026-01-15, License - CC BY-SA 4.0
+    - name: Extract branch name
+      shell: bash
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      id: extract_branch
+
     - run: |
         cd js/tools && npm ci
     - name: Run script
-      run: node js/tools/generate-sentences-report.js '${{ inputs.daysBackToGo }}'
+      run: node js/tools/generate-sentences-report.js '${{ inputs.daysBackToGo }}' '${{ steps.extract_branch.outputs.branch }}'

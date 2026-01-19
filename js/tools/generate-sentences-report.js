@@ -15,11 +15,10 @@ var fs = require('fs');
 /* global process */
 
 const header = '|Word|Sentence|Source|Filename|Date|\n|--|--|--|--|--|\n';
-const footer = '|--|--|--|--|--|\n';
 
 if (process.argv.length < 3) {
   console.error(
-    'Usage: GITHUB_STEP_SUMMARY=path-to-file.txt node tools/generate-sentences-report.js <days back to go>'
+    'Usage: GITHUB_STEP_SUMMARY=path-to-file.txt node tools/generate-sentences-report.js <days back to go> [branch]'
   );
   process.exit(1);
 }
@@ -29,6 +28,8 @@ const summaryPath = process.env.GITHUB_STEP_SUMMARY;
 const daysBack = +process.argv[2];
 
 var endDate = new Date();
+// We want to include entries from today.
+endDate.setDate(endDate.getDate() + 1);
 endDate.setHours(0);
 endDate.setMinutes(0);
 endDate.setSeconds(0);
@@ -36,25 +37,45 @@ endDate.setSeconds(0);
 var startDate = new Date(endDate);
 startDate.setDate(endDate.getDate() - daysBack);
 
-console.error('Getting sentences from', startDate, 'to', endDate);
+var branch = 'master';
+if (process.argv.length > 3) {
+  branch = process.argv[3];
+}
+console.error(
+  'Getting sentences from',
+  startDate,
+  'to',
+  endDate,
+  'for branch',
+  branch
+);
+
 getObjects({ bucketName: 'nyt-said-sentences' });
 
 async function getObjects({ bucketName }) {
   var objectPages = [];
 
+  var listObjectOpts = { Bucket: bucketName };
+  if (branch) {
+    listObjectOpts.Prefix = branch + '/';
+    listObjectOpts.Delimiter = '/';
+  }
+
   try {
     const paginator = paginateListObjectsV2(
       { client: s3Client, pageSize: 100 },
-      { Bucket: bucketName }
+      listObjectOpts
     );
-
     for await (const page of paginator) {
-      let contentsInRange = page.Contents.filter((c) => {
+      if (!page.Contents) {
+        continue;
+      }
+      let contentsInRange = page?.Contents?.filter((c) => {
         let contentsDate = new Date(c.LastModified);
         return contentsDate >= startDate && contentsDate < endDate;
       });
       objectPages.push(
-        contentsInRange.map((o) => ({
+        contentsInRange?.map((o) => ({
           key: o.Key,
           date: new Date(o.LastModified),
         }))
@@ -71,12 +92,6 @@ async function getObjects({ bucketName }) {
     }
 
     objectPages.flat().forEach(reportEntry);
-
-    if (summaryPath) {
-      fs.appendFileSync(summaryPath, footer, { encoding: 'utf8' });
-    } else {
-      process.stdout.write(footer);
-    }
   } catch (caught) {
     if (
       caught instanceof S3ServiceException &&
@@ -85,12 +100,10 @@ async function getObjects({ bucketName }) {
       console.error(
         `Error from S3 while listing objects for "${bucketName}". The bucket doesn't exist.`
       );
-    } else if (caught instanceof S3ServiceException) {
+    } else {
       console.error(
         `Error from S3 while listing objects for "${bucketName}".  ${caught.name}: ${caught.message}`
       );
-    } else {
-      throw caught;
     }
   }
 }

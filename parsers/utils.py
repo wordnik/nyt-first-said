@@ -57,11 +57,6 @@ def fill_out_sentence_object(word, sentence, article_url, date, meta, api):
 def remove_ending_punc(s):
     return re.sub(r'([.\?!;:]+)$', '', s)
 
-def clean_text(text):
-    # u200b is a zero-width space (https://en.wikipedia.org/wiki/Zero-width_space)
-    # that trips up TextBlob.
-    return text.replace(u'\u200b', ' ')
-
 def find_pos_for_word(pos_tags, word):
     try:
         pos_tuple = next(x for x in pos_tags if remove_ending_punc(x[0]) == word)
@@ -83,7 +78,7 @@ def grab_url(url, max_depth=5, opener=None):
     url = make_url_safe(url) 
     logging.info("grabbing " + url)
     try:
-        text = opener.open(url, timeout=10).read()
+        text = opener.open(url, timeout=30).read()
         if b"<title>NY Times Advertisement</title>" in text:
             logging.info("advert retry")
             retry = True
