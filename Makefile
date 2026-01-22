@@ -1,3 +1,4 @@
+TODAY=(date -24hours)
 # Install helpers
 
 install-textblob:
@@ -57,3 +58,7 @@ update-working-sites:
 
 get-failure-screenshots:
 	aws s3 sync s3://nyt-said-failure-reports/ meta/failure-reports/
+
+list-files-dropped-in-last-day:
+	aws s3api list-objects-v2 --bucket nyt-said-sentences \
+	  --query "Contents[?LastModified>='$(TODAY)T00:00:00+0'].Key"
