@@ -7,13 +7,16 @@ class TestCleaningSuite(unittest.TestCase):
 
     def test_clean_trouble_chars(self):
         self.maxDiff = None
-        self.assertEqual(remove_trouble_characters("\u200Dhas\u200D"), "has", "Zero-width joiner removed.")
-        self.assertEqual(remove_trouble_characters("to\u00A0"), "to", "Non-breaking space removed.")
+        self.assertEqual(remove_trouble_characters("\u200Dhas\u200D"), " has ", "Zero-width joiner removed.")
+        self.assertEqual(remove_trouble_characters("to\u00A0"), "to ", "Non-breaking space removed.")
         self.assertEqual(remove_trouble_characters(
             "The stores earmarked for \xe2\x80\x8bclosure from February 2 include one in suburban Shanghai, another in Guangzhou, and \xe2\x81\xa0several more in second-tier Chinese cities such as Nantong, Xuzhou and Harbin, IKEA said in a post on its official WeChat account."
         ),
                          "The stores earmarked for closure from February 2 include one in suburban Shanghai, another in Guangzhou, and several more in second-tier Chinese cities such as Nantong, Xuzhou and Harbin, IKEA said in a post on its official WeChat account.",
                          "Non-breaking space removed.")
+        self.assertEqual(remove_trouble_characters("The 43-year-old defendant, Davidâ�¯Feeney fromâ�¯Ballymeeney, Dromore West,â�¯Co Sligo, had previously pleaded guilty to being intoxicated, engaging in threatening,â�¯abusiveâ�¯and insulting words or behavior and to assault causing harm to a female garda at the national ploughing championshipsâ�¯at Ratheniska on 21 August 2023."),
+        "The 43-year-old defendant, David Feeney from Ballymeeney, Dromore West, Co Sligo, had previously pleaded guilty to being intoxicated, engaging in threatening, abusive and insulting words or behavior and to assault causing harm to a female garda at the national ploughing championships at Ratheniska on 21 August 2023.")
+
     def test_markup(self):
         self.maxDiff = None
         self.assertEqual(remove_trouble_characters("𝗱𝗼𝗻'𝘁 be evil"), "' be evil", "Characters from the High Surrogates Plane removed.")

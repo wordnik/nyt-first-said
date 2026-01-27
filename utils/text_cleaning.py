@@ -33,7 +33,8 @@ trouble_chars = [
     r"\xef\xbb\xbf",
     r"\xa0",
     r"\u200D",
-    r"\u200D"
+    r"\u200D",
+    r"¯"
     ]
 
 def remove_punctuation(text):
@@ -51,11 +52,13 @@ def remove_trouble_characters(text):
     # Non-breaking space
     # cleaned = regex.sub(r"\u00A0", "", cleaned)
     for trub in trouble_chars:
-        cleaned = regex.sub(trub, "", cleaned)
+        cleaned = regex.sub(trub, " ", cleaned)
 
     # Keep things in the Basic Multilingual Plane, so we don't get fake bold
-    # characters like 𝗱𝗮𝘁𝗮 .
-    cleaned = "".join([c for c in cleaned if is_on_basic_multilingual_plane(c)])
+    # characters like 𝗱𝗮𝘁𝗮 and further restrict it to Latin character blocks.
+    cleaned = "".join([c for c in cleaned if is_in_latin_block(c)])
+    # Remove double+ spaces.
+    cleaned = regex.sub(r"\s+", " ", cleaned)
 
     return cleaned
 
@@ -64,9 +67,12 @@ def has_username(text):
         return True
     return False
 
-# https://jhale.dev/posts/detecting-basic-multilingual-plane/
-def is_on_basic_multilingual_plane(char):
-    return int(char.encode().hex(), 16) <= 0xFFFF
+# https://unicodeplus.com/block
+# https://jhale.dev/posts/detecting-basic-multilingual-plane/ 0000 - FFFF
+# We want the first five blocks, which contain characters that can be found
+# in English.
+def is_in_latin_block(char):
+    return int(char.encode().hex(), 16) <= 0x02AF
 
 def prepare_text_for_parsing(text):
     # u200b is a zero-width space (https://en.wikipedia.org/wiki/Zero-width_space)
