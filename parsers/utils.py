@@ -131,7 +131,7 @@ def get_feed_urls(feeder_pages, domain, requester=grab_url):
     return all_urls
 
 # This is to cover word delimiters not covered by TextBlob.
-def split_words_by_unicode_chars(s):
-    # Unicode symbol range https://en.wikipedia.org/wiki/List_of_Unicode_characters#Unicode_symbols
-    return [x for x in re.split('[\u2013-\u204a]', s) if x != '']
+def split_words_by_unicode_punctuation(s):
+    # https://unicodeplus.com/block/2000
+    return [x for x in re.split('[\u2000-\u206f]', s) if x != '']
 

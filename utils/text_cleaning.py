@@ -75,7 +75,7 @@ def is_in_latin_block(char):
     code_point = ord(char)
     return code_point <= 0x02AF or (code_point > 0x1FFF and code_point <= 0x206F)
 
-def prepare_text_for_parsing(text):
+def prepare_text_for_textblob(text):
     # u200b is a zero-width space (https://en.wikipedia.org/wiki/Zero-width_space)
     # that trips up TextBlob.
     cleaned = text.replace(u"\u200b", " ")

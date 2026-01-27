@@ -1,5 +1,5 @@
 import unittest
-from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_parsing
+from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_textblob
 
 class TestCleaningSuite(unittest.TestCase):
     def test_punctuation(self):
@@ -31,8 +31,8 @@ class TestCleaningSuite(unittest.TestCase):
 
     def test_parse_prep(self):
         self.maxDiff = None
-        self.assertEqual(prepare_text_for_parsing("Cansino missed two crucial chances late—first a layup"), "Cansino missed two crucial chances late — first a layup", "Emdash replaced")
-        self.assertEqual(prepare_text_for_parsing("election‑ready"), "election-ready", "Nonbreaking hyphen replaced")
+        self.assertEqual(prepare_text_for_textblob("Cansino missed two crucial chances late—first a layup"), "Cansino missed two crucial chances late — first a layup", "Emdash replaced")
+        self.assertEqual(prepare_text_for_textblob("election‑ready"), "election-ready", "Nonbreaking hyphen replaced")
 
 if __name__ == '__main__':
     unittest.main()
