@@ -1,4 +1,5 @@
 import regex
+from unicodedata import normalize
 
 trouble_chars = [
     r"\t",
@@ -68,11 +69,11 @@ def has_username(text):
     return False
 
 # https://unicodeplus.com/block
-# https://jhale.dev/posts/detecting-basic-multilingual-plane/ 0000 - FFFF
 # We want the first five blocks, which contain characters that can be found
-# in English.
+# in English, plus punctuation.
 def is_in_latin_block(char):
-    return int(char.encode().hex(), 16) <= 0x02AF
+    code_point = ord(char)
+    return code_point <= 0x02AF or (code_point > 0x1FFF and code_point <= 0x206F)
 
 def prepare_text_for_parsing(text):
     # u200b is a zero-width space (https://en.wikipedia.org/wiki/Zero-width_space)
