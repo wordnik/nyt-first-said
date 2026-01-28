@@ -82,4 +82,6 @@ def prepare_text_for_textblob(text):
     # Get TextBlob to parse things on the sides of the emdash as separate words.
     cleaned = cleaned.replace("—", " — ")
     cleaned = cleaned.replace("‑", "-")
+    # Zero-width nonbreaking space
+    cleaned = cleaned.replace("﻿", "")
     return cleaned

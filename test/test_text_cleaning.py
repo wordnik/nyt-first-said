@@ -33,6 +33,7 @@ class TestCleaningSuite(unittest.TestCase):
         self.maxDiff = None
         self.assertEqual(prepare_text_for_textblob("Cansino missed two crucial chances late—first a layup"), "Cansino missed two crucial chances late — first a layup", "Emdash replaced")
         self.assertEqual(prepare_text_for_textblob("election‑ready"), "election-ready", "Nonbreaking hyphen replaced")
+        self.assertEqual(prepare_text_for_textblob("very angry'﻿"), "very angry'", "Removed zero-width nonbreaking space.")
 
 if __name__ == '__main__':
     unittest.main()
