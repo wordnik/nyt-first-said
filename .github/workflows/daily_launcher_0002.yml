@@ -1394,6 +1394,11 @@ jobs:
     secrets: inherit
     with:
       site: newsfilecorp_com
+  toronto_star:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: toronto_star
   the_globe_and_mail:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2379,6 +2384,11 @@ jobs:
     secrets: inherit
     with:
       site: the_real_news_network
+  popculture_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: popculture_com
   honey_nine_com_au:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2414,6 +2424,11 @@ jobs:
     secrets: inherit
     with:
       site: nationalpost_com
+  lfpress_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: lfpress_com
   ottawasun_com:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2489,18 +2504,3 @@ jobs:
     secrets: inherit
     with:
       site: brantfordexpositor_ca
-  nugget_ca:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: nugget_ca
-  calgaryherald_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: calgaryherald_com
-  calgarysun_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: calgarysun_com
