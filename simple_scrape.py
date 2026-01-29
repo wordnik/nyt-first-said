@@ -22,9 +22,9 @@ from utils.headless import HeadlessBrowser
 from utils.errors import ConfigError
 from utils.uninteresting_words import get_uninteresting_count_for_word, increment_uninteresting_count_for_word
 from utils.url_visits import log_url_visit, was_url_visited
-from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_parsing
+from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_textblob
 from parsers.api_check import does_example_exist
-from parsers.utils import fill_out_sentence_object, grab_url, get_feed_urls, split_words_by_unicode_chars
+from parsers.utils import fill_out_sentence_object, grab_url, get_feed_urls, split_words_by_unicode_punctuation
 from parsers.parse_fns import parse_fns
 from parsers.archive_bounce import download_via_archive
 
@@ -144,7 +144,7 @@ def process_article(content, url, site_name, meta):
     # record = open("records/"+url.replace("/", "_")+".txt", "w+")
     record.write("\nARTICLE:" + url)
     print("Processing Article")
-    text = prepare_text_for_parsing(str(content))
+    text = prepare_text_for_textblob(str(content))
     sentence_blob = TextBlob(text)
     for sentence in sentence_blob.sentences:
         if has_username(str(sentence)):
@@ -154,7 +154,7 @@ def process_article(content, url, site_name, meta):
 
         for token in sentence.tokens:
             # TODO: New inner loop with word split among tokens.
-            words = split_words_by_unicode_chars(
+            words = split_words_by_unicode_punctuation(
                     remove_trouble_characters(remove_punctuation(token.string))
             )
             for word in words:
