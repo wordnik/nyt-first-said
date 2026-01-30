@@ -108,3 +108,9 @@ The definition for the runner action is in `brush.yml`. It takes an input named 
 5. When the action's runs are over, the results of the runs (`articles_processed` and `succeeding_parser_name`) should be in the `nyt-said-site-results` DynamoDB table. To use those to update the settings, run `make update-working-sites` to update `target-sites.json`, `daily_launcher.yml`, and `unproven_sites_launcher.yml` and commit them to git.
 
 6. Commit the changes, then push to GitHub.
+
+# Reports
+
+There is a [daily job](https://github.com/wordnik/nyt-first-said/actions/workflows/report_launcher.yml) that generates reports of new words found that day. It creates a big markdown table, which is good for skimming.
+
+If you want to go through results one-by-one, run `node js/tools/generate-html-sentences-report.js 1 > report.html`, then open report.html in a browser. Use n and p keys to page through the sentences and use f to put an entry in a flagged list that you can examine later. If you want the new words report for a particular branch, run `node js/tools/generate-html-sentences-report.js 1 branch-name > report.html`.
