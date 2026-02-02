@@ -22,6 +22,8 @@ def p_tags_to_body(p_tags):
         if type(node) is NavigableString:
             body_strings.append(node)
         else:
+            if node.name == "script":
+                continue
             if node.name == "br":
                 body_strings.append(" \n ")
             else:
@@ -59,6 +61,7 @@ def article_based(html, get_additional_p_tags = None):
 
         logging.info("Article found in html.")
         p_tags = list(article.find_all("p"))
+
     except Exception as e:
         logging.info(f"Error {e} while parsing html: {html}")
         return
