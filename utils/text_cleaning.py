@@ -89,3 +89,16 @@ def prepare_text_for_textblob(text):
     cleaned = cleaned.replace("﻿", "")
 
     return cleaned
+
+def normalize_sentence(s):
+    if len(s) < 2:
+        return s
+    if s[0] == '“' and s[-1] != '”':
+        return s + '”'
+    if s[0] != '“' and s[-1] == '”':
+        return '“' + s
+    if s[0] == '"' and s[-1] != '"':
+        return s + '"'
+    if s[0] != '"' and s[-1] == '"':
+        return '"' + s
+    return s

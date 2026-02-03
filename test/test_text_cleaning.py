@@ -1,5 +1,5 @@
 import unittest
-from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_textblob
+from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_textblob, normalize_sentence
 
 class TestCleaningSuite(unittest.TestCase):
     def test_punctuation(self):
@@ -36,6 +36,18 @@ class TestCleaningSuite(unittest.TestCase):
         self.assertEqual(prepare_text_for_textblob("Cansino missed two crucial chances late—first a layup"), "Cansino missed two crucial chances late — first a layup", "Emdash replaced")
         self.assertEqual(prepare_text_for_textblob("election‑ready"), "election-ready", "Nonbreaking hyphen replaced")
         self.assertEqual(prepare_text_for_textblob("very angry'﻿"), "very angry'", "Removed zero-width nonbreaking space.")
+
+    def test_normalize_sentence(self):
+        self.assertEqual(
+                normalize_sentence('“Using the same beans as our other stores, we explore new flavours, aromas and textures through hand-brew methods, including Norwegian ‘kokikaffe’ and other special preparations.'),
+                '“Using the same beans as our other stores, we explore new flavours, aromas and textures through hand-brew methods, including Norwegian ‘kokikaffe’ and other special preparations.”',
+                "Quotes are balanced."
+                )
+        self.assertEqual(
+                normalize_sentence('This location allows us to offer a deeper, more immersive coffee experience in a calm, intimate setting.”'),
+                '“This location allows us to offer a deeper, more immersive coffee experience in a calm, intimate setting.”',
+                "Quotes are balanced."
+                )
 
 if __name__ == '__main__':
     unittest.main()
