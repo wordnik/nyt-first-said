@@ -1,5 +1,5 @@
 import unittest
-from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_textblob
+from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_textblob, normalize_sentence
 
 class TestCleaningSuite(unittest.TestCase):
     def test_punctuation(self):
@@ -17,7 +17,9 @@ class TestCleaningSuite(unittest.TestCase):
         self.assertEqual(remove_trouble_characters("The 43-year-old defendant, Davidâ�¯Feeney fromâ�¯Ballymeeney, Dromore West,â�¯Co Sligo, had previously pleaded guilty to being intoxicated, engaging in threatening,â�¯abusiveâ�¯and insulting words or behavior and to assault causing harm to a female garda at the national ploughing championshipsâ�¯at Ratheniska on 21 August 2023."),
         "The 43-year-old defendant, Davidâ Feeney fromâ Ballymeeney, Dromore West,â Co Sligo, had previously pleaded guilty to being intoxicated, engaging in threatening,â abusiveâ and insulting words or behavior and to assault causing harm to a female garda at the national ploughing championshipsâ at Ratheniska on 21 August 2023.")
 
-        self.assertEqual(remove_trouble_characters("I would say to them, accountability…anything that I did, I took responsibility for."), "I would say to them, accountability…anything that I did, I took responsibility for.", "Should not remove ellipsis.") 
+        self.assertEqual(remove_trouble_characters("I would say to them, accountability…anything that I did, I took responsibility for."), "I would say to them, accountability…anything that I did, I took responsibility for.", "Should not remove ellipsis.")
+
+        self.assertEqual(remove_trouble_characters("actu­al­ly"), "actually", "Removes the soft hyphen.")
 
     def test_markup(self):
         self.maxDiff = None
@@ -31,7 +33,7 @@ class TestCleaningSuite(unittest.TestCase):
 
     def test_parse_prep(self):
         self.maxDiff = None
-        self.assertEqual(prepare_text_for_textblob("Cansino missed two crucial chances late—first a layup"), "Cansino missed two crucial chances late — first a layup", "Emdash replaced")
+        self.assertEqual(prepare_text_for_textblob("Cansino missed two crucial chances late—first a layup"), "Cansino missed two crucial chances late - first a layup", "Emdash replaced")
         self.assertEqual(prepare_text_for_textblob("election‑ready"), "election-ready", "Nonbreaking hyphen replaced")
         self.assertEqual(prepare_text_for_textblob("very angry'﻿"), "very angry'", "Removed zero-width nonbreaking space.")
 

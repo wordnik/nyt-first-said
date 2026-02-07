@@ -23,6 +23,7 @@ from utils.errors import ConfigError
 from utils.uninteresting_words import get_uninteresting_count_for_word, increment_uninteresting_count_for_word
 from utils.url_visits import log_url_visit, was_url_visited
 from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_textblob
+from utils.sentence_filters import has_balanced_punctuation
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, grab_url, get_feed_urls, split_words_by_unicode_punctuation
 from parsers.parse_fns import parse_fns
@@ -78,7 +79,7 @@ def humanize_url(article):
 # Returns whether or not this example exists (as a 0 or 1). Even if the method
 # ends up posting the word, it may not make it all the way through the example
 # pipeline, so we return False in that case.
-def check_word(word, article_url, sentence, meta):
+def check_and_post_word(word, article_url, sentence, meta):
     time.sleep(1)
     print("API Checking Word: {}".format(word))
     
@@ -152,6 +153,9 @@ def process_article(content, url, site_name, meta):
             # "@" and "word" tokens, so we'll avoid this situation.
             continue
 
+        if not has_balanced_punctuation(str(sentence)):
+            continue
+
         for token in sentence.tokens:
             # TODO: New inner loop with word split among tokens.
             words = split_words_by_unicode_punctuation(
@@ -184,10 +188,11 @@ def process_article(content, url, site_name, meta):
                     else:
                         # not in cache
                         # NLTK part of speech tag list: https://stackoverflow.com/a/38264311/87798
+                        post_result = check_and_post_word(
+                            word, url, sentence.string, meta
+                        )
                         # Multiply by 1 to cast the boolean into a number.
-                        r.set(
-                            wkey,
-                            1 * check_word(word, url, sentence.string, meta))
+                        r.set(wkey, 1 * post_result)
 
     if len(uninteresting_sentence_params) > 0:
         sentence_params = random.sample(uninteresting_sentence_params, 1)[0]

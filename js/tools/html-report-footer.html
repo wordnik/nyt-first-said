@@ -1,0 +1,78 @@
+;
+
+var sentenceIndex = 0;
+
+function onNext() {
+  sentenceIndex += 1;
+  if (sentenceIndex >= examples.length) {
+    sentenceIndex = 0;
+  }
+  renderSentenceObj(sentenceIndex);
+}
+
+function onPrev() {
+  sentenceIndex -= 1;
+  if (sentenceIndex < 0) {
+    sentenceIndex = examples.length - 1;
+  }
+  renderSentenceObj(sentenceIndex);
+}
+
+function onFlag() {
+  var sentenceObj = examples[sentenceIndex];
+  sentenceObj.flagged = true;
+  renderFlagged();
+}
+
+function onKeyUp(e) {
+  if (e.which === 78) { // n
+    onNext();
+  } else if (e.which === 80) { // p
+    onPrev();
+  } else if (e.which === 70) { // f
+    onFlag();
+  }
+}
+
+function renderSentenceObj(index, parentSelector = '.current-sentence') {
+  var sentenceObj = examples[index];
+  var currentSentenceEl = document.querySelector(parentSelector);
+  renderSentenceObjToEl(sentenceObj, currentSentenceEl);
+  currentSentenceEl.querySelector('.progress').textContent = (index + 1) + '/' + examples.length
+}
+
+function renderSentenceObjToEl(sentenceObj, currentSentenceEl) {
+  currentSentenceEl.querySelector('.key').textContent = sentenceObj.key;
+  currentSentenceEl.querySelector('.date').textContent = new Date(sentenceObj.date).toLocaleString();
+  currentSentenceEl.querySelector('.word').textContent = sentenceObj.word;
+  currentSentenceEl.querySelector('.sentence').textContent = sentenceObj.sentence;
+  currentSentenceEl.querySelector('.source a').setAttribute('href', sentenceObj.source);
+  currentSentenceEl.querySelector('.source a').textContent = sentenceObj.source;
+}
+
+function renderFlagged() {
+  var flaggedRoot = document.querySelector('.flagged-sentences');
+  flaggedRoot.innerHTML = '';
+  var flaggedExamples = examples.filter(e => e.flagged);
+  for (let example of flaggedExamples) {
+    var liEl = document.createElement('li');
+    liEl.innerHTML = `<div><b>Word:</b> <span class="word"></span></div>
+  <div><b>Sentence:</b> <span class="sentence"></span></div>
+  <div><b>Date:</b> <span class="date"></span></div>
+  <div><b>Source:</b> <span class="source"><a target="_blank"></a></span></div>
+  <div><b>Key:</b> <span class="key"></span></div>`;
+    flaggedRoot.appendChild(liEl);
+    renderSentenceObjToEl(example, liEl);
+  }
+}
+
+renderSentenceObj(sentenceIndex);
+renderFlagged();
+
+document.querySelector('.next-button').addEventListener('click', onNext);
+document.querySelector('.prev-button').addEventListener('click', onPrev);
+document.querySelector('.flag-button').addEventListener('click', onFlag);
+document.addEventListener('keyup', onKeyUp);
+</script>
+</body>
+<

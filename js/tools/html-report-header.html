@@ -1,0 +1,55 @@
+<html>
+<body>
+<style>
+body {
+  font-family: Georgia;
+  font-size: 24px;
+  width: 100%;
+}
+
+.current-sentence {
+  max-width: 40em;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 30em;
+}
+
+.current-sentence div {
+  margin-bottom: 0.5em;
+}
+
+.word {
+  font-size: 48px;
+}
+
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+button {
+  font-size: 30px;
+}
+</style>
+
+<div class="current-sentence">
+  <div><span class="progress"></span></div>
+  <div><b>Word:</b> <span class="word"></span></div>
+  <div><b>Sentence:</b> <span class="sentence"></span></div>
+  <div><b>Date:</b> <span class="date"></span></div>
+  <div><b>Source:</b> <span class="source"><a target="_blank"></a></span></div>
+  <div><b>Key:</b> <span class="key"></span></div>
+  <button class="flag-button">Flag</button>
+</div>
+
+<div class="centered">
+  <button class="prev-button">Previous</button>
+  <button class="next-button">Next</button>
+</div>
+
+<ol class="flagged-sentences">
+</ol>
+
+<script>
+var examples =

@@ -2349,6 +2349,11 @@ jobs:
     secrets: inherit
     with:
       site: wral_com
+  volcanodiscovery_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: volcanodiscovery_com
   player_fm:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2499,8 +2504,3 @@ jobs:
     secrets: inherit
     with:
       site: forbesafrica_com
-  miningmx_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: miningmx_com
