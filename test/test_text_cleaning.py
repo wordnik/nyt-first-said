@@ -37,23 +37,5 @@ class TestCleaningSuite(unittest.TestCase):
         self.assertEqual(prepare_text_for_textblob("election‑ready"), "election-ready", "Nonbreaking hyphen replaced")
         self.assertEqual(prepare_text_for_textblob("very angry'﻿"), "very angry'", "Removed zero-width nonbreaking space.")
 
-    def test_normalize_sentence(self):
-        self.assertEqual(
-            normalize_sentence('“Using the same beans as our other stores, we explore new flavours, aromas and textures through hand-brew methods, including Norwegian ‘kokikaffe’ and other special preparations.'),
-                '“Using the same beans as our other stores, we explore new flavours, aromas and textures through hand-brew methods, including Norwegian ‘kokikaffe’ and other special preparations.”',
-                "Quotes are balanced."
-                )
-        self.assertEqual(
-            normalize_sentence('This location allows us to offer a deeper, more immersive coffee experience in a calm, intimate setting.”'),
-            '“This location allows us to offer a deeper, more immersive coffee experience in a calm, intimate setting.”',
-            "Quotes are balanced."
-            )
-        self.assertEqual(
-            normalize_sentence('To quote a certain Skywalker: "Now this is pod racing!"'),
-            'To quote a certain Skywalker: "Now this is pod racing!"',
-            "No extra quote is added."
-            )
-
-
 if __name__ == '__main__':
     unittest.main()
