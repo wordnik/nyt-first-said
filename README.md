@@ -99,10 +99,7 @@ The definition for the runner action is in `brush.yml`. It takes an input named 
 
 1. There's a JSON list of sites in `data/now-corpus-sources.json` that has a name and URL for each site. To convert those to entries in the `data/target_sites.json` config file, run `node js/tools/add-to-target-sites.js data/target_sites.json data/now-corpus-sources.json \<start\>-\<end\>`, where `start` is the index of the first site in `data/now-corpus-sources.json` that you want to add and `end` is the index of the site you want to stop at. (The site at `end` is not added.)
 
-2. Run these two commands to update the Daily Launcher and Unproven Sites Launcher GitHub Actions:
-
-- `node js/tools/generate-launcher-action.js data/target_sites.json > .github/workflows/daily_launcher.yml`
-- `node js/tools/generate-launcher-action.js data/target_sites.json false "Unproven sites launcher" > .github/workflows/unproven_sites_launcher.yml`
+2. Run `make update-working-sites` to update the Daily Launcher and Unproven Sites Launcher GitHub Actions.
 
 3. Commit the changes, then push to GitHub.
 
@@ -111,3 +108,9 @@ The definition for the runner action is in `brush.yml`. It takes an input named 
 5. When the action's runs are over, the results of the runs (`articles_processed` and `succeeding_parser_name`) should be in the `nyt-said-site-results` DynamoDB table. To use those to update the settings, run `make update-working-sites` to update `target-sites.json`, `daily_launcher.yml`, and `unproven_sites_launcher.yml` and commit them to git.
 
 6. Commit the changes, then push to GitHub.
+
+# Reports
+
+There is a [daily job](https://github.com/wordnik/nyt-first-said/actions/workflows/report_launcher.yml) that generates reports of new words found that day. It creates a big markdown table, which is good for skimming.
+
+If you want to go through results one-by-one, run `node js/tools/generate-html-sentences-report.js 1 > report.html`, then open report.html in a browser. Use n and p keys to page through the sentences and use f to put an entry in a flagged list that you can examine later. If you want the new words report for a particular branch, run `node js/tools/generate-html-sentences-report.js 1 branch-name > report.html`.

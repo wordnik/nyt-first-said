@@ -24,6 +24,9 @@ def p_tags_to_body(p_tags):
         else:
             if node.name == "script":
                 continue
+            if node.name == "iframe":
+                # Avoid embeds, which usually contain hard-to-parse stuff.
+                continue
             if node.name == "br":
                 body_strings.append(" \n ")
             else:

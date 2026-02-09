@@ -60,6 +60,8 @@ def remove_trouble_characters(text):
     cleaned = "".join([c for c in cleaned if is_in_latin_block(c)])
     # Remove double+ spaces.
     cleaned = regex.sub(r"\s+", " ", cleaned)
+    # Remove soft hyphen.
+    cleaned = cleaned.replace(chr(0xad), "")
 
     return cleaned
 
@@ -80,9 +82,12 @@ def prepare_text_for_textblob(text):
     # that trips up TextBlob.
     cleaned = text.replace(u"\u200b", " ")
     # Get TextBlob to parse things on the sides of the emdash as separate words.
-    cleaned = cleaned.replace("—", "-")
-    cleaned = cleaned.replace("–", "-")
+    cleaned = cleaned.replace("—", " - ")
+    cleaned = cleaned.replace("–", " - ")
+
     cleaned = cleaned.replace("‑", "-")
     # Zero-width nonbreaking space
     cleaned = cleaned.replace("﻿", "")
+
     return cleaned
+
