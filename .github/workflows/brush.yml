@@ -29,8 +29,7 @@ jobs:
         aws-region: us-west-1
     - uses: actions/setup-python@v6
       with:
-        python-version: '3.10.19'
-        cache: 'pip'
+        python-version: '3.10.19' #cache: 'pip'
     - run: |
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
@@ -41,7 +40,7 @@ jobs:
         path: /home/runner/.cache/ms-playwright
         key: ${{ runner.os }}-playwright
     - name: Install playwright
-      if: steps.cache-playwright-install.outputs.cache-hit != 'true'
+      if: true #steps.cache-playwright-install.outputs.cache-hit != 'true'
       run: playwright install --with-deps
     - name: Restore nltk_data from cache
       id: restore-nltk-cache
