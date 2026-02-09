@@ -41,7 +41,7 @@ jobs:
         path: /home/runner/.cache/ms-playwright
         key: ${{ runner.os }}-playwright
     - name: Install playwright
-      if: true #steps.cache-playwright-install.outputs.cache-hit != 'true'
+      if: steps.cache-playwright-install.outputs.cache-hit != 'true'
       run: playwright install --with-deps
     - name: Restore nltk_data from cache
       id: restore-nltk-cache
