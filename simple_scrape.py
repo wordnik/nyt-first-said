@@ -71,7 +71,6 @@ if not site:
     quit()
 
 # Assuming we're running from the project root.
-record = open("records/" + date + ".txt", "a+")
 
 def humanize_url(article):
     return article.split("/")[-1].split(".html")[0].replace("-", " ")
@@ -86,7 +85,6 @@ def check_and_post_word(word, article_url, sentence, meta):
     example_exists = does_example_exist(word)
     if example_exists:
         print("We already have an example for {}".format(word))
-        record.write("~" + "API")
         return example_exists 
 
     language, confidence = langid.classify(sentence)
@@ -94,15 +92,7 @@ def check_and_post_word(word, article_url, sentence, meta):
     if language != "en":
         print("Language Rejection: {}".format(word))
 
-    record.write("~" + "GOOD")
-    record.write("~" + word)
-    if int(r.get("recently") or 0) < 8:
-        r.incr("recently")
-        r.expire("recently", 60 * 30)
-
-        post(word, article_url, sentence, meta)
-    else:
-        print("Recency Rejection: {}".format(word))
+    post(word, article_url, sentence, meta)
 
     return example_exists 
 
@@ -142,8 +132,6 @@ def process_article(content, url, site_name, meta):
     global articles_processed
 
     uninteresting_sentence_params = []
-    # record = open("records/"+url.replace("/", "_")+".txt", "w+")
-    record.write("\nARTICLE:" + url)
     print("Processing Article")
     text = prepare_text_for_textblob(str(content))
     sentence_blob = TextBlob(text)
@@ -164,8 +152,6 @@ def process_article(content, url, site_name, meta):
             for word in words:
                 if len(word) < 2:
                     continue
-                record.write("\n" + word)
-                record.write("~" + word)
                 if bloom_filter.contains(word):
                     # print("Word is in Bloom filter: {}.".format(word))
                     if len(uninteresting_sentence_params) < 10:
@@ -179,13 +165,9 @@ def process_article(content, url, site_name, meta):
                     continue
 
                 if ok_word(word):
-                    record.write("~" + word)
-                    wkey = "word:" + word
+                    wkey = word
                     cache_flag = r.get(wkey)
-                    if cache_flag:
-                        # seen in cache
-                        record.write("~" + "C")
-                    else:
+                    if not cache_flag:
                         # not in cache
                         # NLTK part of speech tag list: https://stackoverflow.com/a/38264311/87798
                         post_result = check_and_post_word(
@@ -333,5 +315,4 @@ def run_brush(parser_name, parser_params):
 
 run_brush(site.get("parser_name"), site.get("parser_params"))
 
-record.close()
 browser.close()
