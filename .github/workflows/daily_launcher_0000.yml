@@ -1834,6 +1834,11 @@ jobs:
     secrets: inherit
     with:
       site: donegalnow_com
+  intellinews_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: intellinews_com
   interestingengineering_com:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2499,8 +2504,3 @@ jobs:
     secrets: inherit
     with:
       site: newindianexpress_com
-  ibtimes_co_in:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: ibtimes_co_in

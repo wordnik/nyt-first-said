@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '0 19 * * *'
 jobs:
+  forbesafrica_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: forbesafrica_com
   miningmx_com:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -19,6 +24,11 @@ jobs:
     secrets: inherit
     with:
       site: heraldlive_co_za
+  algoafm_co_za:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: algoafm_co_za
   cajnewsafrica_com:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -454,6 +464,11 @@ jobs:
     secrets: inherit
     with:
       site: greennews_ie
+  afloat_ie:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: afloat_ie
   her_ie:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -1874,6 +1889,11 @@ jobs:
     secrets: inherit
     with:
       site: cointelegraph_com
+  the_baltimore_sun:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: the_baltimore_sun
   engadget:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2484,23 +2504,3 @@ jobs:
     secrets: inherit
     with:
       site: theobserver_ca
-  o_canada_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: o_canada_com
-  digital_journal:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: digital_journal
-  edmontonsun_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: edmontonsun_com
-  brantfordexpositor_ca:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: brantfordexpositor_ca

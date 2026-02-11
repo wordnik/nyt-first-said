@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '0 18 * * *'
 jobs:
+  ibtimes_co_in:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: ibtimes_co_in
   zeebiz_com:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2499,8 +2504,3 @@ jobs:
     secrets: inherit
     with:
       site: ecr_co_za
-  forbesafrica_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: forbesafrica_com
