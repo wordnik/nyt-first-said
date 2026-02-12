@@ -38,7 +38,7 @@ jobs:
       id: cache-playwright-install
       uses: actions/cache@v4
       with:
-        path: /home/runner/.cache/ms-playwright
+        path: /home/runner/.cache/ms-playwright/firefox-1495
         key: ${{ runner.os }}-playwright
     - name: Install playwright
       if: steps.cache-playwright-install.outputs.cache-hit != 'true'
