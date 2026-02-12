@@ -11,7 +11,7 @@ def search(term):
     outbound_url = link.get_attribute("href")
     print(outbound_url)
     link.click()
-    page.wait_for_load_state(timeout = 90000)
+    page.wait_for_load_state(timeout = 10 * 60 * 1000)
     # page.wait_for_url("(?!https:\/\/duckduckgo\.com)")
     return page.url
 
