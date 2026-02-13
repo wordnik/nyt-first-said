@@ -9,26 +9,11 @@ jobs:
     secrets: inherit
     with:
       site: nyt
-  eurogamer:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: eurogamer
-  sciam:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: sciam
   news_medical:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
     with:
       site: news_medical
-  farmersjournal:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: farmersjournal
   theage_com_au:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2504,3 +2489,18 @@ jobs:
     secrets: inherit
     with:
       site: newindianexpress_com
+  ibtimes_co_in:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: ibtimes_co_in
+  zeebiz_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: zeebiz_com
+  analyticsindiamag_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: analyticsindiamag_com
