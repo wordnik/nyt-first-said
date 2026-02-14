@@ -85,12 +85,19 @@ for (
     targetJobs,
     targetJobKeys.slice(jobIndexStart, jobIndexStart + maxSitesInLauncher)
   );
-  const baseYAML = `name: ${name} ${launcherIndex}
+  var baseYAML = `name: ${name} ${launcherIndex}
 on:
   workflow_dispatch:
   schedule:
     - cron: '0 ${(17 + launcherIndex) % 24} * * *'
 `;
+  if (!targetWorksStatus) {
+    baseYAML = `name: ${name} ${launcherIndex}
+on:
+  workflow_dispatch:
+`;
+  }
+
   const dailyLauncherYaml = baseYAML + yaml.dump({ jobs: launcherJobs });
   const yamlPath = `${yamlBasePath}_${launcherIndex
     .toString()

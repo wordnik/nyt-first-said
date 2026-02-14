@@ -4,16 +4,6 @@ on:
   schedule:
     - cron: '0 18 * * *'
 jobs:
-  zeebiz_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: zeebiz_com
-  analyticsindiamag_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: analyticsindiamag_com
   india_com:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -754,11 +744,6 @@ jobs:
     secrets: inherit
     with:
       site: financialwatchngr_com
-  naij_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: naij_com
   nzherald_co_nz:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2504,3 +2489,18 @@ jobs:
     secrets: inherit
     with:
       site: forbesafrica_com
+  miningmx_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: miningmx_com
+  zoutnet_co_za:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: zoutnet_co_za
+  heraldlive_co_za:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: heraldlive_co_za
