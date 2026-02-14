@@ -4,7 +4,6 @@ import sys
 import redis
 import string
 import time
-import langid
 import os
 import json
 import argparse
@@ -24,6 +23,7 @@ from utils.uninteresting_words import get_uninteresting_count_for_word, incremen
 from utils.url_visits import log_url_visit, was_url_visited
 from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_textblob
 from utils.sentence_filters import has_balanced_punctuation
+from utils.language import is_english
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, grab_url, get_feed_urls, split_words_by_unicode_punctuation
 from parsers.parse_fns import parse_fns
@@ -87,11 +87,6 @@ def check_and_post_word(word, article_url, sentence, meta):
         print("We already have an example for {}".format(word))
         return example_exists 
 
-    language, confidence = langid.classify(sentence)
-
-    if language != "en":
-        print("Language Rejection: {}".format(word))
-
     post(word, article_url, sentence, meta)
 
     return example_exists 
@@ -136,12 +131,17 @@ def process_article(content, url, site_name, meta):
     text = prepare_text_for_textblob(str(content))
     sentence_blob = TextBlob(text)
     for sentence in sentence_blob.sentences:
-        if has_username(str(sentence)):
+        sent_str = str(sentence)
+        if has_username(sent_str):
             # If the sentence has "@word" tokens, they will parse as separate
             # "@" and "word" tokens, so we'll avoid this situation.
             continue
 
-        if not has_balanced_punctuation(str(sentence)):
+        if not has_balanced_punctuation(sent_str):
+            continue
+
+        if not is_english(sent_str):
+            logging.info(f"Rejecting non-English string {sent_str}.")
             continue
 
         for token in sentence.tokens:
