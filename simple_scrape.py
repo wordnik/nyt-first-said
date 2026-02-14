@@ -132,6 +132,10 @@ def process_article(content, url, site_name, meta):
     sentence_blob = TextBlob(text)
     for sentence in sentence_blob.sentences:
         sent_str = str(sentence)
+        if len(sentence.tokens) > 200:
+            logging.info(f"Skipping overly long sentence: {sent_str}")
+            continue
+
         if has_username(sent_str):
             # If the sentence has "@word" tokens, they will parse as separate
             # "@" and "word" tokens, so we'll avoid this situation.
