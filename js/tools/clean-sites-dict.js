@@ -5,12 +5,21 @@ var fs = require('fs');
 
 const targetSitesPath = __dirname + '/../../data/target_sites.json';
 
+var nonSiteHomepagePrefixes = [
+  'https://en.wikipedia.org/',
+  'https://www.merriam-webster.com/',
+  'https://www.investopedia.com/terms/',
+  'https://www.amazon.com/',
+  'https://www.youtube.com/',
+];
+
 var targetSitesObject = JSON.parse(
   fs.readFileSync(targetSitesPath, { encoding: 'utf8' })
 );
 
 var duplicatesFound = 0;
 var msnSitesFound = 0;
+var nonHomepagesFound = 0;
 var seenURLs = [];
 
 for (let key in targetSitesObject) {
@@ -30,6 +39,10 @@ for (let key in targetSitesObject) {
       msnSitesFound += 1;
       delete targetSitesObject[key];
     }
+    if (nonSiteHomepagePrefixes.some((prefix) => url.startsWith(prefix))) {
+      nonHomepagesFound += 1;
+      delete targetSitesObject[key];
+    }
     seenURLs = seenURLs.concat(siteObj.feeder_pages);
   }
 }
@@ -41,7 +54,9 @@ fs.writeFileSync(targetSitesPath, JSON.stringify(targetSitesObject, null, 2), {
 console.log(
   'Found',
   duplicatesFound,
-  'duplicates and',
+  'duplicates,',
+  nonHomepagesFound,
+  'non-home pages found, and',
   msnSitesFound,
   '"on MSN.com sites.'
 );
