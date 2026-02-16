@@ -2,8 +2,933 @@ name: Daily launcher 6
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 23 * * *'
+    - cron: '0 23 */2 * *'
 jobs:
+  Dark_Horizons:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Dark Horizons
+  South_Burnett_Times:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: South Burnett Times
+  INTHEBLACK:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: INTHEBLACK
+  Good_Food:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Good Food
+  Commercial_Real_Estate_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Commercial Real Estate News
+  _9Celebrity:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: 9Celebrity
+  _3AW:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: 3AW
+  VICE:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: VICE
+  Lifehacker_Australia:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Lifehacker Australia
+  Learncfd:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Learncfd
+  Port_Stephens_Examiner:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Port Stephens Examiner
+  Narooma_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Narooma News
+  Cessnock_Advertiser:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Cessnock Advertiser
+  Mudgeee_Guardian:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Mudgeee Guardian
+  Australasian_Lawyer:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Australasian Lawyer
+  Namoi_Valley_Independent:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Namoi Valley Independent
+  TheBull_com_au:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: TheBull.com.au
+  Wauchope_Gazette:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Wauchope Gazette
+  Marie_Claire:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Marie Claire
+  Newsport:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Newsport
+  Tenterfield_Star:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Tenterfield Star
+  Architecture_AU:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Architecture AU
+  Dhaka_Tribune:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Dhaka Tribune
+  United_News_of_Banglades:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: United News of Banglades
+  The_Financial_Express_BD:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Financial Express BD
+  Daily_News_Gallery:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Daily News Gallery
+  National_Post:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: National Post
+  Winnipeg_Free_Press:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Winnipeg Free Press
+  The_London_Free_Press:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The London Free Press
+  Canada_NewsWir:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Canada NewsWir
+  The_Motley_Fool_Canada:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Motley Fool Canada
+  Canada_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Canada.com
+  Technology_Networks:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Technology Networks
+  Yahoo_Canada_Finance:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Yahoo Canada Finance
+  Ottawa_Sun:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Ottawa Sun
+  The_Sudbury_Star:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Sudbury Star
+  Thorold_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Thorold News
+  The_Telegram:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Telegram
+  CanIndia_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: CanIndia News
+  Times_Colonist:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Times Colonist
+  Cape_Breton_Post:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Cape Breton Post
+  Prince_George_Citizen:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Prince George Citizen
+  The_Kingston_Whig_Standard:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Kingston Whig-Standard
+  paNOW:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: paNOW
+  Psychology_Toda:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Psychology Toda
+  TSN:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: TSN
+  Lethbridge_News_Now:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Lethbridge News Now
+  The_Journal_Pioneer:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Journal Pioneer
+  BayToday:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: BayToday
+  National_Observer:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: National Observer
+  GuelphToday:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: GuelphToday
+  Yahoo_News_Canada:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Yahoo News Canada
+  Net_Newsledger:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Net Newsledger
+  CFJC_Today_Kamloops:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: CFJC Today Kamloops
+  Raptors_Republic:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Raptors Republic
+  Timmins_Press:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Timmins Press
+  EverythingGP:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: EverythingGP
+  BarrieToday:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: BarrieToday
+  Varsity:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Varsity
+  Estevan_Mercury:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Estevan Mercury
+  battlefordsNOW:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: battlefordsNOW
+  Thompson_Citizen:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Thompson Citizen
+  Prince_Albert_Daily_Herald:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Prince Albert Daily Herald
+  The_North_Bay_Nugget:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The North Bay Nugget
+  Powell_River_Peak:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Powell River Peak
+  HuffPost_Canada:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: HuffPost Canada
+  Philippine_Canadian_Inquirer:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Philippine Canadian Inquirer
+  Business_in_Vancouver:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Business in Vancouver
+  Vancouver_Is_Awesome:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Vancouver Is Awesome
+  News_UofT:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: News@UofT
+  TimminsToday:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: TimminsToday
+  Driving:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Driving
+  Belleville_Intelligencer:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Belleville Intelligencer
+  Alberta_Daily_Herald_Tribune:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Alberta Daily Herald Tribune
+  Kamloops_This_Week:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Kamloops This Week
+  Western_Hockey_League:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Western Hockey League
+  The_Loo:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Loo
+  Monthly_Review:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Monthly Review
+  Standard_Freeholder:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Standard Freeholder
+  Nanaimo_News_NO:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Nanaimo News NO
+  UM_Toda:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: UM Toda
+  Sault_Star:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Sault Star
+  SooToday:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: SooToday
+  Canadian_Lawyer_Magazine:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Canadian Lawyer Magazine
+  APTN_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: APTN News
+  Bonnyville_Nouvelle:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Bonnyville Nouvelle
+  Proactive_Investors_USA___Canada:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Proactive Investors USA & Canada
+  Manitoulin_Expositor:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Manitoulin Expositor
+  Owen_Sound_Sun_Times:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Owen Sound Sun Times
+  North_Shore_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: North Shore News
+  Toronto_Sta:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Toronto Sta
+  Halifax_Examiner:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Halifax Examiner
+  meadowlakeNOW:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: meadowlakeNOW
+  Brockville_Recorder_and_Times:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Brockville Recorder and Times
+  kawarthaNOW_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: kawarthaNOW.com
+  _95_7_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: 95.7 News
+  NOW_Magazine:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: NOW Magazine
+  OrilliaMatters:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: OrilliaMatters
+  Cabin_Radio:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Cabin Radio
+  UCalgary_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: UCalgary News
+  Trail_Times:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Trail Times
+  The_Sarnia_Journal:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Sarnia Journal
+  Fort_McMurray_Today:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Fort McMurray Today
+  The_Catholic_Register:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Catholic Register
+  Community_Press:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Community Press
+  Brantford_Expositor:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Brantford Expositor
+  The_Tri_City_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Tri-City News
+  The_B_C__Catholi:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The B.C. Catholi
+  The_Hill_Times:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Hill Times
+  The_Crag_and_Canyon:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Crag and Canyon
+  Gazette:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Gazette
+  Dal_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Dal News
+  The_Organization_for_World_Peac:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Organization for World Peac
+  AFT:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: AFT
+  CollingwoodToday:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: CollingwoodToday
+  The_Weather_Network:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Weather Network
+  Chemainus_Valley_Courier:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Chemainus Valley Courier
+  Socialist_Project:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Socialist Project
+  The_Post_Millennial:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Post Millennial
+  larongeNOW:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: larongeNOW
+  The_Gateway_Online:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Gateway Online
+  CHEK:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: CHEK
+  Canadian_Homesteading:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Canadian Homesteading
+  University_Affairs:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: University Affairs
+  Astana_Times:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Astana Times
+  InfoTel_News_Ltd:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: InfoTel News Ltd
+  autoevolution:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: autoevolution
+  Sarnia_Observer:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Sarnia Observer
+  The_Logic:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Logic
+  Vernon_Morning_Star:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Vernon Morning Star
+  Coast_Reporter:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Coast Reporter
+  Goderich_Signal_Star:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Goderich Signal Star
+  CHAT_News_Today:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: CHAT News Today
+  KelownaNow:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: KelownaNow
+  Clinton_News_Record:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Clinton News Record
+  Jamaica_Gleaner:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Jamaica Gleaner
+  Sherwood_Park_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Sherwood Park News
+  Fernie_Free_Press:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Fernie Free Press
+  Cumberland_News_Now:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Cumberland News Now
+  Westerly_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Westerly News
+  Radio_Canada_International__en_:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Radio Canada International (en)
+  Wealth_Professional:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Wealth Professional
+  Ubyssey_Online:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Ubyssey Online
+  Nevada_Green_Time:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Nevada Green Time
+  Oshawa_Express:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Oshawa Express
+  County_Weekly_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: County Weekly News
+  The_GrowthOp:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The GrowthOp
+  Richmond_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Richmond News
+  Law_Times:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Law Times
+  Creston_Valley_Advance:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Creston Valley Advance
+  Truro_Daily_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Truro Daily News
+  BradfordToday:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: BradfordToday
+  Lab_Manager_Magazine:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Lab Manager Magazine
+  Bowen_Island_Undercurrent:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Bowen Island Undercurrent
+  MY_PG_NOW:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: MY PG NOW
+  Humboldt_Journal:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Humboldt Journal
+  Charlotte_Post:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Charlotte Post
+  Woodstock_Sentinel_Review:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Woodstock Sentinel Review
+  South_Asian_Link:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: South Asian Link
+  northeastNOW:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: northeastNOW
+  Estonian_Worl:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Estonian Worl
+  Squamish_Chief:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Squamish Chief
+  The_Battlefords_News_Optimist:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Battlefords News-Optimist
+  The_Record__New_Westminster_:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Record (New Westminster)
+  DUBNetwork:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: DUBNetwork
+  Gananoque_Reporter:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Gananoque Reporter
+  The_Link:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Link
+  Canadian_Running_Magazin:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Canadian Running Magazin
+  Insurance_Business_Canada:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Insurance Business Canada
+  Delta_Optimist:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Delta-Optimist
+  Daily_Miner_and_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Daily Miner and News
+  Cochrane_Times_Post:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Cochrane Times Post
+  McGill_Tribune:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: McGill Tribune
+  countylive_ca:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: countylive.ca
+  Anishinabek_New:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Anishinabek New
+  Haliburton_County_Echo:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Haliburton County Echo
+  Huddle_Today:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Huddle Today
+  Pipeline_News:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Pipeline News
+  Cochrane_Times:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Cochrane Times
+  Canadian_Hockey_League:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Canadian Hockey League
+  Grand_Forks_Gazette:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Grand Forks Gazette
+  Equnews_International:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Equnews International
+  New_York_Classical_Review:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: New York Classical Review
+  The_Lacombe_Globe:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Lacombe Globe
+  Yahoo_Canada_Sports:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Yahoo Canada Sports
   TheSpec_com:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -559,6 +1484,11 @@ jobs:
     secrets: inherit
     with:
       site: Music Business Worldwide
+  Echo:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Echo
   The_Westmorland_Gazette:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -574,6 +1504,11 @@ jobs:
     secrets: inherit
     with:
       site: Daily Post North Wales
+  World_Finance:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: World Finance
   Essex_Live:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -914,6 +1849,11 @@ jobs:
     secrets: inherit
     with:
       site: Darlington and Stockton Times
+  This_Is_Anfiel:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: This Is Anfiel
   NHS_Website:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -1504,6 +2444,11 @@ jobs:
     secrets: inherit
     with:
       site: Boat International
+  Esports_Insider:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Esports Insider
   Civil_Service_World:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -1524,6 +2469,11 @@ jobs:
     secrets: inherit
     with:
       site: Galway Dail
+  Midwest_Radio:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Midwest Radio
   Chemistry_World:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -1554,953 +2504,3 @@ jobs:
     secrets: inherit
     with:
       site: Law Society of Ireland Gazette
-  The_University_Times:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The University Times
-  Anglo_Celt:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Anglo Celt
-  Nenagh_Guardian:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Nenagh Guardian
-  Seatrade_Cruise_News:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Seatrade Cruise News
-  Irish_Farmers_Journal:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Irish Farmers Journal
-  The_Green_News:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Green News
-  gasworld:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: gasworld
-  Kildare_Nationalist:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Kildare Nationalist
-  CasinoBeats:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: CasinoBeats
-  Checkout:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Checkout
-  The_Avondhu_Pres:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Avondhu Pres
-  Laois_Nationalist:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Laois Nationalist
-  Dublin_Inquirer:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Dublin Inquirer
-  The_Comet:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Comet
-  TelecomTV:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: TelecomTV
-  Maxboxing:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Maxboxing
-  Westmeath_Examiner:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Westmeath Examiner
-  Islington_Tribune_newspaper_website:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Islington Tribune newspaper website
-  Highland_Radio:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Highland Radio
-  SHEmazing:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: SHEmazing
-  The_Daily_Swig:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Daily Swig
-  InAVate:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: InAVate
-  TouringCarTimes:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: TouringCarTimes
-  Wexford_People:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Wexford People
-  MinuteHac:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: MinuteHac
-  PublicTechnology:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: PublicTechnology
-  Big_Issue_North:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Big Issue North
-  Carlow_Live:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Carlow Live
-  The_Corkman:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Corkman
-  Re_locate_Magazine:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Re:locate Magazine
-  Galway_Bay_FM:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Galway Bay FM
-  Kfm_Radio:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Kfm Radio
-  Mayo_Advertiser:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Mayo Advertiser
-  Ledger_Insights:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Ledger Insights
-  I_Love_Limeric:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: I Love Limeric
-  www_mining_journal_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: www.mining-journal.com
-  New_Ross_Standard:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: New Ross Standard
-  Pig_Progres:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Pig Progres
-  TechCabal:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: TechCabal
-  Fleet_Transpor:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Fleet Transpor
-  Tipperary_Time:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Tipperary Time
-  AdWorld:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: AdWorld
-  Sligo_Champion:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Sligo Champion
-  TodayFM:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: TodayFM
-  Money_Observer:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Money Observer
-  All_about_feed:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: All about feed
-  IPE_Real_Assets:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: IPE Real Assets
-  Wamda:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Wamda
-  Sunday_Business_Post:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Sunday Business Post
-  Gorey_Guardian:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Gorey Guardian
-  University_Observer_Online:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: University Observer Online
-  Chatham_House:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Chatham House
-  Irish_Health:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Irish Health
-  Ethical_Corporation_Magazine:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Ethical Corporation Magazine
-  The_Kerryman:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Kerryman
-  The_Echo_Newspaper:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Echo Newspaper
-  FM104_Newsroom:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: FM104 Newsroom
-  Westmeath_Independent:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Westmeath Independent
-  Bray_People:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Bray People
-  Transform_magazine:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Transform magazine
-  Football_Espana:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Football Espana
-  CommonSpace:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: CommonSpace
-  CSUSM_NewsCenter:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: CSUSM NewsCenter
-  Munster_Express:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Munster Express
-  ESPNcricinfo_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: ESPNcricinfo.com
-  Poultry_World:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Poultry World
-  Royal_Society_of_Chemistry:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Royal Society of Chemistry
-  Training_Journal:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Training Journal
-  KCLR_Fanzone:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: KCLR Fanzone
-  Irish_Building_Magazine:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Irish Building Magazine
-  RugbyLAD:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: RugbyLAD
-  Small_Business:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Small Business
-  Newry_ie:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Newry.ie
-  Corporate_IT:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Corporate IT
-  The_Lutheran_World_Federation:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Lutheran World Federation
-  Mobile_World_Live:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Mobile World Live
-  Airport_Business:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Airport Business
-  Fingal_Independent:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Fingal Independent
-  Future_Farming:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Future Farming
-  Times_Now:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Times Now
-  Economic_Times:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Economic Times
-  News18:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: News18
-  Business_Standard:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Business Standard
-  India_Today:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: India Today
-  Livemint:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Livemint
-  Financial_Express:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Financial Express
-  Telegraph_India:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Telegraph India
-  The_Hans_India:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Hans India
-  ANI_News:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: ANI News
-  Devdiscourse:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Devdiscourse
-  Reuters_India:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Reuters India
-  News_Nation:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: News Nation
-  Firstpost:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Firstpost
-  Business_Today:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Business Today
-  Daily_Excelsior:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Daily Excelsior
-  The_Quint:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Quint
-  CNBCTV18:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: CNBCTV18
-  Live_Law:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Live Law
-  Cogencis:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Cogencis
-  Speaking_Times:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Speaking Times
-  Mumbai_Mirror:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Mumbai Mirror
-  Zee_Business:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Zee Business
-  Down_To_Earth_Magazine:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Down To Earth Magazine
-  Telangana_Today:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Telangana Today
-  ThePrint:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: ThePrint
-  The_Citize:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Citize
-  IndiaSpend:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: IndiaSpend
-  Mid_Day:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Mid-Day
-  Observer_Research_Foundation:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Observer Research Foundation
-  Free_Press_Journal:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Free Press Journal
-  The_Statesman:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Statesman
-  Ahmedabad_Mirror:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Ahmedabad Mirror
-  Moneylife:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Moneylife
-  Rising_Kashmir_Daily_English_Newspape:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Rising Kashmir Daily English Newspape
-  The_Siasat_Daily:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Siasat Daily
-  Oneindia:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Oneindia
-  DailyO:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: DailyO
-  Oherald:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Oherald
-  The_Better_India:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Better India
-  Newsd_in:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Newsd.in
-  Republic_World:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Republic World
-  OrissaPOST:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: OrissaPOST
-  CGT:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: CGT
-  The_Sangai_Express:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Sangai Express
-  Kashmir_Times:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Kashmir Times
-  afaqs:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: afaqs
-  Micro_Finance_Journalism:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Micro Finance Journalism
-  HuffPost_India:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: HuffPost India
-  State_Times:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: State Times
-  The_Northlines:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Northlines
-  Jagran_Josh:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Jagran Josh
-  Carto:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Carto
-  The_State_Tim:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The State Tim
-  Bangalore_Mirror:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Bangalore Mirror
-  OpIndia:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: OpIndia
-  PGurus:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: PGurus
-  Feminism_in_Indi:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Feminism in Indi
-  IGN_India:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: IGN India
-  Goal_India:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Goal India
-  The_Weather_Channel:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Weather Channel
-  TelecomTal:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: TelecomTal
-  The_Hindu_BusinessLine:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Hindu BusinessLine
-  Mashable_India:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Mashable India
-  CricTracker:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: CricTracker
-  VOGUE_India:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: VOGUE India
-  The_Sentinel_Assam:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Sentinel Assam
-  Business_Wire_Indi:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Business Wire Indi
-  Odisha_Television_Ltd_:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Odisha Television Ltd.
-  Fortune_India:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Fortune India
-  Kashmir_Life:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Kashmir Life
-  myKhel:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: myKhel
-  GQ_India:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: GQ India
-  BGR_India:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: BGR India
-  Free_Press_Kashmir:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Free Press Kashmir
-  NewsBytes:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: NewsBytes
-  Missoula_Current:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Missoula Current
-  Mercom_India:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Mercom India
-  MySmartPrice_Gear:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: MySmartPrice Gear
-  Avenue_Mail:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Avenue Mail
-  Krishi_Jagra:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Krishi Jagra
-  Micro_Finance_Post:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Micro Finance Post
-  ETAuto_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: ETAuto.com
-  ETBrandEquity_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: ETBrandEquity.com
-  NewsX:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: NewsX
-  FactorDaily:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: FactorDaily
-  ETEnergyworld_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: ETEnergyworld.com
-  thenortheasttoday_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: thenortheasttoday.com
-  NYOOOZ:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: NYOOOZ
-  Gadgets_Now:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Gadgets Now
-  Architectural_Digest_India:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Architectural Digest India
-  Mathrubhumi_English:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Mathrubhumi English
-  Specialty_Medical_Dialogues:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Specialty Medical Dialogues
-  Citizen_Matters:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Citizen Matters
-  Morung_Express:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Morung Express
-  Madras_Courier_News:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Madras Courier News
-  The_Kashmir_Walla:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Kashmir Walla
-  ETHealthworld_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: ETHealthworld.com
-  The_Arunachal_Times:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: The Arunachal Times
-  Express_Compute:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Express Compute
-  Nagpur_Today:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Nagpur Today
-  ETCIO_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: ETCIO.com
-  Gizbot:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Gizbot
-  News_Blo:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: News Blo
-  Autocar_Professional:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Autocar Professional
-  ETTelecom_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: ETTelecom.com
-  IWMBuzz:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: IWMBuzz
-  Geospatial_Worl:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Geospatial Worl
-  Indiantelevision_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Indiantelevision.com
-  Wolf_Chronicle:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Wolf Chronicle
-  Overdrive:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Overdrive

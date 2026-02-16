@@ -89,7 +89,7 @@ for (
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 ${(17 + launcherIndex) % 24} * * *'
+    - cron: '0 ${(17 + launcherIndex) % 24} */2 * *'
 `;
   if (!targetWorksStatus) {
     baseYAML = `name: ${name} ${launcherIndex}
