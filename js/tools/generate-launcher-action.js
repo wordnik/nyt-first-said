@@ -7,7 +7,7 @@ var pick = require('lodash.pick');
 
 if (process.argv.length < 4) {
   console.error(
-    'Usage: node js/tools/generate-launcher-action.js data/target-sites.json <yaml base file path> [includeWorks=true] [name=Daily launcher]'
+    'Usage: node js/tools/generate-launcher-action.js data/target-sites.json <yaml base file path> [includeWorks=true] [name=Working sites launcher]'
   );
   process.exit(1);
 }
@@ -23,7 +23,7 @@ const yamlBasePath = process.argv[3];
 if (process.argv.length > 4) {
   targetWorksStatus = JSON.parse(process.argv[4]);
 }
-var name = 'Daily launcher';
+var name = 'Working sites launcher';
 if (process.argv.length > 5) {
   name = process.argv[5];
 }
