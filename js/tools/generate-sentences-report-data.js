@@ -12,19 +12,18 @@ var fs = require('fs');
 // kaikki entries
 // s3-epub entries
 
-/* global process */
+/* global process, __dirname */
 
-const header = '|Word|Sentence|Source|Filename|Date|\n|--|--|--|--|--|\n';
+// const header = '|Word|Sentence|Source|Filename|Date|\n|--|--|--|--|--|\n';
 
 if (process.argv.length < 3) {
   console.error(
-    'Usage: GITHUB_STEP_SUMMARY=path-to-file.txt node tools/generate-sentences-report.js <days back to go> [branch]'
+    'Usage: node tools/generate-sentences-report-data.js <days back to go> [branch]'
   );
   process.exit(1);
 }
 
 var s3Client = new S3Client();
-const summaryPath = process.env.GITHUB_STEP_SUMMARY;
 const daysBack = +process.argv[2];
 
 var endDate = new Date();
@@ -41,6 +40,9 @@ var branch = 'master';
 if (process.argv.length > 3) {
   branch = process.argv[3];
 }
+
+const outPath = __dirname + '/sentences-report/data.json';
+
 console.error(
   'Getting sentences from',
   startDate,
@@ -50,9 +52,15 @@ console.error(
   branch
 );
 
-getObjects({ bucketName: 'nyt-said-sentences' });
+(async function go() {
+  var data = await getObjects({ bucketName: 'nyt-said-sentences' });
+  fs.writeFileSync(outPath, JSON.stringify(data, null, 2), {
+    encoding: 'utf8',
+  });
+})();
 
 async function getObjects({ bucketName }) {
+  var data = [];
   var objectPages = [];
 
   var listObjectOpts = { Bucket: bucketName };
@@ -85,13 +93,7 @@ async function getObjects({ bucketName }) {
       await getEntryDetails(objectPages[pageNum], pageNum, bucketName);
     }
 
-    if (summaryPath) {
-      fs.writeFileSync(summaryPath, header, { encoding: 'utf8' });
-    } else {
-      process.stdout.write(header);
-    }
-
-    objectPages.flat().forEach(reportEntry);
+    data = data.concat(objectPages.flat());
   } catch (caught) {
     if (
       caught instanceof S3ServiceException &&
@@ -106,6 +108,8 @@ async function getObjects({ bucketName }) {
       );
     }
   }
+
+  return data;
 }
 
 async function getEntryDetails(objectList, pageNum, bucketName) {
@@ -132,15 +136,11 @@ async function getEntryDetails(objectList, pageNum, bucketName) {
   }
 }
 
-function reportEntry(entryObj) {
-  var entryText = `|${entryObj.word}|${entryObj.sentence
-    ?.replace(/\n/g, ' ')
-    ?.replace(/\r/g, ' ')}|${entryObj.source}|${
-    entryObj.key
-  }|${entryObj.date.toISOString()}|\n`;
-  if (summaryPath) {
-    fs.appendFileSync(summaryPath, entryText, { encoding: 'utf8' });
-  } else {
-    process.stdout.write(entryText);
-  }
-}
+// function reportEntry(entryObj) {
+//   var entryText = `|${entryObj.word}|${entryObj.sentence
+//     ?.replace(/\n/g, ' ')
+//     ?.replace(/\r/g, ' ')}|${entryObj.source}|${
+//     entryObj.key
+//   }|${entryObj.date.toISOString()}|\n`;
+//     process.stdout.write(entryText);
+// }

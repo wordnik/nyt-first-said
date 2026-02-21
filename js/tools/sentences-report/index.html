@@ -1,0 +1,148 @@
+<html>
+<body>
+<style>
+body {
+  font-family: Georgia;
+  font-size: 24px;
+  width: 100%;
+}
+
+.current-sentence {
+  max-width: 40em;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 30em;
+}
+
+.current-sentence div {
+  margin-bottom: 0.5em;
+}
+
+.word {
+  font-size: 48px;
+}
+
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+button {
+  font-size: 30px;
+}
+
+.column-container {
+  display: flex;
+}
+
+.column-container > div {
+  width: 50%;
+}
+
+</style>
+
+<section class="column-container">
+  <div>
+    <h1>Sentences</h1>
+    <ol class="sentences">
+    </ol>
+  </div>
+  <div>
+    <h1>Flagged</h1>
+    <ol class="flagged-sentences">
+    </ol>
+  </div>
+</section>
+
+<script>
+var sentenceObjs;
+
+function onNext() {
+  sentenceIndex += 1;
+  if (sentenceIndex >= examples.length) {
+    sentenceIndex = 0;
+  }
+  renderSentenceObj(sentenceIndex);
+}
+
+function onPrev() {
+  sentenceIndex -= 1;
+  if (sentenceIndex < 0) {
+    sentenceIndex = examples.length - 1;
+  }
+  renderSentenceObj(sentenceIndex);
+}
+
+function onKeyUp(e) {
+  if (e.which === 78) { // n
+    onNext();
+  } else if (e.which === 80) { // p
+    onPrev();
+  } else if (e.which === 70) { // f
+    onFlag();
+  }
+}
+
+function renderSentenceObj(index, parentSelector = '.current-sentence') {
+  var sentenceObj = examples[index];
+  var currentSentenceEl = document.querySelector(parentSelector);
+  renderSentenceObjToEl(sentenceObj, currentSentenceEl);
+  currentSentenceEl.querySelector('.progress').textContent = (index + 1) + '/' + examples.length
+}
+
+function renderSentenceObjToEl(sentenceObj, currentSentenceEl) {
+  currentSentenceEl.querySelector('.key').textContent = sentenceObj.key;
+  currentSentenceEl.querySelector('.date').textContent = new Date(sentenceObj.date).toLocaleString();
+  currentSentenceEl.querySelector('.word').textContent = sentenceObj.word;
+  currentSentenceEl.querySelector('.sentence').textContent = sentenceObj.sentence;
+  currentSentenceEl.querySelector('.source a').setAttribute('href', sentenceObj.source);
+  currentSentenceEl.querySelector('.source a').textContent = sentenceObj.source;
+  currentSentenceEl.querySelector('.flag-button').addEventListener('click', onFlag);
+
+  function onFlag() {
+    sentenceObj.flagged = !sentenceObj.flagged;
+    renderFlagged();
+  }
+}
+
+
+function renderSentenceObjs({ rootSel, sentenceObjs }) {
+  var root = document.querySelector(rootSel);
+  root.innerHTML = '';
+  for (let sentenceObj of sentenceObjs) {
+    var liEl = document.createElement('li');
+    liEl.innerHTML = `<div><b>Word:</b> <span class="word"></span></div>
+  <div><b>Sentence:</b> <span class="sentence"></span></div>
+  <div><b>Date:</b> <span class="date"></span></div>
+  <div><b>Source:</b> <span class="source"><a target="_blank"></a></span></div>
+  <div><b>Key:</b> <span class="key"></span></div>
+  <button class="flag-button">Flag</button>`;
+    root.appendChild(liEl);
+    renderSentenceObjToEl(sentenceObj, liEl);
+  }
+}
+
+function renderFlagged() {
+  var flaggedExamples = sentenceObjs.filter(e => e.flagged);
+  renderSentenceObjs({ rootSel: '.flagged-sentences', sentenceObjs: flaggedExamples });
+}
+
+(async function go() {
+  try {
+    var res = await fetch('data.json');
+    if (!res.ok) {
+      throw new Error(`Response status: ${res.status}`);
+    }
+    sentenceObjs = await res.json();
+  } catch (error) {
+    console.error('Error while trying to get data:', error);
+  }
+
+  renderSentenceObjs({ rootSel: '.sentences', sentenceObjs });
+  renderFlagged();
+})();
+
+document.addEventListener('keyup', onKeyUp);
+</script>
+</body>
