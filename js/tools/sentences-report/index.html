@@ -50,8 +50,10 @@ button {
   </div>
   <div>
     <h1>Flagged</h1>
+    <button class="export-flagged">Export flagged sentences</button>
     <ol class="flagged-sentences">
     </ol>
+    <div id="downloads"></div>
   </div>
 </section>
 
@@ -143,6 +145,35 @@ function renderFlagged() {
   renderFlagged();
 })();
 
+function onExportFlagged() {
+  var flaggedExamples = sentenceObjs.filter(e => e.flagged);
+  renderDownloadLink({
+    blob: new Blob([JSON.stringify(flaggedExamples, null, 2)], {
+      type: 'application/json'
+    }),
+    parentSelector: '#downloads',
+    downloadLinkText: 'Download the flagged examples',
+    filename: 'flagged-sentences.json'
+  });
+}
+
+function renderDownloadLink({
+  blob,
+  parentSelector,
+  downloadLinkText,
+  filename
+}) {
+  var downloadsRoot = document.querySelector(parentSelector);
+  var link = document.createElement('a');
+  link.textContent = downloadLinkText;
+  downloadsRoot.appendChild(link);
+  var url = window.URL.createObjectURL(blob);
+  link.href = url;
+  link.download = filename;
+  // Could call window.URL.revokeObjectURL after click. Maybe someday?
+}
+
 document.addEventListener('keyup', onKeyUp);
+document.querySelector('.export-flagged').addEventListener('click', onExportFlagged);
 </script>
 </body>
