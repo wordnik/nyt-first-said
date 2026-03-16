@@ -4,51 +4,6 @@ on:
   schedule:
     - cron: '0 5 */2 * *'
 jobs:
-  TechWeekEurope_UK:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: TechWeekEurope UK
-  MoodieReport:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: MoodieReport
-  Gamercast:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Gamercast
-  GreenScene:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: GreenScene
-  Indian_Cars_Bikes:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Indian Cars Bikes
-  ChakraNews_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: ChakraNews.com
-  Firstpos:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Firstpos
-  Super_Good_Movies:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Super Good Movies
-  Hindustan_Time:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Hindustan Time
   TechShout_:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit

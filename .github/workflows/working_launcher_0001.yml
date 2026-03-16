@@ -4,11 +4,6 @@ on:
   schedule:
     - cron: '0 18 */2 * *'
 jobs:
-  india_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: india_com
   moneylife_in:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -1079,11 +1074,6 @@ jobs:
     secrets: inherit
     with:
       site: brecorder_com
-  dailytimes_com_pk:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: dailytimes_com_pk
   thenews_com_pk:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -1959,11 +1949,6 @@ jobs:
     secrets: inherit
     with:
       site: nwitimes_com
-  appleinsider_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: appleinsider_com
   wmur_com:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2139,11 +2124,6 @@ jobs:
     secrets: inherit
     with:
       site: nytimes_com
-  _247sports_com:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: 247sports_com
   dotesports_com:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2504,3 +2484,23 @@ jobs:
     secrets: inherit
     with:
       site: heraldlive_co_za
+  algoafm_co_za:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: algoafm_co_za
+  cajnewsafrica_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: cajnewsafrica_com
+  itnewsafrica_com:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: itnewsafrica_com
+  talkofthetown_co_za:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: talkofthetown_co_za
