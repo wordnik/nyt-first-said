@@ -132,6 +132,10 @@ def process_article(content, url, site_name, meta):
     sentence_blob = TextBlob(text)
     for sentence in sentence_blob.sentences:
         sent_str = str(sentence)
+        if len(sentence.tokens) > 200:
+            logging.info(f"Skipping overly long sentence: {sent_str}")
+            continue
+
         if has_username(sent_str):
             # If the sentence has "@word" tokens, they will parse as separate
             # "@" and "word" tokens, so we'll avoid this situation.
@@ -285,9 +289,12 @@ def run_brush(parser_name, parser_params):
     links = get_feed_urls(site["feeder_pages"], domain, feed_requester)
     if len(links) < 1:
         add_summary_line("Could not get any top-level links with " + parser_name + ".")
-        # TODO: Look into making this part of the target site definition.
-        if feed_requester == browser.get_content:
-            parse_fns["browser_report_failure"](browser, domain + "_links")
+        # If the site has been able to get results before, assume this is a
+        # passing issue.
+        if not site["works"]:
+            # TODO: Look into making this part of the target site definition.
+            if feed_requester == browser.get_content:
+                parse_fns["browser_report_failure"](browser, domain + "_links")
     else:
         process_links(links, parser_name, parser_params)
 
