@@ -1,8 +1,5 @@
 var d3 = require('d3-selection');
-var of = require('object-form');
-
 var listenersInit = false;
-var objectFromDOM = of.ObjectFromDOM({});
 
 function wireControls({ onLoadSites, onSaveSites }) {
   if (listenersInit) {
@@ -45,12 +42,7 @@ function wireControls({ onLoadSites, onSaveSites }) {
   }
 
   function onSave() {
-    var sites = [];
-    var siteItems = document.querySelectorAll('#site-root .site');
-    for (var i = 0; i < siteItems.length; ++i) {
-      sites.push(objectFromDOM(siteItems[i]));
-    }
-    onSaveSites({ sites });
+    onSaveSites();
   }
 }
 

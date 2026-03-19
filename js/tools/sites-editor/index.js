@@ -5,26 +5,39 @@ var renderSites = require('./dom/render-sites');
 var renderDownloadLink = require('render-dl-link');
 var noThrowJSONParse = require('no-throw-json-parse');
 var fieldsThatShouldRenderAsJSON = require('./json-fields');
+var { getSitesFromDOM } = require('./utils');
 
 (function go() {
   window.onerror = reportTopLevelError;
   wireControls({
     onLoadSites({ sites }) {
-      renderSites({ siteData: Object.values(sites) });
+      renderSites({
+        siteData: Object.values(sites),
+        onValueChange: saveLocally,
+      });
     },
     onSaveSites,
   });
+
+  if (localStorage.sites) {
+    renderSites({
+      siteData: Object.values(JSON.parse(localStorage.sites)),
+      onValueChange: saveLocally,
+    });
+  }
 })();
 
 function reportTopLevelError(msg, url, lineNo, columnNo, error) {
   handleError(error);
 }
 
-function onSaveSites({ sites }) {
-  sites.forEach(convertJSONFieldsToObjects);
-  // If we ever have date fields, convert them here.
-  // sites.forEach(convertDateFieldsToDates);
-  var sitesDict = arrangeSitesIntoDict(sites);
+function saveLocally() {
+  var sitesDict = sitesToDict(getSitesFromDOM());
+  localStorage.sites = JSON.stringify(sitesDict);
+}
+
+function onSaveSites() {
+  var sitesDict = JSON.parse(localStorage.sites);
   renderDownloadLink({
     blob: new Blob([JSON.stringify(sitesDict, null, 2)], {
       type: 'application/json',
@@ -33,6 +46,13 @@ function onSaveSites({ sites }) {
     downloadLinkText: 'Download the sites file',
     filename: 'target_sites.json',
   });
+}
+
+function sitesToDict(sites) {
+  sites.forEach(convertJSONFieldsToObjects);
+  // If we ever have date fields, convert them here.
+  // sites.forEach(convertDateFieldsToDates);
+  return arrangeSitesIntoDict(sites);
 }
 
 function arrangeSitesIntoDict(sites) {
@@ -73,7 +93,7 @@ function convertJSONFieldsToObjects(site) {
 // }
 // }
 
-},{"./dom/render-sites":2,"./dom/wire-controls":3,"./json-fields":4,"handle-error-web":7,"no-throw-json-parse":9,"render-dl-link":12}],2:[function(require,module,exports){
+},{"./dom/render-sites":2,"./dom/wire-controls":3,"./json-fields":4,"./utils":13,"handle-error-web":7,"no-throw-json-parse":9,"render-dl-link":12}],2:[function(require,module,exports){
 var d3 = require('d3-selection');
 var siteRoot = d3.select('#site-root');
 var accessor = require('accessor')();
@@ -91,7 +111,7 @@ var selectFields = ['environment', 'form', 'purpose', 'releaseState'];
 var numFields = ['article_pause_secs'];
 var fixedValuesForFields = {};
 
-function renderSites({ siteData }) {
+function renderSites({ siteData, onValueChange }) {
   normalizeObjects(siteData);
   var sites = siteRoot.selectAll('.site').data(siteData, accessor('site'));
   sites.exit().remove();
@@ -113,13 +133,13 @@ function renderSites({ siteData }) {
     .text((x) => x);
 
   var newSites = sites.enter().append('tr').classed('site', true);
-  appendElementsForSites(newSites, siteData[0]);
+  appendElementsForSites(newSites, siteData[0], onValueChange);
 
   var sitesToUpdate = newSites.merge(sites);
   fields.forEach(curry(updateSitesField)(sitesToUpdate));
 }
 
-function appendElementsForSites(sitesSel, exampleSite) {
+function appendElementsForSites(sitesSel, exampleSite, onValueChange) {
   // Move 'site' to the front.
   var fields = Object.keys(exampleSite);
   fields.splice(fields.indexOf('site'), 1);
@@ -130,11 +150,16 @@ function appendElementsForSites(sitesSel, exampleSite) {
   function appendElementsForField(field) {
     let container = sitesSel.append('td').classed('field-container', true);
     // container.append('div').classed('field-label', true).text(field);
-    appendControlForValue(container, field, typeof exampleSite[field]);
+    appendControlForValue(
+      container,
+      field,
+      typeof exampleSite[field],
+      onValueChange
+    );
   }
 }
 
-function appendControlForValue(container, field, valueType) {
+function appendControlForValue(container, field, valueType, onValueChange) {
   if (jsonFieldNames.includes(field)) {
     container.append('textarea').attr('data-of', field);
   } else if (selectFields.includes(field)) {
@@ -149,6 +174,7 @@ function appendControlForValue(container, field, valueType) {
     //   .merge(options)
     //   .text(accessor('identity'))
     //   .attr('value', accessor('identity'));
+    selectControl.on('change', onValueChange);
   } else {
     let input = container.append('input').attr('data-of', field);
     if (valueType === 'boolean') {
@@ -160,6 +186,7 @@ function appendControlForValue(container, field, valueType) {
     } else {
       input.attr('type', 'text');
     }
+    input.on('change', onValueChange);
   }
 }
 
@@ -216,10 +243,7 @@ module.exports = renderSites;
 
 },{"../json-fields":4,"accessor":5,"d3-selection":6,"lodash.curry":8,"normalize-objects":10}],3:[function(require,module,exports){
 var d3 = require('d3-selection');
-var of = require('object-form');
-
 var listenersInit = false;
-var objectFromDOM = of.ObjectFromDOM({});
 
 function wireControls({ onLoadSites, onSaveSites }) {
   if (listenersInit) {
@@ -262,12 +286,7 @@ function wireControls({ onLoadSites, onSaveSites }) {
   }
 
   function onSave() {
-    var sites = [];
-    var siteItems = document.querySelectorAll('#site-root .site');
-    for (var i = 0; i < siteItems.length; ++i) {
-      sites.push(objectFromDOM(siteItems[i]));
-    }
-    onSaveSites({ sites });
+    onSaveSites();
   }
 }
 
@@ -283,7 +302,7 @@ function getFile() {
 
 module.exports = wireControls;
 
-},{"d3-selection":6,"object-form":11}],4:[function(require,module,exports){
+},{"d3-selection":6}],4:[function(require,module,exports){
 module.exports = [
   { field: 'parser_params', type: 'object' },
   { field: 'domains', type: 'array' },
@@ -2782,4 +2801,19 @@ function renderDownloadLink({
 
 module.exports = renderDownloadLink;
 
-},{}]},{},[1]);
+},{}],13:[function(require,module,exports){
+var of = require('object-form');
+var objectFromDOM = of.ObjectFromDOM({});
+
+function getSitesFromDOM() {
+  var sites = [];
+  var siteItems = document.querySelectorAll('#site-root .site');
+  for (var i = 0; i < siteItems.length; ++i) {
+    sites.push(objectFromDOM(siteItems[i]));
+  }
+  return sites;
+}
+
+module.exports = { getSitesFromDOM };
+
+},{"object-form":11}]},{},[1]);
