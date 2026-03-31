@@ -29,6 +29,9 @@ class ParsersSuite(unittest.TestCase):
             f.close()
 
     def test_redirect(self):
-        self.assertEqual(grab_url("https://naij.com"), "", "Returns nothing because the url redirects to a different domain.")
+        with self.assertRaises(urllib.error.HTTPError):
+            # Raises error because the url redirects to a different domain.
+            grab_url("https://naij.com")
+
         redirect_content = grab_url("https://www.geeksofdoom.com/2026/03/18/spring-2026-book-recommendations-gifts")
         self.assertTrue(len(redirect_content) > 100, "Returns text because the url redirects but not to a different domain.")

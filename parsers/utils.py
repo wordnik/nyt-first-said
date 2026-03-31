@@ -108,7 +108,7 @@ def grab_url(url, max_depth=5):
         logging.info("http error retry")
         logging.info(e.reason)
         if e.reason == "Redirect to a different domain.":
-            return ""
+            raise e
         else:
             retry = True
         
