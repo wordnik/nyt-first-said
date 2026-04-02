@@ -72,6 +72,17 @@ if not site:
 
 # Assuming we're running from the project root.
 
+def report_disallowed_redirect(site_name, parser_name, e):
+    logging.info(f"Disallowed redirect: {e.reason}")
+    res = dynamo.put_item(
+        TableName="nyt-said-site-results",
+        Item={
+            "site": {"S": site_name},
+            "articles_processed": {"N": str(articles_processed)},
+            "succeeding_parser_name": {"S": parser_name},
+            "site_is_invalid": {"BOOL": True}
+        })
+
 def humanize_url(article):
     return article.split("/")[-1].split(".html")[0].replace("-", " ")
 
@@ -234,6 +245,10 @@ def process_with_request(link, site, parser_name, parser_params):
         if e.code == 404:
             self.real_article = False
             return 
+        if e.code == 302:
+            report_disallowed_redirect(site["site"], parser_name, e)
+            return
+
         raise
     print("got html")
 
@@ -286,7 +301,13 @@ def run_brush(parser_name, parser_params):
     else:
         domain = site["feeder_pages"][0].replace("https://", "")
 
-    links = get_feed_urls(site["feeder_pages"], domain, feed_requester)
+    try:
+        links = get_feed_urls(site["feeder_pages"], domain, feed_requester)
+    except urllib2.HTTPError as e:
+        if e.code == 302:
+            report_disallowed_redirect(site["site"], parser_name, e)
+            return
+
     if len(links) < 1:
         add_summary_line("Could not get any top-level links with " + parser_name + ".")
         # If the site has been able to get results before, assume this is a

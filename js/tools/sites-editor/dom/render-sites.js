@@ -15,7 +15,7 @@ var selectFields = ['environment', 'form', 'purpose', 'releaseState'];
 var numFields = ['article_pause_secs'];
 var fixedValuesForFields = {};
 
-function renderSites({ siteData }) {
+function renderSites({ siteData, onValueChange }) {
   normalizeObjects(siteData);
   var sites = siteRoot.selectAll('.site').data(siteData, accessor('site'));
   sites.exit().remove();
@@ -37,13 +37,13 @@ function renderSites({ siteData }) {
     .text((x) => x);
 
   var newSites = sites.enter().append('tr').classed('site', true);
-  appendElementsForSites(newSites, siteData[0]);
+  appendElementsForSites(newSites, siteData[0], onValueChange);
 
   var sitesToUpdate = newSites.merge(sites);
   fields.forEach(curry(updateSitesField)(sitesToUpdate));
 }
 
-function appendElementsForSites(sitesSel, exampleSite) {
+function appendElementsForSites(sitesSel, exampleSite, onValueChange) {
   // Move 'site' to the front.
   var fields = Object.keys(exampleSite);
   fields.splice(fields.indexOf('site'), 1);
@@ -54,11 +54,16 @@ function appendElementsForSites(sitesSel, exampleSite) {
   function appendElementsForField(field) {
     let container = sitesSel.append('td').classed('field-container', true);
     // container.append('div').classed('field-label', true).text(field);
-    appendControlForValue(container, field, typeof exampleSite[field]);
+    appendControlForValue(
+      container,
+      field,
+      typeof exampleSite[field],
+      onValueChange
+    );
   }
 }
 
-function appendControlForValue(container, field, valueType) {
+function appendControlForValue(container, field, valueType, onValueChange) {
   if (jsonFieldNames.includes(field)) {
     container.append('textarea').attr('data-of', field);
   } else if (selectFields.includes(field)) {
@@ -73,6 +78,7 @@ function appendControlForValue(container, field, valueType) {
     //   .merge(options)
     //   .text(accessor('identity'))
     //   .attr('value', accessor('identity'));
+    selectControl.on('change', onValueChange);
   } else {
     let input = container.append('input').attr('data-of', field);
     if (valueType === 'boolean') {
@@ -84,6 +90,7 @@ function appendControlForValue(container, field, valueType) {
     } else {
       input.attr('type', 'text');
     }
+    input.on('change', onValueChange);
   }
 }
 

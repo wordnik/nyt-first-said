@@ -4,8 +4,28 @@ import socket
 from bs4 import BeautifulSoup
 import http.cookiejar as cookielib
 import urllib
+from urllib.parse import urlparse
 import time
 import logging
+
+class AvoidNewDomainRedirectHandler(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        domain_parts = urlparse(req.full_url).netloc.split(".")
+        new_domain_parts = urlparse(newurl).netloc.split(".")
+        
+        if domain_parts[-2:] != new_domain_parts[-2:]:
+            print(f"Not follwing redirect from {req.full_url} to {newurl}")
+            raise urllib.error.HTTPError(
+                    req.full_url, 302, "Redirect to a different domain.",
+                    headers, fp)
+        else:
+            return urllib.request.Request(newurl, None, headers);
+
+cj = cookielib.CookieJar()
+opener = urllib.request.build_opener(
+        AvoidNewDomainRedirectHandler, urllib.request.HTTPCookieProcessor(cj)
+        )
+urllib.request.install_opener(opener)
 
 def get_meta_content_by_attr(bs_meta_list, attr, val, default=None):
     # print("name: {}".format(bs_meta_list.name))
@@ -70,15 +90,13 @@ def make_url_safe(url):
     parsed = urllib.parse.urlparse(url)
     return parsed._replace(path=parsed.path.replace(" ", "%20")).geturl()
 
-def grab_url(url, max_depth=5, opener=None):
-    if opener is None:
-        cj = cookielib.CookieJar()
-        opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
+def grab_url(url, max_depth=5):
     retry = False
     url = make_url_safe(url) 
     logging.info("grabbing " + url)
     try:
-        text = opener.open(url, timeout=30).read()
+        text = urllib.request.urlopen(url, timeout=30).read()
+
         if b"<title>NY Times Advertisement</title>" in text:
             logging.info("advert retry")
             retry = True
@@ -89,7 +107,11 @@ def grab_url(url, max_depth=5, opener=None):
         logging.info(url)
         logging.info("http error retry")
         logging.info(e.reason)
-        retry = True
+        if e.reason == "Redirect to a different domain.":
+            raise e
+        else:
+            retry = True
+        
     except Exception as e:
         logging.info(f"Error {e} while opening {url}.")
         return ""
@@ -102,7 +124,7 @@ def grab_url(url, max_depth=5, opener=None):
         #        if max_depth == 0:
         #            raise Exception('Too many attempts to download %s' % url)
         time.sleep(5.0)
-        return grab_url(url, max_depth - 1, opener)
+        return grab_url(url, max_depth - 1)
     return text
 
 

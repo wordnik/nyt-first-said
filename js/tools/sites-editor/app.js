@@ -4,26 +4,39 @@ var renderSites = require('./dom/render-sites');
 var renderDownloadLink = require('render-dl-link');
 var noThrowJSONParse = require('no-throw-json-parse');
 var fieldsThatShouldRenderAsJSON = require('./json-fields');
+var { getSitesFromDOM } = require('./utils');
 
 (function go() {
   window.onerror = reportTopLevelError;
   wireControls({
     onLoadSites({ sites }) {
-      renderSites({ siteData: Object.values(sites) });
+      renderSites({
+        siteData: Object.values(sites),
+        onValueChange: saveLocally,
+      });
     },
     onSaveSites,
   });
+
+  if (localStorage.sites) {
+    renderSites({
+      siteData: Object.values(JSON.parse(localStorage.sites)),
+      onValueChange: saveLocally,
+    });
+  }
 })();
 
 function reportTopLevelError(msg, url, lineNo, columnNo, error) {
   handleError(error);
 }
 
-function onSaveSites({ sites }) {
-  sites.forEach(convertJSONFieldsToObjects);
-  // If we ever have date fields, convert them here.
-  // sites.forEach(convertDateFieldsToDates);
-  var sitesDict = arrangeSitesIntoDict(sites);
+function saveLocally() {
+  var sitesDict = sitesToDict(getSitesFromDOM());
+  localStorage.sites = JSON.stringify(sitesDict);
+}
+
+function onSaveSites() {
+  var sitesDict = JSON.parse(localStorage.sites);
   renderDownloadLink({
     blob: new Blob([JSON.stringify(sitesDict, null, 2)], {
       type: 'application/json',
@@ -32,6 +45,13 @@ function onSaveSites({ sites }) {
     downloadLinkText: 'Download the sites file',
     filename: 'target_sites.json',
   });
+}
+
+function sitesToDict(sites) {
+  sites.forEach(convertJSONFieldsToObjects);
+  // If we ever have date fields, convert them here.
+  // sites.forEach(convertDateFieldsToDates);
+  return arrangeSitesIntoDict(sites);
 }
 
 function arrangeSitesIntoDict(sites) {
