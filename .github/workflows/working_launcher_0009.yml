@@ -4,11 +4,6 @@ on:
   schedule:
     - cron: '0 2 */2 * *'
 jobs:
-  London_News_Onlin:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: London News Onlin
   cosmopolitan_com__UK_:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2504,3 +2499,8 @@ jobs:
     secrets: inherit
     with:
       site: Mile High Hockey
+  Corporate_Knights_Magazine:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: Corporate Knights Magazine

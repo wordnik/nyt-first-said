@@ -4,11 +4,6 @@ on:
   schedule:
     - cron: '0 3 */2 * *'
 jobs:
-  Corporate_Knights_Magazine:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Corporate Knights Magazine
   Big_Brother_Network:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2504,3 +2499,8 @@ jobs:
     secrets: inherit
     with:
       site: Prince Rupert Northern View
+  The_Castlegar_Source:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: The Castlegar Source
