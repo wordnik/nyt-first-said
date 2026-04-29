@@ -147,6 +147,10 @@ def process_article(content, url, site_name, meta):
             logging.info(f"Skipping overly long sentence: {sent_str}")
             continue
 
+        if contains_line_breaks(sent_str):
+            logging.info(f"Skipping sentence with linebreaks: {sent_str}")
+            continue
+
         if has_username(sent_str):
             # If the sentence has "@word" tokens, they will parse as separate
             # "@" and "word" tokens, so we'll avoid this situation.

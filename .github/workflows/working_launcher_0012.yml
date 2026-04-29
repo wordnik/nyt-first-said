@@ -4,11 +4,6 @@ on:
   schedule:
     - cron: '0 5 */2 * *'
 jobs:
-  TechShout_:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: TechShout!
   Campaign_India:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -559,11 +554,11 @@ jobs:
     secrets: inherit
     with:
       site: NOAA
-  China_Law_Blo:
+  China_Law_Blog:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
     with:
-      site: China Law Blo
+      site: China Law Blog
   Center_for_Responsive_Politics:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -929,8 +924,8 @@ jobs:
     secrets: inherit
     with:
       site: Religion Dispatches
-  Geeks_of_Doo:
+  Geeks_of_Doom:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
     with:
-      site: Geeks of Doo
+      site: Geeks of Doom

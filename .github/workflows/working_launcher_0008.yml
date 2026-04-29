@@ -4,11 +4,6 @@ on:
   schedule:
     - cron: '0 1 */2 * *'
 jobs:
-  Digital_Trends:
-    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
-    secrets: inherit
-    with:
-      site: Digital Trends
   Noozhawk:
     uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
     secrets: inherit
@@ -2504,3 +2499,8 @@ jobs:
     secrets: inherit
     with:
       site: Rhyl Journal
+  London_News_Onlin:
+    uses: wordnik/nyt-first-said/.github/workflows/brush.yml@master
+    secrets: inherit
+    with:
+      site: London News Onlin
