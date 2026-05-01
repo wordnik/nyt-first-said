@@ -80,7 +80,7 @@ def report_disallowed_redirect(site_name, parser_name, e):
             "site": {"S": site_name},
             "articles_processed": {"N": str(articles_processed)},
             "succeeding_parser_name": {"S": parser_name},
-            "site_is_invalid": {"BOOL": True}
+            "disallowed_redirect_happened": {"BOOL": True}
         })
 
 def humanize_url(article):

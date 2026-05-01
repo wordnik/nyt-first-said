@@ -30,7 +30,7 @@ var docClient = DynamoDBDocumentClient.from(dbClient);
 (async function main() {
   var siteResults = await getSiteResults({ siteNames: unprovenSiteNames });
   var resultsWithUpdates = siteResults.filter(
-    (res) => !isNaN(res?.articles_processed)
+    (res) => !isNaN(res?.articles_processed) && res?.articles_processed > 0
   );
   for (let result of resultsWithUpdates) {
     if (result?.articles_processed > 0) {
