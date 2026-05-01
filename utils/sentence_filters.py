@@ -15,3 +15,6 @@ def has_balanced_punctuation(s):
 
         # print("unmatched_chars:", unmatched_chars)
     return len(unmatched_chars) == 0
+
+def contains_line_breaks(s):
+    return s.find("\n") != -1

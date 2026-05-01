@@ -180,10 +180,7 @@ def nyt_browser(browser, url):
 # Warning: This depends on the browser not having closed the page or navigated away.
 # Redesign if this can no longer be depended on.
 def browser_report_failure(browser, url):
-    shot_path = "failed_parse_" + url.replace("/", "_") + ".png"
-    image = browser.screenshot(shot_path)
-    s3.put_object(Bucket="nyt-said-failure-reports", Key=shot_path, Body=image, ContentType="image/png")
-    add_summary_line(f"browser_article_based parser failed to get content from {url}. See screenshot at s3://nyt-said-failure-report/{shot_path}.")
+    add_summary_line(f"browser_article_based parser failed to get content from {url}.")
 
 def browser_article_based(browser, url):
     parsed = article_based(browser.get_content(url))
