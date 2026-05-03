@@ -22,7 +22,7 @@ from utils.errors import ConfigError
 from utils.uninteresting_words import get_uninteresting_count_for_word, increment_uninteresting_count_for_word
 from utils.url_visits import log_url_visit, was_url_visited
 from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_textblob
-from utils.sentence_filters import has_balanced_punctuation
+from utils.sentence_filters import has_balanced_punctuation, contains_line_breaks
 from utils.language import is_english
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, grab_url, get_feed_urls, split_words_by_unicode_punctuation
@@ -137,6 +137,10 @@ def ok_word(s):
 def process_article(content, url, site_name, meta):
     global articles_processed
 
+    if not args.revisit and was_url_visited(url):
+        logging.info(f"Skipping article at {url} because we've already visited it before.")
+        return
+
     uninteresting_sentence_params = []
     print("Processing Article")
     text = prepare_text_for_textblob(str(content))
@@ -210,13 +214,6 @@ def process_article(content, url, site_name, meta):
 def process_links(links, parser_name, parser_params):
     global articles_processed
     for link in links:
-        if not args.revisit and was_url_visited(link):
-            # We count it as processed because we use articles_processed as a
-            # measure of success for the run. 0 articles_processed means failure.
-            articles_processed += 1
-            logging.info(f"Skipping {link} because we've already visited it before.")
-            continue
-
         link = link.replace("http://", "https://")
 
         if link.find(":") == -1:
@@ -225,6 +222,10 @@ def process_links(links, parser_name, parser_params):
 
         if not link.startswith("https://"):
             # Avoid mailto:, tel:, ftp:, etc.
+            continue
+
+        if link.find("/search") != -1:
+            # Probably a search page without article-style content.
             continue
 
         # unseen article
