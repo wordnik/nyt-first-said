@@ -1,5 +1,5 @@
 import unittest
-from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_textblob, normalize_sentence
+from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_textblob
 
 class TestCleaningSuite(unittest.TestCase):
     def test_punctuation(self):
