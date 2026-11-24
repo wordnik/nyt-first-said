@@ -22,7 +22,8 @@ from utils.errors import ConfigError
 from utils.uninteresting_words import get_uninteresting_count_for_word, increment_uninteresting_count_for_word
 from utils.url_visits import log_url_visit, was_url_visited
 from utils.text_cleaning import remove_punctuation, remove_trouble_characters, has_username, prepare_text_for_textblob
-from utils.sentence_filters import has_balanced_punctuation, contains_line_breaks
+from utils.sentence_filters import has_balanced_punctuation, contains_line_breaks, \
+word_has_bad_char
 from utils.language import is_english
 from parsers.api_check import does_example_exist
 from parsers.utils import fill_out_sentence_object, grab_url, get_feed_urls, split_words_by_unicode_punctuation
@@ -130,6 +131,9 @@ def ok_word(s):
         s = s[:-1]
 
     if not s.islower():
+        return False
+
+    if word_has_bad_char(s):
         return False
 
     return not any(i.isdigit() or i in "(.@/#-_[" for i in s)

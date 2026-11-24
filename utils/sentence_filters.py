@@ -1,5 +1,10 @@
+import regex
+
 close_punc_for_open_punc = { '"': '"', '“': "”" }
 open_punc_for_close_punc = {v: k for k, v in close_punc_for_open_punc.items()}
+invalid_word_exps = [
+    r".*[\^=\+\\~].*"
+]
 
 def has_balanced_punctuation(s):
     unmatched_chars = []
@@ -18,3 +23,9 @@ def has_balanced_punctuation(s):
 
 def contains_line_breaks(s):
     return s.find("\n") != -1
+
+def word_has_bad_char(word):
+    for expr in invalid_word_exps:
+        if regex.match(expr, word) != None:
+            return True
+    return False
