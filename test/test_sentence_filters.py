@@ -1,7 +1,22 @@
 import unittest
-from utils.sentence_filters import has_balanced_punctuation, contains_line_breaks
+from utils.sentence_filters \
+import has_balanced_punctuation, contains_line_breaks, word_has_bad_char
 
 class SentenceFiltersSuite(unittest.TestCase):
+    def test_bad_char_words(self):
+        self.assertEqual(word_has_bad_char("options^"), True, "Has bad char.")
+        self.assertEqual(word_has_bad_char("options"), False, "Does not have bad char.")
+        self.assertEqual(word_has_bad_char("=how"), True, "Has bad char.")
+        self.assertEqual(word_has_bad_char("how"), False, "Does not have bad char.")
+        self.assertEqual(word_has_bad_char("+\\phi"), True, "Has bad char.")
+        self.assertEqual(word_has_bad_char("phi"), False, "Does not have bad char.")
+        self.assertEqual(word_has_bad_char("=\\arctan"), True, "Has bad char.")
+        self.assertEqual(word_has_bad_char("arctan"), False, "Does not have bad char.")
+        self.assertEqual(word_has_bad_char("+k"), True, "Has bad char.")
+        self.assertEqual(word_has_bad_char("k"), False, "Does not have bad char.")
+        self.assertEqual(word_has_bad_char("careful~"), True, "Has bad char.")
+        self.assertEqual(word_has_bad_char("careful"), False, "Does not have bad char.")
+     
     def test_punctuation_check(self):
         self.assertEqual(has_balanced_punctuation("So many up and downs, but where there’s a will, there’s a way.”"), False)
         self.assertEqual(has_balanced_punctuation("“So many up and downs, but where there’s a will, there’s a way.”"), True)
